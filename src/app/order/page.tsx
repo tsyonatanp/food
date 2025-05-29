@@ -24,16 +24,9 @@ export default function OrderPage() {
             <h1 className="text-3xl font-bold mb-6">תפריט</h1>
             <div className="bg-white rounded-lg shadow-md p-4 mb-6">
               <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="md:w-64 ml-auto">
-                  <MenuFilters
-                    selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
-                  />
-                </div>
+                {/* MenuFilters removed */}
               </div>
-              <MenuItems items={menu} selectedCategory={selectedCategory} selectedTags={selectedTags} />
+              <MenuItems items={menu} />
             </div>
           </div>
           {/* Cart Sidebar */}

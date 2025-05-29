@@ -39,7 +39,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {items.map((item) => (
-        <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden" role="region" aria-labelledby={`menu-item-title-${item.מנה}`}>
           {item.תמונה ? (
             <div className="relative h-48">
               <Image
@@ -53,7 +53,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
             <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400">אין תמונה</div>
           )}
           <div className="p-4">
-            <h3 className="text-xl font-semibold mb-2">{item.מנה}</h3>
+            <h3 id={`menu-item-title-${item.מנה}`} className="text-xl font-semibold mb-2">{item.מנה}</h3>
             <div className="flex items-center justify-between mb-4">
               <span className="text-lg font-medium">
                 ₪{item['מחיר (₪)']} / 100 גרם
@@ -68,21 +68,25 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-2 mt-2">
+              <label htmlFor={`weight-input-${item.מנה}`} className="sr-only">בחר משקל בגרם עבור {item.מנה}</label>
               <div className="flex items-center gap-2 w-full sm:w-auto">
                 <input
+                  id={`weight-input-${item.מנה}`}
                   type="number"
                   min={100}
                   max={1000}
-                  step="50"
+                  step={50}
                   value={selectedWeights[item.מנה] || 200}
                   onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))}
                   className="input w-24"
+                  aria-label={`בחר משקל בגרם עבור ${item.מנה}`}
                 />
                 <span className="text-gray-500">גרם</span>
               </div>
               <button
                 className="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 mt-2 sm:mt-0"
                 onClick={() => handleAddToCart(item)}
+                aria-label={`הוסף את ${item.מנה} לעגלה`}
               >
                 <FaPlus size={14} />
                 הוסף לעגלה

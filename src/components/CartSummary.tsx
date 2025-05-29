@@ -13,11 +13,11 @@ export default function CartSummary() {
   const finalTotal = total + actualDeliveryFee
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 sticky top-4">
+    <div className="bg-white rounded-lg shadow-md p-4 sticky top-4" role="region" aria-label="סיכום הזמנה">
       <h2 className="text-xl font-semibold mb-4">סיכום הזמנה</h2>
 
       {items.length === 0 ? (
-        <p className="text-gray-500 text-center py-8">העגלה ריקה</p>
+        <p className="text-gray-500 text-center py-8" aria-live="polite">העגלה ריקה</p>
       ) : (
         <>
           <div className="space-y-4 mb-6">
@@ -25,8 +25,10 @@ export default function CartSummary() {
               <div key={item.id} className="flex items-start gap-3">
                 <div className="flex-1">
                   <h3 className="font-medium">{item.name}</h3>
+                  <label htmlFor={`cart-weight-input-${item.id}`} className="sr-only">בחר משקל בגרם עבור {item.name}</label>
                   <div className="flex items-center gap-2 mt-1">
                     <input
+                      id={`cart-weight-input-${item.id}`}
                       type="number"
                       min="100"
                       max="1000"
@@ -34,6 +36,7 @@ export default function CartSummary() {
                       value={item.weight}
                       onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
                       className="input w-20 py-1"
+                      aria-label={`בחר משקל בגרם עבור ${item.name}`}
                     />
                     <span className="text-sm text-gray-500">גרם</span>
                   </div>
@@ -44,6 +47,7 @@ export default function CartSummary() {
                 <button
                   onClick={() => removeItem(item.id)}
                   className="text-red-500 hover:text-red-700 transition-colors"
+                  aria-label={`הסר את ${item.name} מהעגלה`}
                 >
                   <FaTrash />
                 </button>
@@ -51,7 +55,7 @@ export default function CartSummary() {
             ))}
           </div>
 
-          <div className="border-t pt-4 space-y-2">
+          <div className="border-t pt-4 space-y-2" aria-live="polite">
             <div className="flex justify-between text-sm">
               <span>סכום ביניים:</span>
               <span>₪{total.toFixed(2)}</span>
@@ -80,6 +84,7 @@ export default function CartSummary() {
           <Link
             href="/checkout"
             className="btn-primary w-full text-center mt-6"
+            aria-label="המשך לתשלום"
           >
             המשך לתשלום
           </Link>
