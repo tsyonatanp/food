@@ -8,6 +8,8 @@ import CartSummary from '@/components/CartSummary';
 
 export default function OrderPage() {
   const [menu, setMenu] = useState<any[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
     fetchMenu().then(setMenu);
@@ -23,10 +25,15 @@ export default function OrderPage() {
             <div className="bg-white rounded-lg shadow-md p-4 mb-6">
               <div className="flex flex-col md:flex-row gap-4 mb-6">
                 <div className="md:w-64 ml-auto">
-                  <MenuFilters />
+                  <MenuFilters
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    selectedTags={selectedTags}
+                    setSelectedTags={setSelectedTags}
+                  />
                 </div>
               </div>
-              <MenuItems items={menu} />
+              <MenuItems items={menu} selectedCategory={selectedCategory} selectedTags={selectedTags} />
             </div>
           </div>
           {/* Cart Sidebar */}
