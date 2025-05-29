@@ -18,6 +18,10 @@ export default function OrderPage() {
   return (
     <main className="min-h-screen py-8">
       <div className="container">
+        {/* CartSummary בראש הדף במובייל בלבד */}
+        <div className="block lg:hidden mb-4">
+          <CartSummary />
+        </div>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main Content */}
           <div className="flex-1">
@@ -29,8 +33,8 @@ export default function OrderPage() {
               <MenuItems items={menu} />
             </div>
           </div>
-          {/* Cart Sidebar */}
-          <div className="lg:w-80">
+          {/* Cart Sidebar בדסקטופ בלבד */}
+          <div className="lg:w-80 hidden lg:block">
             <CartSummary />
           </div>
         </div>
