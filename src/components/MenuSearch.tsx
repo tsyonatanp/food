@@ -3,9 +3,7 @@
 import { useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 
-export default function MenuSearch() {
-  const [query, setQuery] = useState('')
-
+export default function MenuSearch({ value, onChange }: { value: string, onChange: (v: string) => void }) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Implement search functionality
@@ -15,8 +13,8 @@ export default function MenuSearch() {
     <form onSubmit={handleSearch} className="relative">
       <input
         type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
         placeholder="חפש מנות..."
         className="input pl-10"
       />

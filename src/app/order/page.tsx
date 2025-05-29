@@ -1,11 +1,17 @@
+"use client";
+
+import { useState, useEffect } from 'react';
 import { fetchMenu } from '@/lib/fetchMenu';
 import MenuItems from '@/components/MenuItems';
 import MenuFilters from '@/components/MenuFilters';
-import MenuSearch from '@/components/MenuSearch';
 import CartSummary from '@/components/CartSummary';
 
-export default async function OrderPage() {
-  const menu = await fetchMenu();
+export default function OrderPage() {
+  const [menu, setMenu] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchMenu().then(setMenu);
+  }, []);
 
   return (
     <main className="min-h-screen py-8">
@@ -16,10 +22,7 @@ export default async function OrderPage() {
             <h1 className="text-3xl font-bold mb-6">תפריט</h1>
             <div className="bg-white rounded-lg shadow-md p-4 mb-6">
               <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="flex-1">
-                  <MenuSearch />
-                </div>
-                <div className="md:w-64">
+                <div className="md:w-64 ml-auto">
                   <MenuFilters />
                 </div>
               </div>
