@@ -14,32 +14,9 @@ interface MenuItem {
   תמונה?: string
 }
 
-interface MenuItemsProps {
-  items: MenuItem[];
-  selectedCategory: string;
-  selectedTags: string[];
-}
-
-export default function MenuItems({ items, selectedCategory, selectedTags }: MenuItemsProps) {
+export default function MenuItems({ items }: { items: MenuItem[] }) {
   const [selectedWeights, setSelectedWeights] = useState<Record<string, number>>({})
   const { addItem } = useCart()
-
-  // סינון לפי קטגוריה ותגים
-  const filteredItems = items.filter(item => {
-    const categoryMatch = selectedCategory === 'all' ||
-      (selectedCategory === 'meat' && item.קטגוריה === 'בשר') ||
-      (selectedCategory === 'chicken' && item.קטגוריה === 'עוף') ||
-      (selectedCategory === 'fish' && item.קטגוריה === 'דגים') ||
-      (selectedCategory === 'sides' && item.קטגוריה === 'תוספות') ||
-      (selectedCategory === 'salads' && item.קטגוריה === 'סלטים');
-    const tagsMatch = selectedTags.every(tag => {
-      if (tag === 'vegetarian') return item.צמחוני === 'כן';
-      if (tag === 'gluten-free') return item['ללא גלוטן'] === 'כן';
-      // אפשר להוסיף עוד תגיות כאן
-      return false;
-    });
-    return categoryMatch && (selectedTags.length === 0 || tagsMatch);
-  });
 
   const handleWeightChange = (name: string, weight: number) => {
     setSelectedWeights((prev) => ({
@@ -61,7 +38,7 @@ export default function MenuItems({ items, selectedCategory, selectedTags }: Men
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredItems.map((item) => (
+      {items.map((item) => (
         <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden">
           {item.תמונה ? (
             <div className="relative h-48">
