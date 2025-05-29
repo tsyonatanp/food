@@ -33,11 +33,13 @@ export default function MenuFilters({ selectedCategory, setSelectedCategory, sel
     setSelectedCategory(category.id);
   };
   const toggleTag = (tagId: string) => {
-    setSelectedTags((prev: string[]) =>
-      prev.includes(tagId)
-        ? prev.filter(id => id !== tagId)
-        : [...prev, tagId]
-    );
+    let newTags: string[];
+    if (selectedTags.includes(tagId)) {
+      newTags = selectedTags.filter(id => id !== tagId);
+    } else {
+      newTags = [...selectedTags, tagId];
+    }
+    setSelectedTags(newTags);
   };
   const selectedCatObj = categories.find(c => c.id === selectedCategory) || categories[0];
 
