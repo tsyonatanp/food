@@ -2,12 +2,12 @@
 export const dynamic = "force-dynamic";
 
 import { Suspense } from 'react';
-import OrderPage from './OrderPage';
+import OrderContent from './OrderContent';
 
-export default function Page() {
+export default function OrderPage() {
   return (
     <Suspense fallback={<div>טוען...</div>}>
-      <OrderPage />
+      <OrderContent />
     </Suspense>
   );
 } 
