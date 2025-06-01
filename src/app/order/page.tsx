@@ -13,8 +13,13 @@ export default function OrderPage() {
   const selectedCategory = searchParams.get('category') || 'all';
 
   useEffect(() => {
-    fetchMenu().then(setMenu);
+    fetchMenu().then(data => {
+      console.log('menu:', data);
+      setMenu(data);
+    });
   }, []);
+
+  console.log('selectedCategory:', selectedCategory);
 
   // סינון לפי קטגוריה (תומך בריבוי קטגוריות מופרדות בפסיק)
   const filteredMenu = selectedCategory === 'all'
