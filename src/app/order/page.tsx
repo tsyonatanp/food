@@ -19,20 +19,22 @@ export default function OrderPage() {
     });
   }, []);
 
-  console.log('selectedCategory:', selectedCategory);
-
   // מצא את המפתח שמכיל 'קטגוריה' (גם אם יש רווחים)
   const categoryKey = menu.length > 0
     ? Object.keys(menu[0]).find(key => key.replace(/\s/g, '') === 'קטגוריה') || 'קטגוריה'
     : 'קטגוריה';
 
+  console.log('selectedCategory:', selectedCategory);
+  console.log('categoryKey:', categoryKey);
+
   const filteredMenu = selectedCategory === 'all'
     ? menu
     : categoryKey
-      ? menu.filter(item =>
-          item[categoryKey] &&
-          item[categoryKey].split(',').map((s: string) => s.trim()).includes(selectedCategory)
-        )
+      ? menu.filter(item => {
+          const value = item[categoryKey];
+          console.log('item:', item.מנה, '| value:', value);
+          return value && value.split(',').map((s: string) => s.trim()).includes(selectedCategory);
+        })
       : [];
 
   return (
@@ -47,10 +49,13 @@ export default function OrderPage() {
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-6">תפריט</h1>
             <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <div className="flex flex-col md:flex-row gap-4 mb-6">
-                {/* MenuFilters removed */}
-              </div>
-              <MenuItems items={filteredMenu} />
+              {filteredMenu.length === 0 ? (
+                <div className="text-center text-gray-500 py-12 text-xl">
+                  אין מנות זמינות בקטגוריה זו כרגע
+                </div>
+              ) : (
+                <MenuItems items={filteredMenu} />
+              )}
             </div>
           </div>
           {/* Cart Sidebar בדסקטופ בלבד */}
