@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { fetchMenu } from '@/lib/fetchMenu';
 import MenuItems from '@/components/MenuItems';
 import MenuFilters from '@/components/MenuFilters';
@@ -8,12 +9,20 @@ import CartSummary from '@/components/CartSummary';
 
 export default function OrderPage() {
   const [menu, setMenu] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const searchParams = useSearchParams();
+  const selectedCategory = searchParams.get('category') || 'all';
 
   useEffect(() => {
     fetchMenu().then(setMenu);
   }, []);
+
+  // סינון לפי קטגוריה (תומך בריבוי קטגוריות מופרדות בפסיק)
+  const filteredMenu = selectedCategory === 'all'
+    ? menu
+    : menu.filter(item =>
+        item.קטגוריה &&
+        item.קטגוריה.split(',').map((s: string) => s.trim()).includes(selectedCategory)
+      );
 
   return (
     <main className="min-h-screen py-8">
@@ -30,7 +39,7 @@ export default function OrderPage() {
               <div className="flex flex-col md:flex-row gap-4 mb-6">
                 {/* MenuFilters removed */}
               </div>
-              <MenuItems items={menu} />
+              <MenuItems items={filteredMenu} />
             </div>
           </div>
           {/* Cart Sidebar בדסקטופ בלבד */}
