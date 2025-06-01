@@ -21,13 +21,19 @@ export default function OrderPage() {
 
   console.log('selectedCategory:', selectedCategory);
 
-  // סינון לפי קטגוריה (תומך בריבוי קטגוריות מופרדות בפסיק)
+  // מצא את המפתח שמכיל 'קטגוריה' (גם אם יש רווחים)
+  const categoryKey = menu.length > 0
+    ? Object.keys(menu[0]).find(key => key.replace(/\s/g, '') === 'קטגוריה') || 'קטגוריה'
+    : 'קטגוריה';
+
   const filteredMenu = selectedCategory === 'all'
     ? menu
-    : menu.filter(item =>
-        item.קטגוריה &&
-        item.קטגוריה.split(',').map((s: string) => s.trim()).includes(selectedCategory)
-      );
+    : categoryKey
+      ? menu.filter(item =>
+          item[categoryKey] &&
+          item[categoryKey].split(',').map((s: string) => s.trim()).includes(selectedCategory)
+        )
+      : [];
 
   return (
     <main className="min-h-screen py-8">
