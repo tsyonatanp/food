@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchCategories } from '@/lib/fetchCategories';
+import Image from 'next/image';
+import { categories } from '@/lib/categories';
 
 type Category = {
   name: string;
@@ -12,13 +13,14 @@ type Category = {
 
 export default function CategoriesGrid() {
   const router = useRouter();
-  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories()
-      .then(setCategories)
-      .finally(() => setLoading(false));
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) {
@@ -39,11 +41,12 @@ export default function CategoriesGrid() {
           onClick={() => router.push(`/order?category=${encodeURIComponent(category.name)}`)}
           className="group relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
         >
-          <div className="aspect-square">
-            <img
+          <div className="aspect-square relative">
+            <Image
               src={category.image}
               alt={category.name}
-              className="h-full w-full object-cover"
+              fill
+              className="object-cover"
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">

@@ -3,5 +3,7 @@ export async function fetchCategories() {
   if (!res.ok) {
     throw new Error('Failed to fetch categories');
   }
-  return res.json();
+  const data = await res.json();
+  console.log('Categories data:', data);
+  return data;
 } 
