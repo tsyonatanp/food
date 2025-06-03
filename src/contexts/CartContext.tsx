@@ -2,14 +2,19 @@
 
 import { createContext, useContext, useReducer, ReactNode } from 'react'
 
-interface CartItem {
+type CartItem = {
   id: number
   name: string
-  weight: number
-  pricePerGram: number
+  isByWeight: boolean
+  // אם נמכר לפי משקל
+  weight?: number
+  pricePerGram?: number
+  // אם נמכר לפי יחידות
+  quantity?: number
+  price?: number
 }
 
-interface CartState {
+type CartState = {
   items: CartItem[]
   total: number
   deliveryFee: number
@@ -19,110 +24,144 @@ type CartAction =
   | { type: 'ADD_ITEM'; payload: CartItem }
   | { type: 'REMOVE_ITEM'; payload: number }
   | { type: 'UPDATE_WEIGHT'; payload: { id: number; weight: number } }
+  | { type: 'UPDATE_QUANTITY'; payload: { id: number; quantity: number } }
   | { type: 'CLEAR_CART' }
 
 const initialState: CartState = {
   items: [],
   total: 0,
-  deliveryFee: Number(process.env.DEFAULT_DELIVERY_FEE) || 20,
+  deliveryFee: 20
 }
 
-const calculateTotal = (items: CartItem[]): number => {
-  return items.reduce((sum, item) => sum + (item.weight * item.pricePerGram), 0)
-}
-
-const cartReducer = (state: CartState, action: CartAction): CartState => {
+function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case 'ADD_ITEM': {
-      const existingItemIndex = state.items.findIndex(item => item.id === action.payload.id)
-      let newItems: CartItem[]
-
-      if (existingItemIndex > -1) {
-        newItems = state.items.map((item, index) => 
-          index === existingItemIndex
-            ? { ...item, weight: item.weight + action.payload.weight }
-            : item
-        )
-      } else {
-        newItems = [...state.items, action.payload]
+      const existingItem = state.items.find(item => item.id === action.payload.id)
+      
+      if (existingItem) {
+        // אם הפריט כבר קיים, נעדכן את הכמות או המשקל
+        const updatedItems = state.items.map(item => {
+          if (item.id === action.payload.id) {
+            if (item.isByWeight) {
+              return {
+                ...item,
+                weight: (item.weight || 0) + (action.payload.weight || 0)
+              }
+            } else {
+              return {
+                ...item,
+                quantity: (item.quantity || 0) + (action.payload.quantity || 0)
+              }
+            }
+          }
+          return item
+        })
+        
+        return {
+          ...state,
+          items: updatedItems,
+          total: calculateTotal(updatedItems)
+        }
       }
-
+      
+      // אם הפריט חדש, נוסיף אותו לעגלה
+      const newItems = [...state.items, action.payload]
       return {
         ...state,
         items: newItems,
-        total: calculateTotal(newItems),
+        total: calculateTotal(newItems)
       }
     }
-
+    
     case 'REMOVE_ITEM': {
       const newItems = state.items.filter(item => item.id !== action.payload)
       return {
         ...state,
         items: newItems,
-        total: calculateTotal(newItems),
+        total: calculateTotal(newItems)
       }
     }
-
+    
     case 'UPDATE_WEIGHT': {
-      const newItems = state.items.map(item =>
-        item.id === action.payload.id
-          ? { ...item, weight: action.payload.weight }
-          : item
-      )
+      const newItems = state.items.map(item => {
+        if (item.id === action.payload.id) {
+          return { ...item, weight: action.payload.weight }
+        }
+        return item
+      })
       return {
         ...state,
         items: newItems,
-        total: calculateTotal(newItems),
+        total: calculateTotal(newItems)
       }
     }
-
+    
+    case 'UPDATE_QUANTITY': {
+      const newItems = state.items.map(item => {
+        if (item.id === action.payload.id) {
+          return { ...item, quantity: action.payload.quantity }
+        }
+        return item
+      })
+      return {
+        ...state,
+        items: newItems,
+        total: calculateTotal(newItems)
+      }
+    }
+    
     case 'CLEAR_CART':
       return initialState
-
+      
     default:
       return state
   }
 }
 
-interface CartContextType {
+function calculateTotal(items: CartItem[]): number {
+  return items.reduce((total, item) => {
+    if (item.isByWeight) {
+      return total + (item.weight || 0) * (item.pricePerGram || 0)
+    } else {
+      return total + (item.quantity || 0) * (item.price || 0)
+    }
+  }, 0)
+}
+
+const CartContext = createContext<{
   state: CartState
   addItem: (item: CartItem) => void
   removeItem: (id: number) => void
   updateWeight: (id: number, weight: number) => void
+  updateQuantity: (id: number, quantity: number) => void
   clearCart: () => void
-}
-
-const CartContext = createContext<CartContextType | undefined>(undefined)
+} | null>(null)
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState)
-
+  
   const addItem = (item: CartItem) => {
     dispatch({ type: 'ADD_ITEM', payload: item })
   }
-
+  
   const removeItem = (id: number) => {
     dispatch({ type: 'REMOVE_ITEM', payload: id })
   }
-
+  
   const updateWeight = (id: number, weight: number) => {
     dispatch({ type: 'UPDATE_WEIGHT', payload: { id, weight } })
   }
-
+  
+  const updateQuantity = (id: number, quantity: number) => {
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } })
+  }
+  
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' })
   }
-
+  
   return (
-    <CartContext.Provider
-      value={{
-        state,
-        addItem,
-        removeItem,
-        updateWeight,
-        clearCart,
-      }}
-    >
+    <CartContext.Provider value={{ state, addItem, removeItem, updateWeight, updateQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   )
@@ -130,7 +169,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
 export function useCart() {
   const context = useContext(CartContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useCart must be used within a CartProvider')
   }
   return context

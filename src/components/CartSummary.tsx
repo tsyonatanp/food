@@ -5,7 +5,7 @@ import { FaTrash } from 'react-icons/fa'
 import Link from 'next/link'
 
 export default function CartSummary() {
-  const { state, removeItem, updateWeight } = useCart()
+  const { state, removeItem, updateWeight, updateQuantity } = useCart()
   const { items, total, deliveryFee } = state
 
   const freeDeliveryThreshold = Number(process.env.FREE_DELIVERY_THRESHOLD) || 500
@@ -25,24 +25,48 @@ export default function CartSummary() {
               <div key={item.id} className="flex items-start gap-3">
                 <div className="flex-1">
                   <h3 className="font-medium">{item.name}</h3>
-                  <label htmlFor={`cart-weight-input-${item.id}`} className="sr-only">בחר משקל בגרם עבור {item.name}</label>
-                  <div className="flex items-center gap-2 mt-1">
-                    <input
-                      id={`cart-weight-input-${item.id}`}
-                      type="number"
-                      min="100"
-                      max="1000"
-                      step="50"
-                      value={item.weight}
-                      onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
-                      className="input w-20 py-1"
-                      aria-label={`בחר משקל בגרם עבור ${item.name}`}
-                    />
-                    <span className="text-sm text-gray-500">גרם</span>
-                  </div>
-                  <div className="text-sm text-gray-600 mt-1">
-                    ₪{(item.weight * item.pricePerGram).toFixed(2)}
-                  </div>
+                  {item.isByWeight ? (
+                    <>
+                      <label htmlFor={`cart-weight-input-${item.id}`} className="sr-only">בחר משקל בגרם עבור {item.name}</label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          id={`cart-weight-input-${item.id}`}
+                          type="number"
+                          min="100"
+                          max="1000"
+                          step="50"
+                          value={item.weight}
+                          onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
+                          className="input w-20 py-1"
+                          aria-label={`בחר משקל בגרם עבור ${item.name}`}
+                        />
+                        <span className="text-sm text-gray-500">גרם</span>
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        ₪{((item.weight || 0) * (item.pricePerGram || 0)).toFixed(2)}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <label htmlFor={`cart-quantity-input-${item.id}`} className="sr-only">בחר כמות עבור {item.name}</label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          id={`cart-quantity-input-${item.id}`}
+                          type="number"
+                          min="1"
+                          max="10"
+                          value={item.quantity}
+                          onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                          className="input w-20 py-1"
+                          aria-label={`בחר כמות עבור ${item.name}`}
+                        />
+                        <span className="text-sm text-gray-500">יחידות</span>
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        ₪{((item.quantity || 0) * (item.price || 0)).toFixed(2)}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <button
                   onClick={() => removeItem(item.id)}
@@ -55,7 +79,7 @@ export default function CartSummary() {
             ))}
           </div>
 
-          <div className="border-t pt-4 space-y-2" aria-live="polite">
+          <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span>סכום ביניים:</span>
               <span>₪{total.toFixed(2)}</span>
