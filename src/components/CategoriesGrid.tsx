@@ -3,24 +3,26 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { categories } from '@/lib/categories';
+import { fetchCategories } from '@/lib/fetchCategories';
 
-type Category = {
+interface Category {
   name: string;
   image: string;
   description: string;
-};
+}
 
 export default function CategoriesGrid() {
   const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    fetchCategories()
+      .then((data) => {
+        setCategories(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   if (loading) {
