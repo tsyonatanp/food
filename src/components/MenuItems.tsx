@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaMinus } from 'react-icons/fa'
 import { useCart } from '@/contexts/CartContext'
 
 interface MenuItem {
@@ -39,7 +39,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
     const isByWeight = item['סוג מכירה'] !== 'יחידה'
     
     if (isByWeight) {
-      const weight = selectedWeights[item.מנה] || 200
+      const weight = selectedWeights[item.מנה] || 100
       addItem({
         id,
         name: item.מנה,
@@ -63,6 +63,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {items.map((item) => {
         const isByWeight = item['סוג מכירה'] !== 'יחידה'
+        const weight = selectedWeights[item.מנה] ?? 100
+        const quantity = selectedQuantities[item.מנה] ?? 1
         return (
           <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden" role="region" aria-labelledby={`menu-item-title-${item.מנה}`}>
             {item.תמונה ? (
@@ -98,40 +100,70 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 {isByWeight ? (
-                  <>
-                    <label htmlFor={`weight-input-${item.מנה}`} className="sr-only">בחר משקל בגרם עבור {item.מנה}</label>
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <input
-                        id={`weight-input-${item.מנה}`}
-                        type="number"
-                        min={100}
-                        max={1000}
-                        step={50}
-                        value={selectedWeights[item.מנה] || 200}
-                        onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))}
-                        className="input w-24"
-                        aria-label={`בחר משקל בגרם עבור ${item.מנה}`}
-                      />
-                      <span className="text-gray-500">גרם</span>
-                    </div>
-                  </>
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      className="btn-secondary px-2 py-1 text-lg"
+                      onClick={() => handleWeightChange(item.מנה, Math.max(100, weight - 50))}
+                      aria-label={`הפחת 50 גרם עבור ${item.מנה}`}
+                      disabled={weight <= 100}
+                    >
+                      <FaMinus />
+                    </button>
+                    <input
+                      id={`weight-input-${item.מנה}`}
+                      type="number"
+                      min={100}
+                      max={1000}
+                      step={50}
+                      value={weight}
+                      onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))}
+                      className="input w-24 text-center"
+                      aria-label={`בחר משקל בגרם עבור ${item.מנה}`}
+                    />
+                    <button
+                      type="button"
+                      className="btn-secondary px-2 py-1 text-lg"
+                      onClick={() => handleWeightChange(item.מנה, Math.min(1000, weight + 50))}
+                      aria-label={`הוסף 50 גרם עבור ${item.מנה}`}
+                      disabled={weight >= 1000}
+                    >
+                      <FaPlus />
+                    </button>
+                    <span className="text-gray-500">גרם</span>
+                  </div>
                 ) : (
-                  <>
-                    <label htmlFor={`quantity-input-${item.מנה}`} className="sr-only">בחר כמות עבור {item.מנה}</label>
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <input
-                        id={`quantity-input-${item.מנה}`}
-                        type="number"
-                        min={1}
-                        max={10}
-                        value={selectedQuantities[item.מנה] || 1}
-                        onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))}
-                        className="input w-20"
-                        aria-label={`בחר כמות עבור ${item.מנה}`}
-                      />
-                      <span className="text-gray-500">יחידות</span>
-                    </div>
-                  </>
+                  <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      className="btn-secondary px-2 py-1 text-lg"
+                      onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))}
+                      aria-label={`הפחת יחידה עבור ${item.מנה}`}
+                      disabled={quantity <= 1}
+                    >
+                      <FaMinus />
+                    </button>
+                    <input
+                      id={`quantity-input-${item.מנה}`}
+                      type="number"
+                      min={1}
+                      max={10}
+                      value={quantity}
+                      onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))}
+                      className="input w-20 text-center"
+                      aria-label={`בחר כמות עבור ${item.מנה}`}
+                    />
+                    <button
+                      type="button"
+                      className="btn-secondary px-2 py-1 text-lg"
+                      onClick={() => handleQuantityChange(item.מנה, Math.min(10, quantity + 1))}
+                      aria-label={`הוסף יחידה עבור ${item.מנה}`}
+                      disabled={quantity >= 10}
+                    >
+                      <FaPlus />
+                    </button>
+                    <span className="text-gray-500">יחידות</span>
+                  </div>
                 )}
                 <button
                   className="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 mt-2 sm:mt-0"
