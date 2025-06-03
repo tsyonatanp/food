@@ -1,40 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-
-const promotions = [
-  {
-    id: 1,
-    text: 'משלוח חינם בהזמנה מעל 500 גרם! 🚚',
-    bgColor: 'bg-primary-500',
-  },
-  {
-    id: 2,
-    text: 'מבצע השבוע: 20% הנחה על תבשילי בשר! 🥩',
-    bgColor: 'bg-secondary-500',
-  },
-]
+import { useEffect, useState } from 'react'
+import { fetchBanner } from '@/lib/fetchBanner'
 
 export default function Banner() {
-  const [currentPromoIndex, setCurrentPromoIndex] = useState(0)
+  const [messages, setMessages] = useState<string[]>([])
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentPromoIndex((prev: number) => (prev + 1) % promotions.length)
-    }, 5000)
-
-    return () => clearInterval(timer)
+    fetchBanner().then(data => {
+      setMessages(data.map((row: any) => row['פרסום']).filter(Boolean))
+    })
   }, [])
 
-  const currentPromo = promotions[currentPromoIndex]
+  if (messages.length === 0) return null
 
   return (
-    <div 
-      className={`${currentPromo.bgColor} text-white py-3 text-center transition-colors duration-500`}
-    >
-      <div className="container">
-        <p className="text-lg font-medium">{currentPromo.text}</p>
-      </div>
+    <div className="bg-yellow-100 text-yellow-900 text-center py-2 font-bold">
+      {messages.map((msg, i) => (
+        <div key={i}>{msg}</div>
+      ))}
     </div>
   )
 } 
