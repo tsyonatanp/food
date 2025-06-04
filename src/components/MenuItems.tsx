@@ -13,6 +13,7 @@ interface MenuItem {
   'ללא גלוטן': string
   תמונה?: string
   'סוג מכירה'?: string // 'משקל' או 'יחידה'
+  checkboxes?: string | boolean
 }
 
 export default function MenuItems({ items }: { items: MenuItem[] }) {
@@ -59,9 +60,15 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
     }
   }
 
+  // סינון לפי checkboxes
+  const filteredItems = items.filter(item => {
+    // Google Sheets מחזיר TRUE/true/false/FALSE/ריק
+    return item.checkboxes === true || item.checkboxes === 'TRUE' || item.checkboxes === 'true';
+  });
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {items.map((item) => {
+      {filteredItems.map((item) => {
         const isByWeight = item['סוג מכירה'] !== 'יחידה'
         const weight = selectedWeights[item.מנה] ?? 100
         const quantity = selectedQuantities[item.מנה] ?? 1
