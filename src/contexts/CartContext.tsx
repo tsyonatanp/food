@@ -30,7 +30,7 @@ type CartAction =
 const initialState: CartState = {
   items: [],
   total: 0,
-  deliveryFee: 20
+  deliveryFee: 30
 }
 
 function cartReducer(state: CartState, action: CartAction): CartState {

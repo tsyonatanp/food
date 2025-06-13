@@ -3,6 +3,7 @@
 import { Rubik } from 'next/font/google'
 import { CartProvider } from '@/contexts/CartContext'
 import Banner from '@/components/Banner'
+import Navigation from '@/components/Navigation'
 import './globals.css'
 
 const rubik = Rubik({ 
@@ -16,7 +17,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <body className="font-sans bg-gray-50">
         <CartProvider>
           <Banner />
-          {children}
+          <Navigation />
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {children}
+          </main>
         </CartProvider>
       </body>
     </html>
