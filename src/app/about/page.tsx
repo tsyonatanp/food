@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { fetchAbout } from '@/lib/fetchAbout';
 
 export default async function AboutPage() {

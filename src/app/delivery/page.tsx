@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { fetchDelivery } from '@/lib/fetchDelivery';
 
 export default async function DeliveryPage() {

@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { fetchSupport } from '@/lib/fetchSupport';
 
 const WhatsAppIcon = () => (

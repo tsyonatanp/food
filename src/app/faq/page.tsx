@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { fetchFaq } from '@/lib/fetchFaq';
 
 type FaqRow = { type?: string; faq?: string };
