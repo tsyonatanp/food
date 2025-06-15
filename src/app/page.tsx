@@ -17,7 +17,10 @@ export default function HomePage() {
       setTitle(data[0]?.['פרסום'] || '');
       setLoading(false);
     });
-    fetchSheleg().then(setImages);
+    fetchSheleg().then(data => {
+      console.log('sheleg images:', data);
+      setImages(data);
+    });
   }, []);
 
   return (
@@ -26,13 +29,16 @@ export default function HomePage() {
         {images.length > 0 ? (
           <ShelegCarousel images={images} />
         ) : (
-          <h1 className="text-4xl font-bold text-center mb-8 min-h-[2.5rem]">
-            {loading ? (
-              <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse"></span>
-            ) : (
-              title
-            )}
-          </h1>
+          <div className="flex flex-col items-center mb-8 min-h-[2.5rem]">
+            <h1 className="text-4xl font-bold text-center">
+              {loading ? (
+                <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse"></span>
+              ) : (
+                title
+              )}
+            </h1>
+            <p className="text-red-500 mt-2 text-center text-sm">לא נמצאה תמונה בגליון sheleg או שיש בעיה בטעינה. בדוק את הקישור בגליון ואת ההרשאות.</p>
+          </div>
         )}
         <p className="text-center text-gray-600 mb-12">בחר קטגוריה להזמנה</p>
         <CategoriesGrid />
