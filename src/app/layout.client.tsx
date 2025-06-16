@@ -5,6 +5,7 @@ import { CartProvider } from '@/contexts/CartContext'
 import Banner from '@/components/Banner'
 import Navigation from '@/components/Navigation'
 import './globals.css'
+import Script from "next/script";
 
 const rubik = Rubik({ 
   subsets: ['hebrew', 'latin'],
@@ -15,6 +16,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <html lang="he" dir="rtl" className={rubik.variable}>
       <body className="font-sans bg-gray-50">
+        <Script src="https://nagish.li/accessibility.js" strategy="afterInteractive" />
         <CartProvider>
           <Banner />
           <Navigation />
