@@ -6,6 +6,7 @@ import Banner from '@/components/Banner'
 import Navigation from '@/components/Navigation'
 import './globals.css'
 import Script from "next/script";
+import { useEffect } from "react";
 
 const rubik = Rubik({ 
   subsets: ['hebrew', 'latin'],
@@ -13,10 +14,19 @@ const rubik = Rubik({
 })
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    if (!document.getElementById("nagish-li-script")) {
+      const script = document.createElement("script");
+      script.src = "https://nagish.li/accessibility.js";
+      script.id = "nagish-li-script";
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
   return (
     <html lang="he" dir="rtl" className={rubik.variable}>
       <body className="font-sans bg-gray-50">
-        <Script src="https://nagish.li/accessibility.js" strategy="afterInteractive" />
         <CartProvider>
           <Banner />
           <Navigation />
