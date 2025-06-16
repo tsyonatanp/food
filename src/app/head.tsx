@@ -1,7 +1,10 @@
 export default function Head() {
   return (
     <>
-      <script src="https://nagish.li/accessibility.js" defer></script>
+      <script dangerouslySetInnerHTML={{
+        __html: 'nl_pos = "br";'
+      }} />
+      <script src="/nagishli.js?v=2.3" charSet="utf-8" defer></script>
     </>
   );
 } 
