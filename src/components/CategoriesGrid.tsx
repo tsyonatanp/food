@@ -9,6 +9,7 @@ interface Category {
   name: string;
   image: string;
   description: string;
+  checkboxes?: boolean | string | number;
 }
 
 export default function CategoriesGrid() {
@@ -19,6 +20,7 @@ export default function CategoriesGrid() {
   useEffect(() => {
     fetchCategories()
       .then((data) => {
+        console.log('Fetched categories:', data);
         setCategories(data);
         setLoading(false);
       })
@@ -37,30 +39,35 @@ export default function CategoriesGrid() {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-      {categories.map((category) => (
-        <button
-          key={category.name}
-          onClick={() => router.push(`/order?category=${encodeURIComponent(category.name)}`)}
-          className="group relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
-        >
-          <div className="aspect-square relative">
-            <Image
-              src={category.image}
-              alt={category.name}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-              <h3 className="text-xl font-bold">{category.name}</h3>
-              <p className="text-sm opacity-0 transition-opacity group-hover:opacity-100">
-                {category.description}
-              </p>
+      {categories
+        .filter((category) => {
+          const val = String(category.checkboxes).toLowerCase().trim();
+          return val === 'true' || val === '1' || val === 'checked';
+        })
+        .map((category) => (
+          <button
+            key={category.name}
+            onClick={() => router.push(`/order?category=${encodeURIComponent(category.name)}`)}
+            className="group relative overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105"
+          >
+            <div className="aspect-square relative">
+              <Image
+                src={category.image}
+                alt={category.name}
+                fill
+                className="object-cover"
+              />
             </div>
-          </div>
-        </button>
-      ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <h3 className="text-xl font-bold">{category.name}</h3>
+                <p className="text-sm opacity-0 transition-opacity group-hover:opacity-100">
+                  {category.description}
+                </p>
+              </div>
+            </div>
+          </button>
+        ))}
     </div>
   );
 } 
