@@ -5,10 +5,11 @@ import { useCart } from "@/contexts/CartContext";
 import { useRouter } from "next/navigation";
 
 function generateOrderNumber() {
-  const today = new Date();
-  const dateStr = today.toISOString().slice(0,10).replace(/-/g, '');
-  const rand = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  return `${dateStr}-${rand}`;
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0,10).replace(/-/g, ''); // YYYYMMDD
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  return `${dateStr}-${hours}${minutes}`;
 }
 
 export default function CheckoutPage() {
