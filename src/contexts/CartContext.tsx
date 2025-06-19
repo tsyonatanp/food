@@ -125,7 +125,8 @@ function calculateTotal(items: CartItem[]): number {
     if (item.isByWeight) {
       return total + (item.weight || 0) * (item.pricePerGram || 0)
     } else {
-      return total + (item.quantity || 0) * (item.price || 0)
+      // השתמש במחיר משוער אם קיים
+      return total + (item.quantity || 0) * (item.estimatedUnitPrice ?? item.price ?? 0)
     }
   }, 0)
 }
