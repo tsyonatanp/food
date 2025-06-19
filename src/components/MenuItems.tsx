@@ -14,6 +14,7 @@ interface MenuItem {
   תמונה?: string
   'סוג מכירה'?: string // 'משקל' או 'יחידה'
   checkboxes?: string | boolean
+  averageWeightPerUnit?: number // משקל ממוצע ליחידה
 }
 
 export default function MenuItems({ items }: { items: MenuItem[] }) {
@@ -50,13 +51,26 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
       })
     } else {
       const quantity = selectedQuantities[item.מנה] || 1
-      addItem({
-        id,
-        name: item.מנה,
-        quantity,
-        price: Number(item['מחיר (₪)']), // מחיר ליחידה
-        isByWeight: false
-      })
+      // אם יש averageWeightPerUnit, נחשב גם משקל משוער ומחיר לגרם
+      if (item.averageWeightPerUnit) {
+        const estimatedUnitPrice = (item.averageWeightPerUnit / 100) * Number(item['מחיר (₪)'])
+        addItem({
+          id,
+          name: item.מנה,
+          quantity,
+          estimatedUnitPrice, // מחיר ליחידה משוער
+          averageWeightPerUnit: item.averageWeightPerUnit, // משקל ממוצע ליחידה
+          isByWeight: false
+        })
+      } else {
+        addItem({
+          id,
+          name: item.מנה,
+          quantity,
+          price: Number(item['מחיר (₪)']), // מחיר ליחידה
+          isByWeight: false
+        })
+      }
     }
   }
 
@@ -72,6 +86,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
         const isByWeight = item['סוג מכירה'] !== 'יחידה'
         const weight = selectedWeights[item.מנה] ?? 100
         const quantity = selectedQuantities[item.מנה] ?? 1
+        console.log(item.מנה, item.averageWeightPerUnit, typeof item.averageWeightPerUnit);
         return (
           <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden" role="region" aria-labelledby={`menu-item-title-${item.מנה}`}>
             {item.תמונה ? (
@@ -93,7 +108,9 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   {isByWeight ? (
                     `₪${item['מחיר (₪)']} / 100 גרם`
                   ) : (
-                    `₪${item['מחיר (₪)']} ליחידה`
+                    item.averageWeightPerUnit ?
+                      `₪${((item.averageWeightPerUnit / 100) * Number(item['מחיר (₪)'])).toFixed(2)} ליחידה`
+                      : `₪${item['מחיר (₪)']} ליחידה`
                   )}
                 </span>
                 <div className="flex gap-2">
@@ -105,6 +122,13 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   )}
                 </div>
               </div>
+              {/* הצגת מידע מפורט ליחידה */}
+              {!isByWeight && item.averageWeightPerUnit && (
+                <div className="text-xs text-black mb-2 flex flex-col gap-0.5">
+                  <div>מחיר ל-100 גרם: ₪{item['מחיר (₪)']}</div>
+                  <div>משקל ממוצע ליחידה: {item.averageWeightPerUnit} גרם</div>
+                </div>
+              )}
               <div className="flex flex-col gap-4 items-stretch">
                 <div className="flex items-center gap-2 w-full">
                   {isByWeight ? (
@@ -156,9 +180,10 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                         type="number"
                         min={1}
                         max={10}
+                        step={1}
                         value={quantity}
                         onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))}
-                        className="input w-20 text-center"
+                        className="input w-24 text-center"
                         aria-label={`בחר כמות עבור ${item.מנה}`}
                       />
                       <button
@@ -175,12 +200,12 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   )}
                 </div>
                 <button
-                  className="btn-primary w-full flex items-center justify-center gap-2 mt-2"
+                  type="button"
+                  className="btn-primary w-full"
                   onClick={() => handleAddToCart(item)}
-                  aria-label={`הוסף את ${item.מנה} לעגלה`}
+                  aria-label={`הוסף לסל עבור ${item.מנה}`}
                 >
-                  <FaPlus size={14} className="text-white" />
-                  הוסף לעגלה
+                  הוסף לסל
                 </button>
               </div>
             </div>
@@ -189,4 +214,4 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
       })}
     </div>
   )
-} 
+}

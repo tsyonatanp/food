@@ -188,7 +188,13 @@ export default function CheckoutPage() {
                   {items.map(item => (
                     <li key={item.id} className="flex justify-between">
                       <span>{item.name}</span>
-                      <span>{item.weight} גרם</span>
+                      <span>
+                        {item.isByWeight
+                          ? `${item.weight} גרם`
+                          : item.averageWeightPerUnit && item.estimatedUnitPrice
+                            ? `${item.quantity ?? 0} יחידות (הערכה: ${(item.quantity ?? 0) * item.averageWeightPerUnit} גרם, מחיר משוער: ₪${((item.estimatedUnitPrice ?? 0) * (item.quantity ?? 0)).toFixed(2)})`
+                            : `${item.quantity} יחידות`}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -205,6 +211,9 @@ export default function CheckoutPage() {
                 <span>סה"כ לתשלום:</span>
                 <span>₪{finalTotal.toFixed(2)}</span>
               </div>
+              <strong className="text-xs text-red-600 mt-2 block">
+                המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.
+              </strong>
             </div>
             {error && <div className="text-red-600 text-center">{error}</div>}
             <button
@@ -214,6 +223,9 @@ export default function CheckoutPage() {
             >
               {loading ? "שולח..." : "שלח הזמנה"}
             </button>
+            <strong className="text-xs text-red-600 mt-2 block text-center">
+              המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.
+            </strong>
           </form>
         )}
       </div>

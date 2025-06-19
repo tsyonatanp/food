@@ -12,6 +12,8 @@ type CartItem = {
   // אם נמכר לפי יחידות
   quantity?: number
   price?: number
+  averageWeightPerUnit?: number // משקל ממוצע ליחידה
+  estimatedUnitPrice?: number // מחיר ליחידה משוער
 }
 
 type CartState = {
