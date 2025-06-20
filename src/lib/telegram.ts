@@ -22,11 +22,17 @@ export async function sendTelegramMessage(text: string) {
     const responseText = await response.text();
     console.log('Raw Telegram API Response:', responseText);
 
-    const result = JSON.parse(responseText);
-    console.log('Telegram API Response:', JSON.stringify(result, null, 2));
-
     if (!response.ok) {
-      throw new Error(`Telegram API error: ${result.description}`);
+      console.error('Telegram API error:', responseText);
+      // Don't throw here to allow the order process to complete
+      return;
+    }
+
+    try {
+      const result = JSON.parse(responseText);
+      console.log('Telegram API Response:', JSON.stringify(result, null, 2));
+    } catch (error) {
+      console.error('Failed to parse Telegram API response:', error);
     }
   } catch (error) {
     console.error('Failed to send Telegram message:', error);
