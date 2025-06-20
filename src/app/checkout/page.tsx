@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useRouter } from "next/navigation";
 
@@ -27,6 +27,19 @@ export default function CheckoutPage() {
   const [success, setSuccess] = useState(false);
   const [orderNumber] = useState(generateOrderNumber());
   const router = useRouter();
+
+  useEffect(() => {
+    const savedDetails = localStorage.getItem('customerDetails');
+    if (savedDetails) {
+      const { name, phone, address, floor, apartment, entryCode } = JSON.parse(savedDetails);
+      setName(name || "");
+      setPhone(phone || "");
+      setAddress(address || "");
+      setFloor(floor || "");
+      setApartment(apartment || "");
+      setEntryCode(entryCode || "");
+    }
+  }, []);
 
   const freeDeliveryThreshold = Number(process.env.NEXT_PUBLIC_FREE_DELIVERY_THRESHOLD) || 500;
   const actualDeliveryFee = total >= freeDeliveryThreshold ? 0 : deliveryFee;
@@ -69,6 +82,8 @@ export default function CheckoutPage() {
       });
       const data = await res.json();
       if (data.ok) {
+        const customerDetails = { name, phone, address, floor, apartment, entryCode };
+        localStorage.setItem('customerDetails', JSON.stringify(customerDetails));
         setSuccess(true);
         clearCart();
         setTimeout(() => router.push("/"), 3000);
