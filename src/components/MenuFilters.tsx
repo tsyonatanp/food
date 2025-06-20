@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Listbox } from '@headlessui/react'
 import { FaChevronDown } from 'react-icons/fa'
 
+// TODO: Replace static categories with dynamic fetch from Google Sheets and filter by enabled field
 const categories = [
   { id: 'all', name: 'הכל' },
   { id: 'meat', name: 'בשר' },

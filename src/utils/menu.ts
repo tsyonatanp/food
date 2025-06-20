@@ -11,6 +11,7 @@ interface MenuItem {
   available: boolean
   imageUrl: string
   tags: string[]
+  averageWeightPerUnit?: number
 }
 
 export async function importMenuFromExcel(file: File): Promise<MenuItem[]> {
@@ -30,7 +31,8 @@ export async function importMenuFromExcel(file: File): Promise<MenuItem[]> {
       maxWeight: Number(row['משקל מקסימלי']) || 1000,
       available: row['זמינות'] === 'במלאי',
       imageUrl: row['קישור לתמונה'] || '',
-      tags: (row['תגיות'] || '').split(',').map((tag: string) => tag.trim()).filter(Boolean)
+      tags: (row['תגיות'] || '').split(',').map((tag: string) => tag.trim()).filter(Boolean),
+      averageWeightPerUnit: Number(row['הערכה']) || undefined,
     }))
   } catch (error) {
     console.error('Failed to import menu from Excel:', error)

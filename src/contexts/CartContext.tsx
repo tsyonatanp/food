@@ -12,6 +12,8 @@ type CartItem = {
   // אם נמכר לפי יחידות
   quantity?: number
   price?: number
+  averageWeightPerUnit?: number // משקל ממוצע ליחידה
+  estimatedUnitPrice?: number // מחיר ליחידה משוער
 }
 
 type CartState = {
@@ -30,7 +32,7 @@ type CartAction =
 const initialState: CartState = {
   items: [],
   total: 0,
-  deliveryFee: 20
+  deliveryFee: 30
 }
 
 function cartReducer(state: CartState, action: CartAction): CartState {
@@ -123,7 +125,8 @@ function calculateTotal(items: CartItem[]): number {
     if (item.isByWeight) {
       return total + (item.weight || 0) * (item.pricePerGram || 0)
     } else {
-      return total + (item.quantity || 0) * (item.price || 0)
+      // השתמש במחיר משוער אם קיים
+      return total + (item.quantity || 0) * (item.estimatedUnitPrice ?? item.price ?? 0)
     }
   }, 0)
 }

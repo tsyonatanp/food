@@ -63,7 +63,15 @@ export default function CartSummary() {
                         <span className="text-sm text-gray-500">יחידות</span>
                       </div>
                       <div className="text-sm text-gray-600 mt-1">
-                        ₪{((item.quantity || 0) * (item.price || 0)).toFixed(2)}
+                        ₪{item.estimatedUnitPrice && item.quantity ? (item.estimatedUnitPrice * item.quantity).toFixed(2) : ((item.quantity || 0) * (item.price || 0)).toFixed(2)}
+                        {item.averageWeightPerUnit && item.estimatedUnitPrice ? (
+                          <>
+                            <br />
+                            <span className="text-xs text-gray-500">
+                              (הערכה: {item.quantity! * item.averageWeightPerUnit} גרם, מחיר משוער: ₪{(item.estimatedUnitPrice * item.quantity!).toFixed(2)})
+                            </span>
+                          </>
+                        ) : null}
                       </div>
                     </>
                   )}
