@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       (apartment ? `\n<b>דירה:</b> ${apartment}` : '') +
       (entryCode ? `\n<b>קוד כניסה:</b> ${entryCode}` : '') +
       (notes ? `\n<b>הערות לשליח:</b> ${notes}` : '') +
-      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total}` +
+      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}` +
       `\n\n<b>המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.</b>`;
 
     console.log("Attempting to send Telegram message...");
