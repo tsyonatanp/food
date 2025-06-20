@@ -76,33 +76,32 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
 
   // סינון לפי checkboxes
   const filteredItems = items.filter(item => {
-    // Google Sheets מחזיר TRUE/true/false/FALSE/ריק
     return item.checkboxes === true || item.checkboxes === 'TRUE' || item.checkboxes === 'true';
   });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredItems.map((item) => {
-        const isByWeight = item['סוג מכירה'] !== 'יחידה'
-        const weight = selectedWeights[item.מנה] ?? 100
-        const quantity = selectedQuantities[item.מנה] ?? 1
+        const isByWeight = item['סוג מכירה'] !== 'יחידה';
+        const weight = selectedWeights[item.מנה] ?? 100;
+        const quantity = selectedQuantities[item.מנה] ?? 1;
 
         return (
-          <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden">
-            {item.תמונה ? (
-              <div className="relative h-48">
+          <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+            <div className="relative h-48">
+              {item.תמונה ? (
                 <Image
                   src={item.תמונה}
                   alt={item.מנה}
                   fill
                   className="object-cover"
                 />
-              </div>
-            ) : (
-              <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400">אין תמונה</div>
-            )}
-            <div className="p-4 flex flex-col justify-between" style={{ minHeight: '260px' }}>
-              <div>
+              ) : (
+                <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400">אין תמונה</div>
+              )}
+            </div>
+            <div className="p-4 flex flex-col flex-grow">
+              <div className="flex-grow">
                 <h3 className="text-xl font-semibold mb-2">{item.מנה}</h3>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-lg font-medium">
@@ -123,7 +122,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                     )}
                   </div>
                 </div>
-                
+
                 {!isByWeight && item.averageWeightPerUnit && (
                   <div className="text-xs text-black mb-2 flex flex-col gap-0.5">
                     <div>מחיר ל-100 גרם: ₪{item['מחיר (₪)']}</div>
@@ -132,62 +131,26 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                 )}
               </div>
 
-              <div className="flex flex-col gap-4 items-stretch mt-4">
+              <div className="flex flex-col gap-4 items-stretch mt-auto">
                 <div className="flex items-center gap-2 w-full">
                   {isByWeight ? (
                     <>
-                      <button
-                        type="button"
-                        className="btn-secondary px-2 py-1 text-lg"
-                        onClick={() => handleWeightChange(item.מנה, Math.max(100, weight - 50))}
-                        disabled={weight <= 100}
-                      >
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.max(100, weight - 50))} disabled={weight <= 100}>
                         <FaMinus />
                       </button>
-                      <input
-                        type="number"
-                        min={100}
-                        max={1000}
-                        step={50}
-                        value={weight}
-                        onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))}
-                        className="input w-24 text-center"
-                      />
-                      <button
-                        type="button"
-                        className="btn-secondary px-2 py-1 text-lg"
-                        onClick={() => handleWeightChange(item.מנה, Math.min(1000, weight + 50))}
-                        disabled={weight >= 1000}
-                      >
+                      <input type="number" min={100} max={1000} step={50} value={weight} onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.min(1000, weight + 50))} disabled={weight >= 1000}>
                         <FaPlus />
                       </button>
                       <span className="text-gray-500">גרם</span>
                     </>
                   ) : (
                     <>
-                      <button
-                        type="button"
-                        className="btn-secondary px-2 py-1 text-lg"
-                        onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))}
-                        disabled={quantity <= 1}
-                      >
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))} disabled={quantity <= 1}>
                         <FaMinus />
                       </button>
-                      <input
-                        type="number"
-                        min={1}
-                        max={10}
-                        step={1}
-                        value={quantity}
-                        onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))}
-                        className="input w-24 text-center"
-                      />
-                      <button
-                        type="button"
-                        className="btn-secondary px-2 py-1 text-lg"
-                        onClick={() => handleQuantityChange(item.מנה, Math.min(10, quantity + 1))}
-                        disabled={quantity >= 10}
-                      >
+                      <input type="number" min={1} max={10} step={1} value={quantity} onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.min(10, quantity + 1))} disabled={quantity >= 10}>
                         <FaPlus />
                       </button>
                       <span className="text-gray-500">יחידות</span>
@@ -204,8 +167,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
               </div>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
