@@ -85,8 +85,17 @@ export default function CheckoutPage() {
         const customerDetails = { name, phone, address, floor, apartment, entryCode };
         localStorage.setItem('customerDetails', JSON.stringify(customerDetails));
         setSuccess(true);
+        // Save order details for the confirmation page
+        const orderDetails = {
+          orderNumber: data.orderNumber,
+          name: data.name,
+          total: data.total,
+          cart: data.cart,
+        };
+        sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
+        
         clearCart();
-        setTimeout(() => router.push("/"), 3000);
+        router.push('/order-confirmation'); // Redirect to confirmation page
       } else {
         setError(data.error || "אירעה שגיאה בשליחת ההזמנה");
       }
