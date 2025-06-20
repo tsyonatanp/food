@@ -1,9 +1,12 @@
 export async function sendTelegramMessage(text: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
+  
   if (!token || !chatId) {
-    console.error('Missing Telegram credentials');
-    throw new Error('Missing Telegram credentials');
+    console.log('Telegram credentials not found - skipping notification (this is normal in local development)');
+    console.log('Order details that would be sent to Telegram:');
+    console.log(text);
+    return; // Don't throw error, just return gracefully
   }
 
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
@@ -36,6 +39,6 @@ export async function sendTelegramMessage(text: string) {
     }
   } catch (error) {
     console.error('Failed to send Telegram message:', error);
-    throw error; // Re-throw the error to be caught by the API route
+    // Don't throw error to allow order process to complete
   }
 } 

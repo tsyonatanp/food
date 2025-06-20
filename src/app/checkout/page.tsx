@@ -87,10 +87,10 @@ export default function CheckoutPage() {
         setSuccess(true);
         // Save order details for the confirmation page
         const orderDetails = {
-          orderNumber: data.orderNumber,
-          name: data.name,
-          total: data.total,
-          cart: data.cart,
+          orderNumber,
+          name,
+          total: finalTotal,
+          cart: items,
         };
         sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
         

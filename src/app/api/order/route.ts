@@ -24,8 +24,13 @@ export async function POST(req: NextRequest) {
       `\n\n<b>המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.</b>`;
 
     console.log("Attempting to send Telegram message...");
-    await sendTelegramMessage(message);
-    console.log("Telegram message sent successfully!");
+    try {
+      await sendTelegramMessage(message);
+      console.log("Telegram message sent successfully!");
+    } catch (telegramError) {
+      console.log("Telegram notification failed, but order was processed successfully:", telegramError);
+      // Don't fail the entire order process if Telegram fails
+    }
 
     return NextResponse.json({ ok: true });
   } catch (e) {
