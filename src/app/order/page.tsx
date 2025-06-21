@@ -42,11 +42,8 @@ function OrderContent() {
       });
 
   return (
-    <main className="min-h-screen py-8">
+    <main className="min-h-screen py-8 pb-32 lg:pb-8">
       <div className="container">
-        <div className="block lg:hidden mb-4">
-          <CartSummary />
-        </div>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-6">תפריט</h1>
@@ -73,6 +70,11 @@ function OrderContent() {
             <CartSummary />
           </div>
         </div>
+      </div>
+      
+      {/* עגלה קבועה בתחתית במובייל */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg lg:hidden z-50">
+        <CartSummary />
       </div>
     </main>
   );
