@@ -105,13 +105,11 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                 <h3 className="text-xl font-semibold mb-2">{item.מנה}</h3>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-lg font-medium">
-                    {isByWeight ? (
+                    {item['סוג מכירה'] === 'יחידה' && !item.averageWeightPerUnit ?
+                      `₪${item['מחיר (₪)']} ליחידה`
+                      :
                       `₪${item['מחיר (₪)']} / 100 גרם`
-                    ) : (
-                      item.averageWeightPerUnit ?
-                        `₪${((item.averageWeightPerUnit / 100) * Number(item['מחיר (₪)'])).toFixed(2)} ליחידה`
-                        : `₪${item['מחיר (₪)']} ליחידה`
-                    )}
+                    }
                   </span>
                   <div className="flex gap-2">
                     {item.צמחוני === 'כן' && (
@@ -125,8 +123,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
 
                 {!isByWeight && item.averageWeightPerUnit && (
                   <div className="text-xs text-black mb-2 flex flex-col gap-0.5">
-                    <div>מחיר ל-100 גרם: ₪{item['מחיר (₪)']}</div>
                     <div>משקל ממוצע ליחידה: {item.averageWeightPerUnit} גרם</div>
+                    <div>מחיר משוער ליחידה: ₪{((item.averageWeightPerUnit / 100) * Number(item['מחיר (₪)'])).toFixed(2)}</div>
                   </div>
                 )}
               </div>
@@ -146,12 +144,12 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                     </>
                   ) : (
                     <>
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))} disabled={quantity <= 1}>
-                        <FaMinus />
-                      </button>
-                      <input type="number" min={1} max={10} step={1} value={quantity} onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
                       <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.min(10, quantity + 1))} disabled={quantity >= 10}>
                         <FaPlus />
+                      </button>
+                      <input type="number" min={1} max={10} step={1} value={quantity} onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))} disabled={quantity <= 1}>
+                        <FaMinus />
                       </button>
                       <span className="text-gray-500">יחידות</span>
                     </>
