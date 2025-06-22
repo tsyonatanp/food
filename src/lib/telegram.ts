@@ -43,20 +43,20 @@ export async function sendTelegramMessage(text: string) {
   }
 }
 
-export async function sendTelegramDocument(pdfBuffer: Buffer, fileName: string, caption: string) {
+export async function sendPhotoToTelegram(imageBuffer: Buffer, caption: string) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
 
   if (!token || !chatId) {
-    console.log('Telegram credentials not found, skipping document.');
+    console.log('Telegram credentials not found, skipping photo.');
     return;
   }
 
-  const url = `https://api.telegram.org/bot${token}/sendDocument`;
+  const url = `https://api.telegram.org/bot${token}/sendPhoto`;
   
   const formData = new FormData();
   formData.append('chat_id', chatId);
-  formData.append('document', new Blob([pdfBuffer]), fileName);
+  formData.append('photo', new Blob([imageBuffer]), 'order-receipt.png');
   formData.append('caption', caption);
 
   try {
@@ -66,9 +66,9 @@ export async function sendTelegramDocument(pdfBuffer: Buffer, fileName: string, 
     });
      if (!response.ok) {
       const errorText = await response.text();
-      console.error('Telegram API error (sendDocument):', errorText);
+      console.error('Telegram API error (sendPhoto):', errorText);
     }
   } catch (error) {
-    console.error('Failed to send Telegram document:', error);
+    console.error('Failed to send Telegram photo:', error);
   }
 } 
