@@ -6,9 +6,12 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     
     const { orderNumber, name, phone, cart, total } = data;
-    const itemsText = cart.map((item: any) =>
-        `• ${item.name} - ${item.quantity} ${item.isByWeight ? 'גרם' : 'יחידות'}`
-    ).join('\n');
+    const itemsText = cart.map((item: any) => {
+      if (item.isByWeight) {
+        return `• ${item.name} - ${item.weight} גרם`;
+      }
+      return `• ${item.name} - ${item.quantity} יחידות`;
+    }).join('\n');
     
     const message = `🛒 <b>הזמנה חדשה!</b>\n\n<b>מספר הזמנה:</b> ${orderNumber}\n<b>שם:</b> ${name}\n<b>טלפון:</b> ${phone}\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}`;
 
