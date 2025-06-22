@@ -50,13 +50,13 @@ const OrderPdfDocument = ({ order }: { order: any }) => (
       </View>
       <View style={styles.section}>
         <Text style={styles.subtitle}>Order Details:</Text>
-        {order.cart.items.map((item: any, index: number) => (
+        {order.cart.map((item: any, index: number) => (
           <Text key={index} style={styles.item}>
             - {item.name} (x{item.isByWeight ? `${item.weight}g` : item.quantity}) - ${item.price.toFixed(2)}
           </Text>
         ))}
       </View>
-      <Text style={styles.total}>Total: ${order.cart.total.toFixed(2)}</Text>
+      <Text style={styles.total}>Total: ${order.total.toFixed(2)}</Text>
     </Page>
   </Document>
 );

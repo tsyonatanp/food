@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     console.log("Received order data:", data);
     // data should include: orderNumber, name, phone, address, floor, apartment, entryCode, notes, cart (array of items), total, etc.
     const { orderNumber, name, phone, address, floor, apartment, entryCode, notes, cart, total } = data;
-    const itemsText = cart.items.map((item: any) =>
+    const itemsText = cart.map((item: any) =>
       item.isByWeight
         ? `• ${item.name} - ${item.weight} גרם`
         : item.averageWeightPerUnit && item.estimatedUnitPrice
@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
       (apartment ? `\n<b>דירה:</b> ${apartment}` : '') +
       (entryCode ? `\n<b>קוד כניסה:</b> ${entryCode}` : '') +
       (notes ? `\n<b>הערות לשליח:</b> ${notes}` : '') +
-      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${cart.total.toFixed(2)}` +
+      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}` +
       `\n\n<b>המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.</b>`;
 
     console.log("Attempting to send Telegram message...");
