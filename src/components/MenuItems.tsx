@@ -76,7 +76,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
 
   // סינון לפי checkboxes
   const filteredItems = items.filter(item => {
-    return item.checkboxes === true || item.checkboxes === 'TRUE' || item.checkboxes === 'true';
+    const checkboxValue = String(item.checkboxes).toLowerCase();
+    return checkboxValue === 'true';
   });
 
   return (
@@ -135,8 +136,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                       <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.max(100, weight - 50))} disabled={weight <= 100}>
                         <FaMinus />
                       </button>
-                      <input type="number" min={100} max={1000} step={50} value={weight} onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.min(1000, weight + 50))} disabled={weight >= 1000}>
+                      <input type="number" min={100} max={2000} step={50} value={weight} onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.min(2000, weight + 50))} disabled={weight >= 2000}>
                         <FaPlus />
                       </button>
                       <span className="text-gray-500">גרם</span>

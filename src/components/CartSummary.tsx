@@ -43,22 +43,22 @@ export default function CartSummary() {
             {/* פרטי הזמנה מורחבים */}
             {isExpanded && (
               <div className="border-t border-gray-200 pt-3 mt-3">
-                <div className="space-y-3 mb-4 max-h-48 overflow-y-auto">
+                <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
                   {items.map((item) => (
                     <div key={item.id} className="flex items-start gap-3 text-sm">
-                      <div className="flex-1">
-                        <h3 className="font-medium">{item.name}</h3>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-medium truncate">{item.name}</h3>
                         {item.isByWeight ? (
                           <>
                             <div className="flex items-center gap-2 mt-1">
                               <input
                                 type="number"
                                 min="100"
-                                max="1000"
+                                max="2000"
                                 step="50"
                                 value={item.weight}
                                 onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
-                                className="input w-16 py-1 text-xs"
+                                className="input w-20 py-1 text-xs"
                               />
                               <span className="text-xs text-gray-500">גרם</span>
                             </div>
@@ -87,7 +87,7 @@ export default function CartSummary() {
                       </div>
                       <button
                         onClick={() => removeItem(item.id)}
-                        className="text-red-500 hover:text-red-700 transition-colors text-xs"
+                        className="text-red-500 hover:text-red-700 transition-colors text-xs flex-shrink-0"
                         aria-label={`הסר את ${item.name} מהעגלה`}
                       >
                         <FaTrash />
@@ -131,11 +131,11 @@ export default function CartSummary() {
 
           {/* תצוגה מלאה בדסקטופ */}
           <div className="hidden lg:block">
-            <div className="space-y-4 mb-6">
+            <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
               {items.map((item) => (
                 <div key={item.id} className="flex items-start gap-3">
-                  <div className="flex-1">
-                    <h3 className="font-medium">{item.name}</h3>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium truncate">{item.name}</h3>
                     {item.isByWeight ? (
                       <>
                         <label htmlFor={`cart-weight-input-${item.id}`} className="sr-only">בחר משקל בגרם עבור {item.name}</label>
@@ -144,11 +144,11 @@ export default function CartSummary() {
                             id={`cart-weight-input-${item.id}`}
                             type="number"
                             min="100"
-                            max="1000"
+                            max="2000"
                             step="50"
                             value={item.weight}
                             onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
-                            className="input w-20 py-1"
+                            className="input w-24 py-1"
                             aria-label={`בחר משקל בגרם עבור ${item.name}`}
                           />
                           <span className="text-sm text-gray-500">גרם</span>
@@ -189,7 +189,7 @@ export default function CartSummary() {
                   </div>
                   <button
                     onClick={() => removeItem(item.id)}
-                    className="text-red-500 hover:text-red-700 transition-colors"
+                    className="text-red-500 hover:text-red-700 transition-colors flex-shrink-0"
                     aria-label={`הסר את ${item.name} מהעגלה`}
                   >
                     <FaTrash />

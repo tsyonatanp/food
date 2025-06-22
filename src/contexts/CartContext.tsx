@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useReducer, ReactNode } from 'react'
+import { createContext, useContext, useReducer, ReactNode, useEffect } from 'react'
 
 type CartItem = {
   id: number
@@ -28,6 +28,7 @@ type CartAction =
   | { type: 'UPDATE_WEIGHT'; payload: { id: number; weight: number } }
   | { type: 'UPDATE_QUANTITY'; payload: { id: number; quantity: number } }
   | { type: 'CLEAR_CART' }
+  | { type: 'LOAD_CART'; payload: CartState }
 
 const initialState: CartState = {
   items: [],
@@ -115,6 +116,9 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case 'CLEAR_CART':
       return initialState
       
+    case 'LOAD_CART':
+      return action.payload
+      
     default:
       return state
   }
@@ -131,6 +135,45 @@ function calculateTotal(items: CartItem[]): number {
   }, 0)
 }
 
+// פונקציה לטעינת העגלה מ-localStorage
+function loadCartFromStorage(): CartState {
+  if (typeof window === 'undefined') {
+    return initialState
+  }
+  
+  try {
+    const savedCart = localStorage.getItem('cart')
+    if (savedCart) {
+      const parsedCart = JSON.parse(savedCart)
+      // וודא שהמבנה תקין
+      if (parsedCart && typeof parsedCart === 'object') {
+        return {
+          items: Array.isArray(parsedCart.items) ? parsedCart.items : [],
+          total: typeof parsedCart.total === 'number' ? parsedCart.total : 0,
+          deliveryFee: typeof parsedCart.deliveryFee === 'number' ? parsedCart.deliveryFee : 30
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error loading cart from localStorage:', error)
+  }
+  
+  return initialState
+}
+
+// פונקציה לשמירת העגלה ב-localStorage
+function saveCartToStorage(cart: CartState) {
+  if (typeof window === 'undefined') {
+    return
+  }
+  
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart))
+  } catch (error) {
+    console.error('Error saving cart to localStorage:', error)
+  }
+}
+
 const CartContext = createContext<{
   state: CartState
   addItem: (item: CartItem) => void
@@ -141,7 +184,12 @@ const CartContext = createContext<{
 } | null>(null)
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, initialState)
+  const [state, dispatch] = useReducer(cartReducer, loadCartFromStorage())
+  
+  // שמירת העגלה ב-localStorage בכל פעם שהיא משתנה
+  useEffect(() => {
+    saveCartToStorage(state)
+  }, [state])
   
   const addItem = (item: CartItem) => {
     dispatch({ type: 'ADD_ITEM', payload: item })
