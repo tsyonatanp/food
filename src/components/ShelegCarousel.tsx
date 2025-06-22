@@ -20,7 +20,7 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
         src={images[index]}
         alt="שלג - אוכל מוכן"
         className="rounded-xl shadow-lg max-h-64 object-contain"
-        style={{ maxWidth: 400 }}
+        style={{ width: '100%', maxWidth: '400px' }}
       />
     </div>
   );
