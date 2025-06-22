@@ -5,7 +5,8 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
     
-    const { orderNumber, name, phone, cart, total } = data;
+    const { orderNumber, name, phone, address, floor, apartment, entryCode, notes, cart, total } = data;
+    
     const itemsText = cart.map((item: any) => {
       if (item.isByWeight) {
         return `• ${item.name} - ${item.weight} גרם`;
@@ -13,7 +14,13 @@ export async function POST(req: NextRequest) {
       return `• ${item.name} - ${item.quantity} יחידות`;
     }).join('\n');
     
-    const message = `🛒 <b>הזמנה חדשה!</b>\n\n<b>מספר הזמנה:</b> ${orderNumber}\n<b>שם:</b> ${name}\n<b>טלפון:</b> ${phone}\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}`;
+    const message = `🛒 <b>הזמנה חדשה!</b>\n\n<b>מספר הזמנה:</b> ${orderNumber}\n<b>שם:</b> ${name}\n<b>טלפון:</b> ${phone}\n<b>כתובת:</b> ${address}` +
+      (floor ? `\n<b>קומה:</b> ${floor}` : '') +
+      (apartment ? `\n<b>דירה:</b> ${apartment}` : '') +
+      (entryCode ? `\n<b>קוד כניסה:</b> ${entryCode}` : '') +
+      (notes ? `\n<b>הערות לשליח:</b> ${notes}` : '') +
+      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}` +
+      `\n\n<b>המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.</b>`;
 
     await sendTelegramMessage(message);
 
