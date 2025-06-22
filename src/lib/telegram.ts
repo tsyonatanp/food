@@ -41,4 +41,34 @@ export async function sendTelegramMessage(text: string) {
     console.error('Failed to send Telegram message:', error);
     // Don't throw error to allow order process to complete
   }
+}
+
+export async function sendTelegramDocument(pdfBuffer: Buffer, fileName: string, caption: string) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!token || !chatId) {
+    console.log('Telegram credentials not found, skipping document.');
+    return;
+  }
+
+  const url = `https://api.telegram.org/bot${token}/sendDocument`;
+  
+  const formData = new FormData();
+  formData.append('chat_id', chatId);
+  formData.append('document', new Blob([pdfBuffer]), fileName);
+  formData.append('caption', caption);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Telegram API error (sendDocument):', errorText);
+    }
+  } catch (error) {
+    console.error('Failed to send Telegram document:', error);
+  }
 } 

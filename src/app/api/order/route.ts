@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sendTelegramMessage } from '@/lib/telegram';
+import { sendTelegramMessage, sendTelegramDocument } from '@/lib/telegram';
+import OrderPdfDocument from '@/components/OrderPdfDocument';
+import ReactPDF from '@react-pdf/renderer';
+import React from 'react';
 
 export async function POST(req: NextRequest) {
   console.log("Order API route called");
@@ -8,7 +11,7 @@ export async function POST(req: NextRequest) {
     console.log("Received order data:", data);
     // data should include: orderNumber, name, phone, address, floor, apartment, entryCode, notes, cart (array of items), total, etc.
     const { orderNumber, name, phone, address, floor, apartment, entryCode, notes, cart, total } = data;
-    const itemsText = cart.map((item: any) =>
+    const itemsText = cart.items.map((item: any) =>
       item.isByWeight
         ? `• ${item.name} - ${item.weight} גרם`
         : item.averageWeightPerUnit && item.estimatedUnitPrice
@@ -20,7 +23,7 @@ export async function POST(req: NextRequest) {
       (apartment ? `\n<b>דירה:</b> ${apartment}` : '') +
       (entryCode ? `\n<b>קוד כניסה:</b> ${entryCode}` : '') +
       (notes ? `\n<b>הערות לשליח:</b> ${notes}` : '') +
-      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}` +
+      `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${cart.total.toFixed(2)}` +
       `\n\n<b>המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.</b>`;
 
     console.log("Attempting to send Telegram message...");
@@ -30,6 +33,22 @@ export async function POST(req: NextRequest) {
     } catch (telegramError) {
       console.log("Telegram notification failed, but order was processed successfully:", telegramError);
       // Don't fail the entire order process if Telegram fails
+    }
+
+    // Then, generate and send the PDF document
+    try {
+      const pdfComponent = React.createElement(OrderPdfDocument, { order: data });
+      // @ts-ignore
+      const pdfBuffer = await ReactPDF.toBuffer(pdfComponent);
+      
+      const fileName = `order-${orderNumber}.pdf`;
+      const caption = `קבלה עבור הזמנה מספר ${orderNumber}`;
+      
+      await sendTelegramDocument(pdfBuffer, fileName, caption);
+    } catch (pdfError) {
+      console.error('Failed to generate or send PDF:', pdfError);
+      // Optionally send a message to Telegram that PDF generation failed
+      await sendTelegramMessage(`<b>שגיאה:</b> לא ניתן היה להפיק קובץ PDF עבור הזמנה ${orderNumber}.`);
     }
 
     return NextResponse.json({ ok: true });
