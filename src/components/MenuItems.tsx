@@ -124,7 +124,6 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                 {!isByWeight && item.averageWeightPerUnit && (
                   <div className="text-xs text-black mb-2 flex flex-col gap-0.5">
                     <div>משקל ממוצע ליחידה: {item.averageWeightPerUnit} גרם</div>
-                    <div>מחיר משוער ליחידה: ₪{((item.averageWeightPerUnit / 100) * Number(item['מחיר (₪)'])).toFixed(2)}</div>
                   </div>
                 )}
               </div>
