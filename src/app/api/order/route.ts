@@ -1,8 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendTelegramMessage, sendTelegramDocument } from '@/lib/telegram';
 import OrderPdfDocument from '@/components/OrderPdfDocument';
-import ReactPDF from '@react-pdf/renderer';
+import ReactPDF, { Font } from '@react-pdf/renderer';
 import React from 'react';
+import path from 'path';
+import fs from 'fs';
+
+// Register the font
+try {
+  const fontPath = path.join(process.cwd(), 'assets', 'fonts', 'Assistant-Regular.ttf');
+  const fontBuffer = fs.readFileSync(fontPath);
+  Font.register({
+    family: 'Assistant',
+    // @ts-ignore - The type definitions are incorrect and don't account for Buffer sources.
+    fonts: [{ src: fontBuffer, fontWeight: 'normal' }]
+  });
+} catch (error) {
+  console.error("Failed to register font on module load:", error);
+}
 
 export async function POST(req: NextRequest) {
   console.log("Order API route called");
@@ -38,7 +53,7 @@ export async function POST(req: NextRequest) {
     // Then, generate and send the PDF document
     try {
       const pdfComponent = React.createElement(OrderPdfDocument, { order: data });
-      // @ts-ignore
+      // @ts-ignore - toBuffer exists in this environment
       const pdfBuffer = await ReactPDF.toBuffer(pdfComponent);
       
       const fileName = `order-${orderNumber}.pdf`;
