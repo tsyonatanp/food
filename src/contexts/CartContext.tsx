@@ -184,11 +184,22 @@ const CartContext = createContext<{
 } | null>(null)
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, loadCartFromStorage())
+  const [state, dispatch] = useReducer(cartReducer, initialState) // Start with initial empty state
   
-  // שמירת העגלה ב-localStorage בכל פעם שהיא משתנה
+  // Load cart from storage only on the client-side after initial render
   useEffect(() => {
-    saveCartToStorage(state)
+    const savedCart = loadCartFromStorage();
+    if (savedCart.items.length > 0 || savedCart.total > 0) {
+      dispatch({ type: 'LOAD_CART', payload: savedCart });
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  // Save cart to storage whenever it changes
+  useEffect(() => {
+    // Avoid overwriting the initial empty state with an empty cart from storage
+    if (state !== initialState) {
+      saveCartToStorage(state)
+    }
   }, [state])
   
   const addItem = (item: CartItem) => {
