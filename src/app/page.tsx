@@ -25,7 +25,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-32 lg:pb-0">
+    <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-12">
         {images.length > 0 ? (
           <ShelegCarousel images={images} />
@@ -45,8 +45,8 @@ export default function HomePage() {
         <CategoriesGrid />
       </div>
       
-      {/* עגלה קבועה בתחתית במובייל */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg lg:hidden z-50">
+      {/* עגלה צפה במובייל - מוצגת רק ככפתור צף */}
+      <div className="lg:hidden">
         <CartSummary />
       </div>
     </main>
