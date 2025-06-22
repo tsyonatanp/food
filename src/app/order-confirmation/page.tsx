@@ -29,7 +29,7 @@ export default function OrderConfirmationPage() {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
-    contentRef: componentRef,
+    content: () => componentRef.current,
     documentTitle: `אישור הזמנה - ${orderDetails?.orderNumber}`,
     pageStyle: `
       @media print {
