@@ -72,7 +72,7 @@ export default function CartSummary() {
                               <input
                                 type="number"
                                 min="1"
-                                max="10"
+                                max="50"
                                 value={item.quantity}
                                 onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
                                 className="input w-16 py-1 text-xs"
@@ -165,7 +165,7 @@ export default function CartSummary() {
                             id={`cart-quantity-input-${item.id}`}
                             type="number"
                             min="1"
-                            max="10"
+                            max="50"
                             value={item.quantity}
                             onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
                             className="input w-20 py-1"

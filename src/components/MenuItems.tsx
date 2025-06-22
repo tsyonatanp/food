@@ -144,10 +144,10 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                     </>
                   ) : (
                     <>
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.min(10, quantity + 1))} disabled={quantity >= 10}>
+                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.min(50, quantity + 1))} disabled={quantity >= 50}>
                         <FaPlus />
                       </button>
-                      <input type="number" min={1} max={10} step={1} value={quantity} onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
+                      <input type="number" min={1} max={50} step={1} value={quantity} onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
                       <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))} disabled={quantity <= 1}>
                         <FaMinus />
                       </button>
