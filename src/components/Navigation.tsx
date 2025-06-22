@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { fetchLogoUrl } from '@/lib/fetchLogo';
+import { FaPhone } from 'react-icons/fa';
 
 const navLinks = [
   { name: 'משלוחים ואיזורי חלוקה', href: '/delivery' },
@@ -19,6 +20,10 @@ export default function Navigation() {
   useEffect(() => {
     fetchLogoUrl().then(setLogoUrl).catch(() => setLogoUrl('/logo.png'));
   }, []);
+
+  const handlePhoneClick = () => {
+    window.location.href = 'tel:050-9555755';
+  };
 
   return (
     <nav className="bg-white shadow-md w-full">
@@ -41,8 +46,24 @@ export default function Navigation() {
             </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu */}
           <div className="flex items-center sm:hidden w-full justify-between">
+            {/* Phone button on the left */}
+            <button
+              onClick={handlePhoneClick}
+              className="inline-flex items-center justify-center p-2 rounded-md text-green-600 hover:text-green-700 hover:bg-green-50"
+              aria-label="התקשר אלינו: 050-9555755"
+              title="התקשר אלינו: 050-9555755"
+            >
+              <FaPhone className="h-5 w-5" />
+            </button>
+            
+            {/* Logo in center */}
+            <Link href="/" className="flex-shrink-0 flex items-center justify-center">
+              <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
+            </Link>
+            
+            {/* Menu button on the right */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
@@ -58,9 +79,6 @@ export default function Navigation() {
                 </svg>
               )}
             </button>
-            <Link href="/" className="flex-shrink-0 flex items-center justify-center">
-              <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
-            </Link>
           </div>
         </div>
       </div>

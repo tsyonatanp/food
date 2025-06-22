@@ -4,7 +4,6 @@ import { Rubik } from 'next/font/google'
 import { CartProvider } from '@/contexts/CartContext'
 import Banner from '@/components/Banner'
 import Navigation from '@/components/Navigation'
-import FloatingPhone from '@/components/FloatingPhone'
 import './globals.css'
 import Script from "next/script";
 import { useEffect } from "react";
@@ -34,7 +33,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {children}
           </main>
-          <FloatingPhone />
         </CartProvider>
       </body>
     </html>
