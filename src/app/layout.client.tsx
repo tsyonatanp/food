@@ -8,6 +8,8 @@ import GoogleAnalytics from '@/components/GoogleAnalytics'
 import './globals.css'
 import Script from "next/script";
 import { useEffect } from "react";
+import { usePathname } from 'next/navigation';
+import { pageview } from '@/utils/gtag';
 
 const rubik = Rubik({ 
   subsets: ['hebrew', 'latin'],
@@ -15,6 +17,8 @@ const rubik = Rubik({
 })
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   useEffect(() => {
     if (!document.getElementById("nagish-li-script")) {
       const script = document.createElement("script");
@@ -24,6 +28,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       document.body.appendChild(script);
     }
   }, []);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
+      pageview(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, pathname);
+    }
+  }, [pathname]);
 
   return (
     <html lang="he" dir="rtl" className={rubik.variable}>
