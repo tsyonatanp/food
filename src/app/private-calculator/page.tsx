@@ -74,14 +74,7 @@ export default function PrivateCalculator() {
   const handleAllPDF = async () => {
     if (calculations.length === 0) return;
     const { jsPDF } = await import('jspdf');
-    await import('../../lib/Assistant-Regular-normal.js');
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    // Add logo
-    try {
-      const logoImg = await fetch(TEMP_LOGO).then(r => r.blob()).then(blobToBase64);
-      doc.addImage(logoImg, 'PNG', 10, 10, 40, 40);
-    } catch (e) {}
-    // Add Assistant font for Hebrew
     doc.addFont('Assistant-Regular.ttf', 'Assistant', 'normal');
     doc.setFont('Assistant');
     doc.setTextColor(40, 40, 120);
