@@ -30,7 +30,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     // Load Assistant font for jsPDF (client only)
     if (!document.getElementById('assistant-font-script')) {
       const fontScript = document.createElement('script');
-      fontScript.src = '/src/lib/Assistant-Regular-normal.js';
+      fontScript.src = '/lib/Assistant-Regular-normal.js';
       fontScript.id = 'assistant-font-script';
       fontScript.async = true;
       document.body.appendChild(fontScript);
