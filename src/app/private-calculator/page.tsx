@@ -274,7 +274,6 @@ export default function PrivateCalculator() {
           </table>
         )}
         <div className="final-notes-title">הערות כלליות:</div>
-        <div style={{ marginBottom: 8, color: '#555' }}>אם יש הערות להזמנה – כתבו כאן</div>
         <div style={{ border: '1.5px solid #789', background: '#f5f5ff', borderRadius: 6, padding: 12, minHeight: 50, marginBottom: 24 }}>
           {finalNotes}
         </div>
