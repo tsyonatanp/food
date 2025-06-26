@@ -5,7 +5,6 @@ import { useEffect, useState, useRef } from 'react';
 interface Product {
   name: string;
   price: number;
-  image: string;
 }
 
 interface Calculation {
@@ -34,7 +33,6 @@ export default function PrivateCalculator() {
         const items: Product[] = filtered.map((item: any) => ({
           name: item['מנה'],
           price: Number(item['מחיר (₪)']),
-          image: item['תמונה'],
         }));
         setProducts(items);
       });
@@ -55,42 +53,7 @@ export default function PrivateCalculator() {
     }
   };
 
-  const handlePDF = async (calc: Calculation) => {
-    const { jsPDF } = await import('jspdf');
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    // Add logo
-    try {
-      const logoImg = await fetch(TEMP_LOGO).then(r => r.blob()).then(blobToBase64);
-      doc.addImage(logoImg, 'PNG', 10, 10, 40, 40);
-    } catch (e) {}
-    // Date
-    const date = new Date().toLocaleDateString('he-IL');
-    doc.setFontSize(12);
-    doc.text(`תאריך: ${date}`, 160, 20);
-    doc.setFontSize(22);
-    doc.text('מחשבון מחיר', 105, 60, { align: 'center' });
-    doc.setFontSize(16);
-    doc.text(`מוצר: ${calc.product.name}`, 20, 80);
-    doc.text(`מחיר לק"ג: ₪${calc.product.price}`, 20, 90);
-    doc.text(`משקל: ${calc.weight} גרם`, 20, 100);
-    doc.text(`מחיר סופי: ₪${calc.total.toFixed(2)}`, 20, 110);
-    if (calc.product.image) {
-      try {
-        const prodImg = await fetch(calc.product.image).then(r => r.blob()).then(blobToBase64);
-        doc.addImage(prodImg, 'JPEG', 120, 80, 70, 70);
-      } catch (e) {}
-    }
-    // Notes
-    if (calc.notes) {
-      doc.setFontSize(14);
-      doc.text('הערות:', 20, 130);
-      doc.setFontSize(12);
-      doc.text(calc.notes, 20, 140, { maxWidth: 170 });
-    }
-    doc.save('calculation.pdf');
-  };
-
-  // Helper: blob to base64
+  // Helper: blob to base64 (for logo)
   function blobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -104,6 +67,45 @@ export default function PrivateCalculator() {
     if (printRef.current) {
       window.print();
     }
+  };
+
+  const handleAllPDF = async () => {
+    if (calculations.length === 0) return;
+    const { jsPDF } = await import('jspdf');
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    // Add logo
+    try {
+      const logoImg = await fetch(TEMP_LOGO).then(r => r.blob()).then(blobToBase64);
+      doc.addImage(logoImg, 'PNG', 10, 10, 40, 40);
+    } catch (e) {}
+    // Date
+    const date = new Date().toLocaleDateString('he-IL');
+    doc.setFontSize(12);
+    doc.text(`תאריך: ${date}`, 160, 20);
+    doc.setFontSize(22);
+    doc.text('סיכום הזמנה', 105, 60, { align: 'center' });
+    doc.setFontSize(16);
+    let y = 80;
+    calculations.forEach((calc, idx) => {
+      doc.text(`מוצר: ${calc.product.name}`, 20, y);
+      doc.text(`מחיר לק"ג: ₪${calc.product.price}`, 20, y + 10);
+      doc.text(`משקל: ${calc.weight} גרם`, 20, y + 20);
+      doc.text(`מחיר סופי: ₪${calc.total.toFixed(2)}`, 20, y + 30);
+      if (calc.notes) {
+        doc.setFontSize(14);
+        doc.text('הערות:', 20, y + 40);
+        doc.setFontSize(12);
+        doc.text(calc.notes, 20, y + 50, { maxWidth: 170 });
+        y += 60;
+      } else {
+        y += 40;
+      }
+      if (y > 250 && idx < calculations.length - 1) {
+        doc.addPage();
+        y = 20;
+      }
+    });
+    doc.save('order-summary.pdf');
   };
 
   return (
@@ -121,31 +123,6 @@ export default function PrivateCalculator() {
           ))}
         </select>
       </div>
-      {selected && (
-        <div style={{ marginBottom: 16 }}>
-          {selected.image ? (
-            <img
-              src={selected.image}
-              alt={selected.name}
-              style={{ maxWidth: 200, maxHeight: 200, display: 'block', margin: '0 auto 16px' }}
-              onError={e => {
-                const target = e.target as HTMLImageElement;
-                target.onerror = null;
-                target.style.display = 'none';
-                const noImg = document.createElement('div');
-                noImg.innerText = 'אין תמונה';
-                noImg.style.textAlign = 'center';
-                noImg.style.color = '#888';
-                noImg.style.margin = '0 auto 16px';
-                target.parentElement?.appendChild(noImg);
-              }}
-            />
-          ) : (
-            <div style={{ textAlign: 'center', color: '#888', margin: '0 auto 16px' }}>אין תמונה</div>
-          )}
-          <div>מחיר לק"ג: <b>₪{selected.price}</b></div>
-        </div>
-      )}
       <div style={{ marginBottom: 16 }}>
         <label>הזן משקל בגרם:</label>
         <input type='number' value={weight} onChange={e => setWeight(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8 }} />
@@ -167,7 +144,6 @@ export default function PrivateCalculator() {
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>משקל (גרם)</th>
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>מחיר סופי</th>
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>הערות</th>
-                <th style={{ border: '1px solid #ddd', padding: 8 }}>PDF</th>
               </tr>
             </thead>
             <tbody>
@@ -178,9 +154,6 @@ export default function PrivateCalculator() {
                   <td style={{ border: '1px solid #ddd', padding: 8 }}>{calc.weight}</td>
                   <td style={{ border: '1px solid #ddd', padding: 8 }}>₪{calc.total.toFixed(2)}</td>
                   <td style={{ border: '1px solid #ddd', padding: 8 }}>{calc.notes}</td>
-                  <td style={{ border: '1px solid #ddd', padding: 8 }}>
-                    <button onClick={() => handlePDF(calc)} style={{ padding: '4px 8px', background: '#10b981', color: '#fff', border: 'none', borderRadius: 4 }}>PDF</button>
-                  </td>
                 </tr>
               ))}
             </tbody>
@@ -188,7 +161,10 @@ export default function PrivateCalculator() {
         )}
       </div>
       {calculations.length > 0 && (
-        <button onClick={handlePrint} style={{ width: '100%', padding: 12, background: '#f59e42', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הדפס הכל</button>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button onClick={handlePrint} style={{ flex: 1, padding: 12, background: '#f59e42', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הדפס הכל</button>
+          <button onClick={handleAllPDF} style={{ flex: 1, padding: 12, background: '#10b981', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הורד PDF לכל ההזמנה</button>
+        </div>
       )}
     </div>
   );
