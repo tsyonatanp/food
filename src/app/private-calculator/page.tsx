@@ -100,10 +100,10 @@ export default function PrivateCalculator() {
     // Table headers
     doc.setFillColor(230, 230, 240);
     doc.setTextColor(0,0,0);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.rect(15, y, 180, 10, 'F');
     doc.text(['מוצר', 'מחיר ל-100 גרם', 'משקל (גרם)', 'מחיר סופי', 'הערות'], 105, y+7, { align: 'center', maxWidth: 180 });
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');
     y += 12;
     let totalSum = 0;
     calculations.forEach((calc, idx) => {
@@ -124,12 +124,12 @@ export default function PrivateCalculator() {
       if (y > 260) { doc.addPage(); y = 20; }
     });
     // Total row
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.setFillColor(220,220,230);
     doc.rect(15, y-6, 180, 10, 'F');
     doc.text('סך הכל להזמנה:', 110, y);
     doc.text('₪'+String(totalSum != null ? totalSum.toFixed(2) : ''), 150, y);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');
     y += 14;
     // Final notes
     if (finalNotes) {
