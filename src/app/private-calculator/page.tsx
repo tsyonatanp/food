@@ -105,7 +105,26 @@ export default function PrivateCalculator() {
       </div>
       {selected && (
         <div style={{ marginBottom: 16 }}>
-          <img src={selected.image} alt={selected.name} style={{ maxWidth: 200, maxHeight: 200, display: 'block', margin: '0 auto 16px' }} />
+          {selected.image ? (
+            <img
+              src={selected.image}
+              alt={selected.name}
+              style={{ maxWidth: 200, maxHeight: 200, display: 'block', margin: '0 auto 16px' }}
+              onError={e => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.style.display = 'none';
+                const noImg = document.createElement('div');
+                noImg.innerText = 'אין תמונה';
+                noImg.style.textAlign = 'center';
+                noImg.style.color = '#888';
+                noImg.style.margin = '0 auto 16px';
+                target.parentElement?.appendChild(noImg);
+              }}
+            />
+          ) : (
+            <div style={{ textAlign: 'center', color: '#888', margin: '0 auto 16px' }}>אין תמונה</div>
+          )}
           <div>מחיר לק"ג: <b>₪{selected.price}</b></div>
         </div>
       )}
