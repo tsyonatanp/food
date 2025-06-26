@@ -43,6 +43,7 @@ export default function PrivateCalculator() {
     if (selected && weight) {
       const w = parseFloat(weight);
       if (!isNaN(w)) {
+        // מחיר לק"ג
         const total = (w / 1000) * selected.price;
         setCalculations(prev => [
           ...prev,
@@ -87,11 +88,13 @@ export default function PrivateCalculator() {
     doc.text('סיכום הזמנה', 105, 60, { align: 'center' });
     doc.setFontSize(16);
     let y = 80;
+    let totalSum = 0;
     calculations.forEach((calc, idx) => {
       doc.text(`מוצר: ${calc.product.name}`, 20, y);
-      doc.text(`מחיר לק"ג: ₪${calc.product.price}`, 20, y + 10);
+      doc.text(`מחיר ל-100 גרם: ₪${calc.product.price}`, 20, y + 10);
       doc.text(`משקל: ${calc.weight} גרם`, 20, y + 20);
       doc.text(`מחיר סופי: ₪${calc.total.toFixed(2)}`, 20, y + 30);
+      totalSum += calc.total;
       if (calc.notes) {
         doc.setFontSize(14);
         doc.text('הערות:', 20, y + 40);
@@ -106,6 +109,16 @@ export default function PrivateCalculator() {
         y = 20;
       }
     });
+    // סיכום סופי
+    if (calculations.length > 1) {
+      if (y > 250) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.setFontSize(16);
+      doc.text(`סך הכל להזמנה: ₪${totalSum.toFixed(2)}`, 20, y + 10);
+      y += 20;
+    }
     // Final notes
     if (finalNotes) {
       if (y > 250) {
@@ -120,17 +133,21 @@ export default function PrivateCalculator() {
     doc.save('order-summary.pdf');
   };
 
+  // חישוב סך הכל להזמנה
+  const totalSum = calculations.reduce((sum, c) => sum + c.total, 0);
+
   return (
     <div style={{ maxWidth: 800, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
       <style>{`
         @media print {
           body * { visibility: hidden; }
-          #private-calc-print, #private-calc-print * { visibility: visible; }
-          #private-calc-print { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
+          #private-calc-output, #private-calc-output * { visibility: visible; }
+          #private-calc-output { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
         }
       `}</style>
       <h1 style={{ textAlign: 'center', marginBottom: 24 }}>מחשבון מחיר (פנימי)</h1>
-      <div id="private-calc-print" ref={printRef}>
+      {/* טופס */}
+      <div style={{ marginBottom: 32 }}>
         <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
           <label>בחר מוצר:</label>
           <select value={selected?.name || ''} onChange={e => {
@@ -152,8 +169,9 @@ export default function PrivateCalculator() {
           <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
         </div>
         <button onClick={handleAddCalculation} style={{ width: '100%', padding: 12, background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, marginBottom: 24 }}>הוסף חישוב</button>
-
-        {/* טבלת חישובים */}
+      </div>
+      {/* פלט להדפסה ול-PDF */}
+      <div id="private-calc-output" ref={printRef}>
         {calculations.length > 0 && (
           <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16 }}>
             <thead>
@@ -175,6 +193,12 @@ export default function PrivateCalculator() {
                   <td style={{ border: '1px solid #ddd', padding: 8 }}>{calc.notes}</td>
                 </tr>
               ))}
+              {/* שורת סיכום */}
+              <tr style={{ background: '#f3f4f6', fontWeight: 'bold' }}>
+                <td colSpan={3} style={{ border: '1px solid #ddd', padding: 8, textAlign: 'left' }}>סך הכל להזמנה:</td>
+                <td style={{ border: '1px solid #ddd', padding: 8 }}>₪{totalSum.toFixed(2)}</td>
+                <td style={{ border: '1px solid #ddd', padding: 8 }}></td>
+              </tr>
             </tbody>
           </table>
         )}
