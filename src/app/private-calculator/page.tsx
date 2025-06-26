@@ -22,6 +22,7 @@ export default function PrivateCalculator() {
   const [weight, setWeight] = useState('');
   const [notes, setNotes] = useState('');
   const [calculations, setCalculations] = useState<Calculation[]>([]);
+  const [finalNotes, setFinalNotes] = useState('');
   const printRef = useRef<HTMLDivElement>(null);
 
   // Fetch products from Google Sheets (opensheet API)
@@ -105,36 +106,54 @@ export default function PrivateCalculator() {
         y = 20;
       }
     });
+    // Final notes
+    if (finalNotes) {
+      if (y > 250) {
+        doc.addPage();
+        y = 20;
+      }
+      doc.setFontSize(16);
+      doc.text('הערות כלליות:', 20, y + 10);
+      doc.setFontSize(12);
+      doc.text(finalNotes, 20, y + 20, { maxWidth: 170 });
+    }
     doc.save('order-summary.pdf');
   };
 
   return (
     <div style={{ maxWidth: 800, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
+      <style>{`
+        @media print {
+          body * { visibility: hidden; }
+          #private-calc-print, #private-calc-print * { visibility: visible; }
+          #private-calc-print { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
+        }
+      `}</style>
       <h1 style={{ textAlign: 'center', marginBottom: 24 }}>מחשבון מחיר (פנימי)</h1>
-      <div style={{ marginBottom: 16 }}>
-        <label>בחר מוצר:</label>
-        <select value={selected?.name || ''} onChange={e => {
-          const prod = products.find(p => p.name === e.target.value);
-          setSelected(prod || null);
-        }} style={{ width: '100%', padding: 8, marginTop: 8 }}>
-          <option value=''>-- בחר --</option>
-          {products.map(p => (
-            <option key={p.name} value={p.name}>{p.name}</option>
-          ))}
-        </select>
-      </div>
-      <div style={{ marginBottom: 16 }}>
-        <label>הזן משקל בגרם:</label>
-        <input type='number' value={weight} onChange={e => setWeight(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8 }} />
-      </div>
-      <div style={{ marginBottom: 16 }}>
-        <label>הערות (לא חובה):</label>
-        <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, minHeight: 50 }} />
-      </div>
-      <button onClick={handleAddCalculation} style={{ width: '100%', padding: 12, background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, marginBottom: 24 }}>הוסף חישוב</button>
+      <div id="private-calc-print" ref={printRef}>
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
+          <label>בחר מוצר:</label>
+          <select value={selected?.name || ''} onChange={e => {
+            const prod = products.find(p => p.name === e.target.value);
+            setSelected(prod || null);
+          }} style={{ width: '100%', padding: 8, marginTop: 8 }}>
+            <option value=''>-- בחר --</option>
+            {products.map(p => (
+              <option key={p.name} value={p.name}>{p.name}</option>
+            ))}
+          </select>
+        </div>
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
+          <label>הזן משקל בגרם:</label>
+          <input type='number' value={weight} onChange={e => setWeight(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, border: '1px solid #d1d5db', borderRadius: 4 }} />
+        </div>
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
+          <label>הערות (לא חובה):</label>
+          <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
+        </div>
+        <button onClick={handleAddCalculation} style={{ width: '100%', padding: 12, background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, marginBottom: 24 }}>הוסף חישוב</button>
 
-      {/* טבלת חישובים */}
-      <div ref={printRef} style={{ marginBottom: 24 }}>
+        {/* טבלת חישובים */}
         {calculations.length > 0 && (
           <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16 }}>
             <thead>
@@ -159,6 +178,11 @@ export default function PrivateCalculator() {
             </tbody>
           </table>
         )}
+        {/* Final notes */}
+        <div style={{ marginBottom: 24, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
+          <label>הערות כלליות (יופיעו בסוף ה-PDF וההדפסה):</label>
+          <textarea value={finalNotes} onChange={e => setFinalNotes(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
+        </div>
       </div>
       {calculations.length > 0 && (
         <div style={{ display: 'flex', gap: 12 }}>
