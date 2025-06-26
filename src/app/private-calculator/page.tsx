@@ -72,78 +72,9 @@ export default function PrivateCalculator() {
   };
 
   const handleAllPDF = async () => {
-    if (calculations.length === 0) return;
     const { jsPDF } = await import('jspdf');
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    doc.addFont('Assistant-Regular.ttf', 'Assistant', 'normal');
-    doc.setFont('Assistant');
-    doc.setTextColor(40, 40, 120);
-    doc.text('שלג-רוז – אוכל מוכן', 190, 25, { align: 'right' });
-    doc.setTextColor(0, 0, 0);
-    // Date (friendly Hebrew)
-    const date = new Date();
-    const months = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
-    const dateStr = `${date.getDate()} ב${months[date.getMonth()]} ${date.getFullYear()}`;
-    doc.setFontSize(14);
-    doc.text(`תאריך: ${dateStr}`, 190, 35, { align: 'right' });
-    // Table title
-    doc.setFontSize(18);
-    doc.text('סיכום הזמנה', 190, 50, { align: 'right' });
-    // Table
-    doc.setFontSize(13);
-    let y = 60;
-    // Table headers
-    doc.setFillColor(230, 230, 240);
-    doc.setTextColor(0,0,0);
-    doc.setFont('Assistant', 'bold');
-    doc.rect(15, y, 180, 10, 'F');
-    doc.text(['מוצר', 'מחיר ל-100 גרם', 'משקל (גרם)', 'מחיר סופי', 'הערות'], 190, y+7, { align: 'right', maxWidth: 180 });
-    doc.setFont('Assistant', 'normal');
-    y += 12;
-    let totalSum = 0;
-    calculations.forEach((calc, idx) => {
-      // Alternate row color
-      if (idx % 2 === 0) {
-        doc.setFillColor(255,255,255);
-      } else {
-        doc.setFillColor(240,240,250);
-      }
-      doc.rect(15, y-6, 180, 10, 'F');
-      doc.text(String(calc.product.name || ''), 190, y, { align: 'right' });
-      doc.text('₪'+String(calc.product.price || ''), 150, y, { align: 'right' });
-      doc.text(String(calc.weight || ''), 120, y, { align: 'right' });
-      doc.text('₪'+String(calc.total != null ? calc.total.toFixed(2) : ''), 90, y, { align: 'right' });
-      doc.text(String(calc.notes || ''), 60, y, { align: 'right', maxWidth: 40 });
-      totalSum += calc.total;
-      y += 10;
-      if (y > 260) { doc.addPage(); y = 20; }
-    });
-    // Total row
-    doc.setFont('Assistant', 'bold');
-    doc.setFillColor(220,220,230);
-    doc.rect(15, y-6, 180, 10, 'F');
-    doc.text('סך הכל להזמנה:', 120, y, { align: 'right' });
-    doc.text('₪'+String(totalSum != null ? totalSum.toFixed(2) : ''), 90, y, { align: 'right' });
-    doc.setFont('Assistant', 'normal');
-    y += 14;
-    // Final notes
-    if (finalNotes) {
-      if (y > 250) { doc.addPage(); y = 20; }
-      doc.setFontSize(15);
-      doc.setDrawColor(120,120,180);
-      doc.setFillColor(245,245,255);
-      doc.rect(15, y, 180, 18, 'FD');
-      doc.text('הערות כלליות:', 190, y+7, { align: 'right' });
-      doc.setFontSize(12);
-      doc.text(String(finalNotes || ''), 190, y+15, { align: 'right', maxWidth: 170 });
-      y += 26;
-    }
-    // Greeting
-    if (y > 250) { doc.addPage(); y = 20; }
-    doc.setFontSize(15);
-    doc.setTextColor(40, 120, 40);
-    doc.text('בתיאבון ובריאות טובה 🌿 צוות שלג-רוז', 190, y+10, { align: 'right' });
-    doc.setTextColor(0,0,0);
+    const doc = new jsPDF();
+    doc.text('Hello world', 10, 10);
     doc.save('order-summary.pdf');
   };
 
