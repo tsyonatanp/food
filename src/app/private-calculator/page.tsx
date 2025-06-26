@@ -17,23 +17,17 @@ export default function PrivateCalculator() {
   const [total, setTotal] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
 
-  // Fetch products from Google Sheets (CSV export)
+  // Fetch products from Google Sheets (opensheet API)
   useEffect(() => {
-    fetch('https://docs.google.com/spreadsheets/d/1xTlTECzbxdDVu6SSnoQnN_GtL39b7-ZzhgcIvaLyljU/gviz/tq?tqx=out:csv&sheet=Sheet1')
-      .then(res => res.text())
-      .then(csv => {
-        const lines = csv.split('\n');
-        const items: Product[] = [];
-        for (let i = 1; i < lines.length; i++) {
-          const cols = lines[i].split(',');
-          if (cols.length > 6 && cols[2] && cols[3] && cols[6]) {
-            items.push({
-              name: cols[2],
-              price: parseFloat(cols[3]),
-              image: cols[6],
-            });
-          }
-        }
+    fetch('https://opensheet.elk.sh/1xTlTECzbxdDVu6SSnoQnN_GtL39b7-ZzhgcIvaLyljU/Menu')
+      .then(res => res.json())
+      .then((data) => {
+        const filtered = data.filter((item: any) => String(item.checkboxes).toLowerCase() === 'true');
+        const items: Product[] = filtered.map((item: any) => ({
+          name: item['מנה'],
+          price: Number(item['מחיר (₪)']),
+          image: item['תמונה'],
+        }));
         setProducts(items);
       });
   }, []);
