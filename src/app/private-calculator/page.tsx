@@ -1,11 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface Product {
   name: string;
   price: number;
   image: string;
+}
+
+interface Calculation {
+  product: Product;
+  weight: number;
+  total: number;
+  notes: string;
 }
 
 const TEMP_LOGO = '/images/logo.png';
@@ -14,8 +21,9 @@ export default function PrivateCalculator() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selected, setSelected] = useState<Product | null>(null);
   const [weight, setWeight] = useState('');
-  const [total, setTotal] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
+  const [calculations, setCalculations] = useState<Calculation[]>([]);
+  const printRef = useRef<HTMLDivElement>(null);
 
   // Fetch products from Google Sheets (opensheet API)
   useEffect(() => {
@@ -32,17 +40,22 @@ export default function PrivateCalculator() {
       });
   }, []);
 
-  const handleCalc = () => {
+  const handleAddCalculation = () => {
     if (selected && weight) {
       const w = parseFloat(weight);
       if (!isNaN(w)) {
-        setTotal((w / 1000) * selected.price);
+        const total = (w / 1000) * selected.price;
+        setCalculations(prev => [
+          ...prev,
+          { product: selected, weight: w, total, notes }
+        ]);
+        setWeight('');
+        setNotes('');
       }
     }
   };
 
-  const handlePDF = async () => {
-    if (!selected || !weight || !total) return;
+  const handlePDF = async (calc: Calculation) => {
     const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     // Add logo
@@ -57,22 +70,22 @@ export default function PrivateCalculator() {
     doc.setFontSize(22);
     doc.text('מחשבון מחיר', 105, 60, { align: 'center' });
     doc.setFontSize(16);
-    doc.text(`מוצר: ${selected.name}`, 20, 80);
-    doc.text(`מחיר לק"ג: ₪${selected.price}`, 20, 90);
-    doc.text(`משקל: ${weight} גרם`, 20, 100);
-    doc.text(`מחיר סופי: ₪${total.toFixed(2)}`, 20, 110);
-    if (selected.image) {
+    doc.text(`מוצר: ${calc.product.name}`, 20, 80);
+    doc.text(`מחיר לק"ג: ₪${calc.product.price}`, 20, 90);
+    doc.text(`משקל: ${calc.weight} גרם`, 20, 100);
+    doc.text(`מחיר סופי: ₪${calc.total.toFixed(2)}`, 20, 110);
+    if (calc.product.image) {
       try {
-        const prodImg = await fetch(selected.image).then(r => r.blob()).then(blobToBase64);
+        const prodImg = await fetch(calc.product.image).then(r => r.blob()).then(blobToBase64);
         doc.addImage(prodImg, 'JPEG', 120, 80, 70, 70);
       } catch (e) {}
     }
     // Notes
-    if (notes) {
+    if (calc.notes) {
       doc.setFontSize(14);
       doc.text('הערות:', 20, 130);
       doc.setFontSize(12);
-      doc.text(notes, 20, 140, { maxWidth: 170 });
+      doc.text(calc.notes, 20, 140, { maxWidth: 170 });
     }
     doc.save('calculation.pdf');
   };
@@ -87,15 +100,20 @@ export default function PrivateCalculator() {
     });
   }
 
+  const handlePrint = () => {
+    if (printRef.current) {
+      window.print();
+    }
+  };
+
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
+    <div style={{ maxWidth: 800, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
       <h1 style={{ textAlign: 'center', marginBottom: 24 }}>מחשבון מחיר (פנימי)</h1>
       <div style={{ marginBottom: 16 }}>
         <label>בחר מוצר:</label>
         <select value={selected?.name || ''} onChange={e => {
           const prod = products.find(p => p.name === e.target.value);
           setSelected(prod || null);
-          setTotal(null);
         }} style={{ width: '100%', padding: 8, marginTop: 8 }}>
           <option value=''>-- בחר --</option>
           {products.map(p => (
@@ -136,14 +154,41 @@ export default function PrivateCalculator() {
         <label>הערות (לא חובה):</label>
         <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, minHeight: 50 }} />
       </div>
-      <button onClick={handleCalc} style={{ width: '100%', padding: 12, background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, marginBottom: 16 }}>חשב מחיר</button>
-      {total !== null && (
-        <div style={{ textAlign: 'center', fontSize: 22, marginBottom: 16 }}>
-          מחיר סופי: <b>₪{total.toFixed(2)}</b>
-        </div>
-      )}
-      {total !== null && (
-        <button onClick={handlePDF} style={{ width: '100%', padding: 12, background: '#10b981', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הורד PDF</button>
+      <button onClick={handleAddCalculation} style={{ width: '100%', padding: 12, background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, marginBottom: 24 }}>הוסף חישוב</button>
+
+      {/* טבלת חישובים */}
+      <div ref={printRef} style={{ marginBottom: 24 }}>
+        {calculations.length > 0 && (
+          <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 16 }}>
+            <thead>
+              <tr style={{ background: '#f3f4f6' }}>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>מוצר</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>מחיר לק"ג</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>משקל (גרם)</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>מחיר סופי</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>הערות</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>PDF</th>
+              </tr>
+            </thead>
+            <tbody>
+              {calculations.map((calc, idx) => (
+                <tr key={idx}>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{calc.product.name}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>₪{calc.product.price}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{calc.weight}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>₪{calc.total.toFixed(2)}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>{calc.notes}</td>
+                  <td style={{ border: '1px solid #ddd', padding: 8 }}>
+                    <button onClick={() => handlePDF(calc)} style={{ padding: '4px 8px', background: '#10b981', color: '#fff', border: 'none', borderRadius: 4 }}>PDF</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+      {calculations.length > 0 && (
+        <button onClick={handlePrint} style={{ width: '100%', padding: 12, background: '#f59e42', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הדפס הכל</button>
       )}
     </div>
   );
