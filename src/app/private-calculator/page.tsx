@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react';
-import '../../lib/Assistant-Regular-normal.js';
 
 interface Product {
   name: string;
@@ -75,6 +74,7 @@ export default function PrivateCalculator() {
   const handleAllPDF = async () => {
     if (calculations.length === 0) return;
     const { jsPDF } = await import('jspdf');
+    await import('../../lib/Assistant-Regular-normal.js');
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     // Add logo
     try {
