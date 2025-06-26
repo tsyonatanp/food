@@ -43,8 +43,8 @@ export default function PrivateCalculator() {
     if (selected && weight) {
       const w = parseFloat(weight);
       if (!isNaN(w)) {
-        // מחיר לק"ג
-        const total = (w / 1000) * selected.price;
+        // מחיר ל-100 גרם
+        const total = (w / 100) * selected.price;
         setCalculations(prev => [
           ...prev,
           { product: selected, weight: w, total, notes }
@@ -177,7 +177,7 @@ export default function PrivateCalculator() {
             <thead>
               <tr style={{ background: '#f3f4f6' }}>
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>מוצר</th>
-                <th style={{ border: '1px solid #ddd', padding: 8 }}>מחיר לק"ג</th>
+                <th style={{ border: '1px solid #ddd', padding: 8 }}>מחיר ל-100 גרם</th>
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>משקל (גרם)</th>
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>מחיר סופי</th>
                 <th style={{ border: '1px solid #ddd', padding: 8 }}>הערות</th>
