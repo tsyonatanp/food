@@ -27,22 +27,35 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-12">
-        {images.length > 0 ? (
-          <ShelegCarousel images={images} />
-        ) : (
-          <div className="flex flex-col items-center mb-8 min-h-[2.5rem]">
-            <h1 className="text-4xl font-bold text-center">
-              {loading ? (
-                <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse"></span>
-              ) : (
-                title
+        {/* Hero Section */}
+        <section className="mb-8" role="banner" aria-label="כותרת ראשית">
+          {images.length > 0 ? (
+            <ShelegCarousel images={images} />
+          ) : (
+            <div className="flex flex-col items-center mb-8 min-h-[2.5rem]">
+              <h1 className="text-4xl font-bold text-center">
+                {loading ? (
+                  <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
+                ) : (
+                  title || 'ברוכים הבאים ל-Redy Food'
+                )}
+              </h1>
+              {loading && (
+                <p className="text-red-500 mt-2 text-center text-sm" role="status" aria-live="polite">
+                  לא נמצאה תמונה בגליון sheleg או שיש בעיה בטעינה. בדוק את הקישור בגליון ואת ההרשאות.
+                </p>
               )}
-            </h1>
-            <p className="text-red-500 mt-2 text-center text-sm">לא נמצאה תמונה בגליון sheleg או שיש בעיה בטעינה. בדוק את הקישור בגליון ואת ההרשאות.</p>
-          </div>
-        )}
-        <p className="text-center text-gray-600 mb-12">בחר קטגוריה להזמנה</p>
-        <CategoriesGrid />
+            </div>
+          )}
+        </section>
+
+        {/* Categories Section */}
+        <section role="region" aria-labelledby="categories-heading">
+          <h2 id="categories-heading" className="text-center text-gray-600 mb-12 text-xl font-semibold">
+            בחר קטגוריה להזמנה
+          </h2>
+          <CategoriesGrid />
+        </section>
       </div>
       
       {/* עגלה צפה במובייל - מוצגת רק ככפתור צף */}

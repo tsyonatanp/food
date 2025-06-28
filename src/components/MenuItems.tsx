@@ -81,14 +81,15 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="region" aria-label="רשימת מנות">
       {filteredItems.map((item) => {
         const isByWeight = item['סוג מכירה'] !== 'יחידה';
         const weight = selectedWeights[item.מנה] ?? 100;
         const quantity = selectedQuantities[item.מנה] ?? 1;
+        const itemId = `item-${item.מנה.replace(/\s+/g, '-')}`;
 
         return (
-          <div key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+          <article key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col" role="article">
             <div className="relative h-48">
               {item.תמונה ? (
                 <Image
@@ -98,7 +99,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   className="object-cover"
                 />
               ) : (
-                <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400">אין תמונה</div>
+                <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400" role="img" aria-label={`אין תמונה זמינה עבור ${item.מנה}`}>אין תמונה</div>
               )}
             </div>
             <div className="p-4 flex flex-col flex-grow">
@@ -112,12 +113,12 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                       `₪${item['מחיר (₪)']} / 100 גרם`
                     }
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2" role="group" aria-label="תכונות המנה">
                     {item.צמחוני === 'כן' && (
-                      <span className="px-2 py-1 bg-green-100 text-sm rounded-full">צמחוני</span>
+                      <span className="px-2 py-1 bg-green-100 text-sm rounded-full" role="status">צמחוני</span>
                     )}
                     {item['ללא גלוטן'] === 'כן' && (
-                      <span className="px-2 py-1 bg-yellow-100 text-sm rounded-full">ללא גלוטן</span>
+                      <span className="px-2 py-1 bg-yellow-100 text-sm rounded-full" role="status">ללא גלוטן</span>
                     )}
                   </div>
                 </div>
@@ -133,25 +134,71 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                 <div className="flex items-center gap-2 w-full">
                   {isByWeight ? (
                     <>
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.max(100, weight - 50))} disabled={weight <= 100}>
-                        <FaMinus />
+                      <button 
+                        type="button" 
+                        className="btn-secondary px-2 py-1 text-lg" 
+                        onClick={() => handleWeightChange(item.מנה, Math.max(100, weight - 50))} 
+                        disabled={weight <= 100}
+                        aria-label={`הפחת משקל עבור ${item.מנה}`}
+                      >
+                        <FaMinus aria-hidden="true" />
                       </button>
-                      <input type="number" min={100} max={2000} step={50} value={weight} onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleWeightChange(item.מנה, Math.min(2000, weight + 50))} disabled={weight >= 2000}>
-                        <FaPlus />
+                      <label htmlFor={`weight-${itemId}`} className="sr-only">משקל בגרם עבור {item.מנה}</label>
+                      <input 
+                        id={`weight-${itemId}`}
+                        type="number" 
+                        min={100} 
+                        max={2000} 
+                        step={50} 
+                        value={weight} 
+                        onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))} 
+                        className="input w-24 text-center" 
+                        aria-describedby={`weight-desc-${itemId}`}
+                      />
+                      <button 
+                        type="button" 
+                        className="btn-secondary px-2 py-1 text-lg" 
+                        onClick={() => handleWeightChange(item.מנה, Math.min(2000, weight + 50))} 
+                        disabled={weight >= 2000}
+                        aria-label={`הוסף משקל עבור ${item.מנה}`}
+                      >
+                        <FaPlus aria-hidden="true" />
                       </button>
-                      <span className="text-gray-500">גרם</span>
+                      <span className="text-gray-500" id={`weight-desc-${itemId}`}>גרם</span>
                     </>
                   ) : (
                     <>
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.min(50, quantity + 1))} disabled={quantity >= 50}>
-                        <FaPlus />
+                      <button 
+                        type="button" 
+                        className="btn-secondary px-2 py-1 text-lg" 
+                        onClick={() => handleQuantityChange(item.מנה, Math.min(50, quantity + 1))} 
+                        disabled={quantity >= 50}
+                        aria-label={`הוסף כמות עבור ${item.מנה}`}
+                      >
+                        <FaPlus aria-hidden="true" />
                       </button>
-                      <input type="number" min={1} max={50} step={1} value={quantity} onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} className="input w-24 text-center" />
-                      <button type="button" className="btn-secondary px-2 py-1 text-lg" onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))} disabled={quantity <= 1}>
-                        <FaMinus />
+                      <label htmlFor={`quantity-${itemId}`} className="sr-only">כמות יחידות עבור {item.מנה}</label>
+                      <input 
+                        id={`quantity-${itemId}`}
+                        type="number" 
+                        min={1} 
+                        max={50} 
+                        step={1} 
+                        value={quantity} 
+                        onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} 
+                        className="input w-24 text-center" 
+                        aria-describedby={`quantity-desc-${itemId}`}
+                      />
+                      <button 
+                        type="button" 
+                        className="btn-secondary px-2 py-1 text-lg" 
+                        onClick={() => handleQuantityChange(item.מנה, Math.max(1, quantity - 1))} 
+                        disabled={quantity <= 1}
+                        aria-label={`הפחת כמות עבור ${item.מנה}`}
+                      >
+                        <FaMinus aria-hidden="true" />
                       </button>
-                      <span className="text-gray-500">יחידות</span>
+                      <span className="text-gray-500" id={`quantity-desc-${itemId}`}>יחידות</span>
                     </>
                   )}
                 </div>
@@ -159,14 +206,15 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   type="button"
                   className="btn-primary w-full"
                   onClick={() => handleAddToCart(item)}
+                  aria-label={`הוסף ${item.מנה} לעגלה`}
                 >
                   הוספה להזמנה
                 </button>
               </div>
             </div>
-          </div>
+          </article>
         );
       })}
-    </div>
+    </section>
   );
 }

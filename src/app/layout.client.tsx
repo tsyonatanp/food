@@ -5,6 +5,7 @@ import { CartProvider } from '@/contexts/CartContext'
 import Banner from '@/components/Banner'
 import Navigation from '@/components/Navigation'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
+import AccessibilityTest from '@/components/AccessibilityTest'
 import './globals.css'
 import Script from "next/script";
 import { useEffect } from "react";
@@ -46,11 +47,17 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <html lang="he" dir="rtl" className={rubik.variable}>
       <body className="font-sans bg-gray-50">
+        {/* Skip link for keyboard navigation */}
+        <a href="#main-content" className="skip-link">
+          דלג לתוכן הראשי
+        </a>
+        
         <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
+        <AccessibilityTest />
         <CartProvider>
           <Banner />
           <Navigation />
-          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
             {children}
           </main>
         </CartProvider>

@@ -4,28 +4,41 @@ import { useEffect, useState } from 'react'
 import { fetchBanner } from '@/lib/fetchBanner'
 
 export default function Banner() {
-  const [messages, setMessages] = useState<string[]>([])
-  const [current, setCurrent] = useState(0)
+  const [bannerText, setBannerText] = useState('')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchBanner().then(data => {
-      setMessages(data.map((row: any) => row['פרסום']).filter(Boolean))
-    })
+    fetchBanner()
+      .then((data) => {
+        if (data && data.length > 0) {
+          setBannerText(data[0]?.['באנר'] || '')
+        }
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
   }, [])
 
-  useEffect(() => {
-    if (messages.length === 0) return
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % messages.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [messages])
+  if (loading) {
+    return (
+      <div className="bg-yellow-100 border-b border-yellow-200" role="banner" aria-label="באנר מידע">
+        <div className="container mx-auto px-4 py-2">
+          <div className="animate-pulse bg-yellow-200 h-4 rounded w-1/3"></div>
+        </div>
+      </div>
+    )
+  }
 
-  if (messages.length === 0) return null
+  if (!bannerText) {
+    return null
+  }
 
   return (
-    <div className="bg-yellow-300 text-yellow-900 text-center py-4 px-2 font-extrabold text-xl shadow-lg tracking-wide border-b-4 border-yellow-500 animate-fade-in">
-      {messages[current]}
+    <div className="bg-yellow-100 border-b border-yellow-200" role="banner" aria-label="באנר מידע">
+      <div className="container mx-auto px-4 py-2">
+        <p className="text-yellow-800 text-center text-sm font-medium" aria-live="polite">
+          {bannerText}
+        </p>
+      </div>
     </div>
   )
 } 

@@ -5,10 +5,138 @@
 @layer base {
   :root {
     direction: rtl;
+    /* Improved color contrast ratios */
+    --color-primary-600: #1d4ed8;
+    --color-primary-700: #1e40af;
+    --color-secondary-600: #9333ea;
+    --color-secondary-700: #7c3aed;
+    --color-success: #059669;
+    --color-error: #dc2626;
+    --color-warning: #d97706;
   }
   
   body {
     @apply antialiased;
+    /* Ensure minimum color contrast */
+    color: #1f2937;
+    background-color: #f9fafb;
+  }
+
+  /* Skip link for keyboard navigation */
+  .skip-link {
+    @apply absolute -top-10 left-6 bg-blue-600 text-white px-4 py-2 rounded-md z-50;
+    @apply focus:top-6 transition-all duration-200;
+    /* Ensure high contrast */
+    background-color: #1d4ed8;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* Focus styles for better keyboard navigation */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* Ensure all interactive elements are keyboard accessible */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn-primary {
+      @apply border-2 border-black;
+      background-color: #000000;
+      color: #ffffff;
+    }
+    
+    .btn-secondary {
+      @apply border-2 border-black;
+      background-color: #333333;
+      color: #ffffff;
+    }
+    
+    .input {
+      @apply border-2 border-black;
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    .text-gray-500 {
+      color: #000000 !important;
+    }
+
+    .text-gray-600 {
+      color: #000000 !important;
+    }
+  }
+
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-primary-600: #3b82f6;
+      --color-primary-700: #2563eb;
+      --color-secondary-600: #8b5cf6;
+      --color-secondary-700: #7c3aed;
+    }
+
+    body {
+      background-color: #111827;
+      color: #f9fafb;
+    }
+
+    .bg-white {
+      background-color: #1f2937;
+    }
+
+    .text-gray-900 {
+      color: #f9fafb;
+    }
+
+    .text-gray-600 {
+      color: #d1d5db;
+    }
+
+    .border-gray-300 {
+      border-color: #4b5563;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .skip-link {
+      transition: none !important;
+    }
+  }
+
+  /* Ensure sufficient text spacing */
+  p, h1, h2, h3, h4, h5, h6 {
+    line-height: 1.5;
+  }
+
+  /* Ensure minimum touch target size */
+  button, a, input[type="button"], input[type="submit"], input[type="reset"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Ensure form controls are properly sized */
+  input, select, textarea {
+    min-height: 44px;
   }
 }
 
@@ -19,17 +147,90 @@
   
   .btn {
     @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700;
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:bg-primary-700;
+    background-color: var(--color-primary-600);
+    color: #ffffff;
+    font-weight: 600;
   }
   
   .btn-secondary {
-    @apply btn bg-secondary-600 text-white hover:bg-secondary-700;
+    @apply btn bg-secondary-600 text-white hover:bg-secondary-700 focus:bg-secondary-700;
+    background-color: var(--color-secondary-600);
+    color: #ffffff;
+    font-weight: 600;
   }
   
   .input {
     @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    min-height: 44px;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+
+  /* Accessibility utilities */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  .visually-hidden {
+    @apply sr-only;
+  }
+
+  /* Status indicators with proper contrast */
+  .status-vegetarian {
+    background-color: var(--color-success);
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .status-gluten-free {
+    background-color: var(--color-warning);
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Error states with proper contrast */
+  .error-message {
+    background-color: var(--color-error);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+  }
+
+  /* Success states with proper contrast */
+  .success-message {
+    background-color: var(--color-success);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+  }
+
+  /* Ensure proper heading hierarchy */
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
   }
 } 

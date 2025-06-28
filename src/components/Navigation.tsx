@@ -26,7 +26,7 @@ export default function Navigation() {
   };
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 w-full">
+    <nav className="bg-white shadow-md sticky top-0 z-50 w-full" role="navigation" aria-label="ניווט ראשי">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 relative">
           {/* Desktop menu */}
@@ -36,7 +36,7 @@ export default function Navigation() {
               <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base">עלינו</Link>
             </div>
             <div className="flex-shrink-0 flex items-center justify-center">
-              <Link href="/">
+              <Link href="/" aria-label="דף הבית">
                 <Image src={logoUrl} alt="לוגו" width={48} height={48} priority />
               </Link>
             </div>
@@ -59,7 +59,7 @@ export default function Navigation() {
             </button>
             
             {/* Logo in center */}
-            <Link href="/" className="flex-shrink-0 flex items-center justify-center">
+            <Link href="/" className="flex-shrink-0 flex items-center justify-center" aria-label="דף הבית">
               <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
             </Link>
             
@@ -68,13 +68,15 @@ export default function Navigation() {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
               aria-label={isMenuOpen ? 'סגור תפריט' : 'פתח תפריט'}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
               {!isMenuOpen ? (
-                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               ) : (
-                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               )}
@@ -84,12 +86,12 @@ export default function Navigation() {
       </div>
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="sm:hidden bg-white border-t">
+        <div id="mobile-menu" className="sm:hidden bg-white border-t" role="menu" aria-label="תפריט ניווט">
           <div className="flex flex-col items-center py-2 space-y-2">
-            <Link href="/delivery" className="text-gray-900 hover:text-gray-600 font-medium text-base">משלוחים ואיזורי חלוקה</Link>
-            <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base">עלינו</Link>
-            <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base">שאלות ותשובות</Link>
-            <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base">שרות לקוחות</Link>
+            <Link href="/delivery" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">משלוחים ואיזורי חלוקה</Link>
+            <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">עלינו</Link>
+            <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שאלות ותשובות</Link>
+            <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שרות לקוחות</Link>
           </div>
         </div>
       )}
