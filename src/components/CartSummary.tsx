@@ -83,7 +83,7 @@ export default function CartSummary() {
                                   onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
                                   className="input w-20 py-1 text-sm"
                                 />
-                                <span className="text-sm text-gray-500">גרם</span>
+                                <span className="text-sm text-gray-500 unit-label" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>גרם</span>
                               </div>
                               <div className="text-sm text-gray-600 mt-1">
                                 ₪{((item.weight || 0) * (item.pricePerGram || 0)).toFixed(2)}
@@ -100,7 +100,7 @@ export default function CartSummary() {
                                   onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
                                   className="input w-16 py-1 text-sm"
                                 />
-                                <span className="text-sm text-gray-500">יחידות</span>
+                                <span className="text-sm text-gray-500 unit-label" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>יחידות</span>
                               </div>
                               <div className="text-sm text-gray-600 mt-1">
                                 ₪{item.estimatedUnitPrice && item.quantity ? (item.estimatedUnitPrice * item.quantity).toFixed(2) : ((item.quantity || 0) * (item.price || 0)).toFixed(2)}
@@ -189,10 +189,10 @@ export default function CartSummary() {
                             step="50"
                             value={item.weight}
                             onChange={(e) => updateWeight(item.id, parseInt(e.target.value))}
-                            className="input w-24 py-1"
+                            className="input w-28 py-1"
                             aria-label={`בחר משקל בגרם עבור ${item.name}`}
                           />
-                          <span className="text-sm text-gray-500">גרם</span>
+                          <span className="text-sm text-gray-500 unit-label" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>גרם</span>
                         </div>
                         <div className="text-sm text-gray-600 mt-1">
                           ₪{((item.weight || 0) * (item.pricePerGram || 0)).toFixed(2)}
@@ -212,7 +212,7 @@ export default function CartSummary() {
                             className="input w-20 py-1"
                             aria-label={`בחר כמות עבור ${item.name}`}
                           />
-                          <span className="text-sm text-gray-500">יחידות</span>
+                          <span className="text-sm text-gray-500 unit-label" style={{wordBreak: 'break-word', whiteSpace: 'normal'}}>יחידות</span>
                         </div>
                         <div className="text-sm text-gray-600 mt-1">
                           ₪{item.estimatedUnitPrice && item.quantity ? (item.estimatedUnitPrice * item.quantity).toFixed(2) : ((item.quantity || 0) * (item.price || 0)).toFixed(2)}

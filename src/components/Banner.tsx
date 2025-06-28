@@ -10,12 +10,16 @@ export default function Banner() {
   useEffect(() => {
     fetchBanner()
       .then((data) => {
+        console.log('Banner fetch result:', data)
         if (data && data.length > 0) {
           setBannerText(data[0]?.['באנר'] || '')
         }
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch((err) => {
+        console.error('Banner fetch error:', err)
+        setLoading(false)
+      })
   }, [])
 
   if (loading) {
@@ -29,6 +33,7 @@ export default function Banner() {
   }
 
   if (!bannerText) {
+    console.warn('Banner: No bannerText found')
     return null
   }
 
