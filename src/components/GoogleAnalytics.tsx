@@ -22,8 +22,8 @@ export default function GoogleAnalytics({ GA_MEASUREMENT_ID }: GoogleAnalyticsPr
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GA_MEASUREMENT_ID}', {
-              page_title: document.title,
-              page_location: window.location.href,
+              page_title: typeof document !== 'undefined' ? document.title : 'Redy Food',
+              page_location: typeof window !== 'undefined' ? window.location.href : '',
             });
           `,
         }}

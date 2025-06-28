@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { useReactToPrint } from 'react-to-print';
 
 // Define the type for an item in the order
 interface OrderItem {
@@ -28,35 +27,27 @@ export default function OrderConfirmationPage() {
   const [error, setError] = useState<string | null>(null);
   const componentRef = useRef<HTMLDivElement>(null);
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: `אישור הזמנה - ${orderDetails?.orderNumber}`,
-    pageStyle: `
-      @media print {
-        body {
-          direction: rtl;
-          -webkit-print-color-adjust: exact; /* Ensures colors and backgrounds are printed */
-        }
-        .no-print {
-          display: none !important;
-        }
-      }
-    `
-  });
+  const handlePrint = () => {
+    if (typeof window !== 'undefined' && componentRef.current) {
+      window.print();
+    }
+  };
 
   useEffect(() => {
-    const savedOrderJson = sessionStorage.getItem('latestOrder');
-    if (savedOrderJson) {
-      try {
-        const savedOrder = JSON.parse(savedOrderJson);
-        setOrderDetails(savedOrder);
-      } catch (e) {
-        setError("לא ניתן היה לטעון את פרטי ההזמנה.");
+    if (typeof window !== 'undefined') {
+      const savedOrderJson = sessionStorage.getItem('latestOrder');
+      if (savedOrderJson) {
+        try {
+          const savedOrder = JSON.parse(savedOrderJson);
+          setOrderDetails(savedOrder);
+        } catch (e) {
+          setError("לא ניתן היה לטעון את פרטי ההזמנה.");
+        }
+      } else {
+        // This can happen if the user navigates directly to this page
+        // without completing an order.
+        setError("לא נמצאו פרטי הזמנה. ייתכן שהגעת לכאן בטעות.");
       }
-    } else {
-      // This can happen if the user navigates directly to this page
-      // without completing an order.
-      setError("לא נמצאו פרטי הזמנה. ייתכן שהגעת לכאן בטעות.");
     }
   }, []);
 
@@ -137,6 +128,18 @@ export default function OrderConfirmationPage() {
 
   return (
     <>
+      <style jsx>{`
+        @media print {
+          body {
+            direction: rtl;
+            -webkit-print-color-adjust: exact;
+          }
+          .no-print {
+            display: none !important;
+          }
+        }
+      `}</style>
+      
       <div style={{ display: 'none' }}>
         <div ref={componentRef}>
             <PrintableContent />

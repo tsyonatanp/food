@@ -66,7 +66,7 @@ export default function PrivateCalculator() {
   }
 
   const handlePrint = () => {
-    if (printRef.current) {
+    if (printRef.current && typeof window !== 'undefined') {
       window.print();
     }
   };

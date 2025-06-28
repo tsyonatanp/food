@@ -1,20 +1,15 @@
 'use client'
 
 import { useEffect } from 'react'
-import axe from 'axe-core'
-
-interface Violation {
-  description: string
-  impact: string
-  nodes: any[]
-}
 
 export default function AccessibilityTest() {
   useEffect(() => {
-    // בדיקת נגישות אוטומטית רק בסביבת פיתוח
-    if (process.env.NODE_ENV === 'development') {
+    // בדיקת נגישות אוטומטית רק בסביבת פיתוח ורק בצד הלקוח
+    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined' && typeof document !== 'undefined') {
       const runAccessibilityTest = async () => {
         try {
+          // דינמי import של axe-core רק בצד הלקוח
+          const { default: axe } = await import('axe-core')
           const results = await axe.run()
           
           if (results.violations.length > 0) {

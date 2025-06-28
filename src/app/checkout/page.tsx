@@ -29,15 +29,17 @@ export default function CheckoutPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const savedDetails = localStorage.getItem('customerDetails');
-    if (savedDetails) {
-      const { name, phone, address, floor, apartment, entryCode } = JSON.parse(savedDetails);
-      setName(name || "");
-      setPhone(phone || "");
-      setAddress(address || "");
-      setFloor(floor || "");
-      setApartment(apartment || "");
-      setEntryCode(entryCode || "");
+    if (typeof window !== 'undefined') {
+      const savedDetails = localStorage.getItem('customerDetails');
+      if (savedDetails) {
+        const { name, phone, address, floor, apartment, entryCode } = JSON.parse(savedDetails);
+        setName(name || "");
+        setPhone(phone || "");
+        setAddress(address || "");
+        setFloor(floor || "");
+        setApartment(apartment || "");
+        setEntryCode(entryCode || "");
+      }
     }
   }, []);
 
@@ -83,16 +85,18 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (data.ok) {
         const customerDetails = { name, phone, address, floor, apartment, entryCode };
-        localStorage.setItem('customerDetails', JSON.stringify(customerDetails));
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('customerDetails', JSON.stringify(customerDetails));
+          // Save order details for the confirmation page
+          const orderDetails = {
+            orderNumber,
+            name,
+            total: finalTotal,
+            cart: items,
+          };
+          sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
+        }
         setSuccess(true);
-        // Save order details for the confirmation page
-        const orderDetails = {
-          orderNumber,
-          name,
-          total: finalTotal,
-          cart: items,
-        };
-        sessionStorage.setItem('latestOrder', JSON.stringify(orderDetails));
         
         clearCart();
         router.push('/order-confirmation'); // Redirect to confirmation page

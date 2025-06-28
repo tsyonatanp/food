@@ -7,7 +7,9 @@ export default function FloatingPhone() {
   
   const handleClick = () => {
     // פתיחת הטלפון עם מספר הטלפון
-    window.location.href = `tel:${phoneNumber}`
+    if (typeof window !== 'undefined') {
+      window.location.href = `tel:${phoneNumber}`
+    }
   }
 
   return (

@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Redy Food - אוכל מוכן במשלוח',
   description: 'הזמנת אוכל מוכן ליום שישי טרי לפי משקל עם משלוח עד הבית',
+  metadataBase: new URL('https://redy-food.vercel.app'),
   openGraph: {
     title: 'Redy Food - אוכל מוכן במשלוח',
     description: 'הזמנת אוכל מוכן ליום שישי טרי לפי משקל עם משלוח עד הבית',

@@ -22,7 +22,9 @@ export default function Navigation() {
   }, []);
 
   const handlePhoneClick = () => {
-    window.location.href = 'tel:050-9555755';
+    if (typeof window !== 'undefined') {
+      window.location.href = 'tel:050-9555755';
+    }
   };
 
   return (
