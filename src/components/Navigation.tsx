@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { fetchLogoUrl } from '@/lib/fetchLogo';
 import { FaPhone } from 'react-icons/fa';
+import KosherStamp from './KosherStamp';
 
 const navLinks = [
   { name: 'משלוחים ואיזורי חלוקה', href: '/delivery' },
@@ -41,6 +42,7 @@ export default function Navigation() {
               <Link href="/" aria-label="דף הבית">
                 <Image src={logoUrl} alt="לוגו" width={48} height={48} priority />
               </Link>
+              <KosherStamp />
             </div>
             <div className="flex items-center space-x-reverse space-x-8">
               <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base">שאלות ותשובות</Link>
@@ -61,9 +63,12 @@ export default function Navigation() {
             </button>
             
             {/* Logo in center */}
-            <Link href="/" className="flex-shrink-0 flex items-center justify-center" aria-label="דף הבית">
-              <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
-            </Link>
+            <div className="flex items-center">
+              <Link href="/" className="flex-shrink-0 flex items-center justify-center" aria-label="דף הבית">
+                <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
+              </Link>
+              <KosherStamp />
+            </div>
             
             {/* Menu button on the right */}
             <button
