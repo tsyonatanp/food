@@ -106,7 +106,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
               <div className="flex-grow">
                 <h3 className="text-xl font-semibold mb-2">{item.מנה}</h3>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-lg font-medium">
+                  <span className="text-sm text-gray-500 unit-label" style={{wordBreak: 'break-word', whiteSpace: 'normal', minWidth: '4.5rem', display: 'inline-block'}}>
                     {item['סוג מכירה'] === 'יחידה' && !item.averageWeightPerUnit ?
                       `₪${item['מחיר (₪)']} ליחידה`
                       :
@@ -152,7 +152,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                         step={50} 
                         value={weight} 
                         onChange={(e) => handleWeightChange(item.מנה, parseInt(e.target.value))} 
-                        className="input w-24 text-center" 
+                        className="input w-32 md:w-36 lg:w-40 py-1" 
                         aria-describedby={`weight-desc-${itemId}`}
                       />
                       <button 
@@ -186,7 +186,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                         step={1} 
                         value={quantity} 
                         onChange={(e) => handleQuantityChange(item.מנה, parseInt(e.target.value))} 
-                        className="input w-24 text-center" 
+                        className="input w-32 md:w-36 lg:w-40 py-1" 
                         aria-describedby={`quantity-desc-${itemId}`}
                       />
                       <button 
