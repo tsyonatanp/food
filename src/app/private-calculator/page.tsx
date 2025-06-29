@@ -55,6 +55,10 @@ export default function PrivateCalculator() {
     }
   };
 
+  const handleDeleteCalculation = (index: number) => {
+    setCalculations(prev => prev.filter((_, i) => i !== index));
+  };
+
   // Helper: blob to base64 (for logo)
   function blobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -179,6 +183,7 @@ export default function PrivateCalculator() {
                 <th>משקל (גרם)</th>
                 <th>מחיר סופי</th>
                 <th>הערות</th>
+                <th>פעולות</th>
               </tr>
             </thead>
             <tbody>
@@ -189,10 +194,26 @@ export default function PrivateCalculator() {
                   <td>{calc.weight}</td>
                   <td>₪{calc.total.toFixed(2)}</td>
                   <td>{calc.notes}</td>
+                  <td>
+                    <button 
+                      onClick={() => handleDeleteCalculation(idx)}
+                      style={{ 
+                        background: '#dc2626', 
+                        color: 'white', 
+                        padding: '4px 8px', 
+                        borderRadius: '4px',
+                        border: 'none',
+                        cursor: 'pointer'
+                      }}
+                      aria-label={`מחק את ${calc.product.name}`}
+                    >
+                      מחק
+                    </button>
+                  </td>
                 </tr>
               ))}
               <tr style={{ fontWeight: 'bold', background: '#e6e6f0' }}>
-                <td colSpan={3} style={{ textAlign: 'left' }}>סך הכל להזמנה:</td>
+                <td colSpan={4} style={{ textAlign: 'left' }}>סך הכל להזמנה:</td>
                 <td>₪{totalSum.toFixed(2)}</td>
                 <td></td>
               </tr>

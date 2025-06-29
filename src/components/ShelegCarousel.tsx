@@ -33,14 +33,14 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
   };
 
   return (
-    <div className="w-[400px] mx-auto" role="region" aria-label="גלריית תמונות שלג">
+    <div className="w-full max-w-[400px] px-4 mx-auto" role="region" aria-label="גלריית תמונות שלג">
       <div className="relative">
         {/* Main image */}
         <div className="relative">
           <img
             src={images[index]}
             alt={`שלג - אוכל מוכן, תמונה ${index + 1} מתוך ${images.length}`}
-            className="rounded-xl shadow-lg w-full h-64 object-cover"
+            className="rounded-xl shadow-lg w-full h-48 sm:h-64 object-cover"
           />
           
           {/* Navigation buttons */}
@@ -48,17 +48,17 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
             <>
               <button
                 onClick={goToPrevious}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 focus:bg-opacity-75"
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1.5 sm:p-2 rounded-full hover:bg-opacity-75 focus:bg-opacity-75"
                 aria-label="תמונה קודמת"
               >
-                <FaChevronLeft aria-hidden="true" />
+                <FaChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
               </button>
               <button
                 onClick={goToNext}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 focus:bg-opacity-75"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-1.5 sm:p-2 rounded-full hover:bg-opacity-75 focus:bg-opacity-75"
                 aria-label="תמונה הבאה"
               >
-                <FaChevronRight aria-hidden="true" />
+                <FaChevronRight className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
               </button>
             </>
           )}
@@ -66,13 +66,16 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
 
         {/* Controls */}
         {images.length > 1 && (
-          <div className="flex justify-center items-center mt-4 space-x-2 space-x-reverse">
+          <div className="flex justify-center items-center mt-2 sm:mt-4 space-x-2 space-x-reverse">
             <button
               onClick={togglePlayPause}
-              className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full"
+              className="bg-gray-200 hover:bg-gray-300 p-1.5 sm:p-2 rounded-full"
               aria-label={isPlaying ? "עצור הקרנה" : "התחל הקרנה"}
             >
-              {isPlaying ? <FaPause aria-hidden="true" /> : <FaPlay aria-hidden="true" />}
+              {isPlaying ? 
+                <FaPause className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" /> : 
+                <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
+              }
             </button>
             
             {/* Slide indicators */}
