@@ -33,15 +33,14 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
   };
 
   return (
-    <section className="w-full flex justify-center my-6" role="region" aria-label="גלריית תמונות שלג">
-      <div className="relative max-w-2xl w-full">
+    <div className="w-[400px] mx-auto" role="region" aria-label="גלריית תמונות שלג">
+      <div className="relative">
         {/* Main image */}
         <div className="relative">
           <img
             src={images[index]}
             alt={`שלג - אוכל מוכן, תמונה ${index + 1} מתוך ${images.length}`}
-            className="rounded-xl shadow-lg max-h-64 object-contain w-full"
-            style={{ maxWidth: '400px' }}
+            className="rounded-xl shadow-lg w-full h-64 object-cover"
           />
           
           {/* Navigation buttons */}
@@ -99,6 +98,6 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
           תמונה {index + 1} מתוך {images.length}
         </div>
       </div>
-    </section>
+    </div>
   );
 } 
