@@ -92,6 +92,8 @@ export default function PrivateCalculator() {
           body * { visibility: hidden; }
           #private-calc-output, #private-calc-output * { visibility: visible; }
           #private-calc-output { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
+          #private-calc-output th:last-child,
+          #private-calc-output td:last-child { display: none; }
         }
         #private-calc-output .order-title {
           font-size: 2rem;
@@ -213,8 +215,9 @@ export default function PrivateCalculator() {
                 </tr>
               ))}
               <tr style={{ fontWeight: 'bold', background: '#e6e6f0' }}>
-                <td colSpan={4} style={{ textAlign: 'left' }}>סך הכל להזמנה:</td>
+                <td colSpan={3} style={{ textAlign: 'left' }}>סך הכל להזמנה:</td>
                 <td>₪{totalSum.toFixed(2)}</td>
+                <td></td>
                 <td></td>
               </tr>
             </tbody>
