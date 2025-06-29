@@ -11,6 +11,9 @@ export default function KosherStamp() {
           height: 60px;
           position: relative;
           margin-right: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         @media (max-width: 640px) {
           .kosher-stamp {
@@ -24,8 +27,14 @@ export default function KosherStamp() {
         <Image
           src="/images/kosher-stamp.png"
           alt="תעודת כשרות"
-          fill
-          style={{ objectFit: 'contain' }}
+          width={60}
+          height={60}
+          priority
+          style={{
+            maxWidth: '100%',
+            height: 'auto',
+            objectFit: 'contain'
+          }}
         />
       </div>
     </>
