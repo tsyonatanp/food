@@ -38,11 +38,11 @@ export default function Navigation() {
               <Link href="/delivery" className="text-gray-900 hover:text-gray-600 font-medium text-base">משלוחים ואיזורי חלוקה</Link>
               <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base">עלינו</Link>
             </div>
-            <div className="flex-shrink-0 flex items-center justify-center">
+            <div className="flex-shrink-0 flex items-center justify-center gap-2">
+              <KosherStamp />
               <Link href="/" aria-label="דף הבית">
                 <Image src={logoUrl} alt="לוגו" width={48} height={48} priority />
               </Link>
-              <KosherStamp />
             </div>
             <div className="flex items-center space-x-reverse space-x-8">
               <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base">שאלות ותשובות</Link>
@@ -63,11 +63,11 @@ export default function Navigation() {
             </button>
             
             {/* Logo in center */}
-            <div className="flex items-center">
+            <div className="flex items-center justify-center gap-1">
+              <KosherStamp />
               <Link href="/" className="flex-shrink-0 flex items-center justify-center" aria-label="דף הבית">
                 <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
               </Link>
-              <KosherStamp />
             </div>
             
             {/* Menu button on the right */}

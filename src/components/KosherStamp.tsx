@@ -7,16 +7,16 @@ export default function KosherStamp() {
     <>
       <style>{`
         .kosher-stamp {
-          width: 40px;
-          height: 40px;
+          width: 60px;
+          height: 60px;
           position: relative;
-          margin-right: 8px;
+          margin-right: 12px;
         }
         @media (max-width: 640px) {
           .kosher-stamp {
-            width: 32px;
-            height: 32px;
-            margin-right: 4px;
+            width: 45px;
+            height: 45px;
+            margin-right: 8px;
           }
         }
       `}</style>
