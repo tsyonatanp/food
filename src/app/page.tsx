@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import CategoriesGrid from '@/components/CategoriesGrid';
 import CartSummary from '@/components/CartSummary';
 import { fetchTitle } from '@/lib/fetchTitle';
@@ -11,6 +12,9 @@ export default function HomePage() {
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState<string[]>([]);
+  const [clickCount, setClickCount] = useState(0);
+  const [lastClickTime, setLastClickTime] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     fetchTitle().then(data => {
@@ -24,8 +28,27 @@ export default function HomePage() {
     });
   }, []);
 
+  // פונקציה לטיפול בלחיצות במקום ריק
+  const handleEmptySpaceClick = () => {
+    const now = Date.now();
+    
+    // אם עבר יותר מ-3 שניות מהלחיצה האחרונה, מאפסים את המונה
+    if (now - lastClickTime > 3000) {
+      setClickCount(1);
+    } else {
+      setClickCount(prev => prev + 1);
+    }
+    
+    setLastClickTime(now);
+    
+    // אם הגענו ל-10 לחיצות, עוברים למחשבון הפרטי
+    if (clickCount + 1 >= 10) {
+      router.push('/private-calculator');
+    }
+  };
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
       {/* Hero Section - קרוסלה בראש הדף */}
       {images.length > 0 ? (
         <ShelegCarousel images={images} />

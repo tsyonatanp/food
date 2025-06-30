@@ -84,6 +84,8 @@ export default function PrivateCalculator() {
 
   // חישוב סך הכל להזמנה
   const totalSum = calculations.reduce((sum, c) => sum + c.total, 0);
+  const deliveryFee = 30; // דמי משלוח קבועים
+  const totalWithDelivery = totalSum + deliveryFee;
 
   return (
     <div style={{ maxWidth: 800, margin: '20px auto', padding: '16px 12px', background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
@@ -235,6 +237,18 @@ export default function PrivateCalculator() {
               <tr style={{ fontWeight: 'bold', background: '#e6e6f0' }}>
                 <td colSpan={3} style={{ textAlign: 'left' }}>סך הכל להזמנה:</td>
                 <td>₪{totalSum.toFixed(2)}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style={{ fontWeight: 'bold', background: '#f0f8ff' }}>
+                <td colSpan={3} style={{ textAlign: 'left' }}>דמי משלוח:</td>
+                <td>₪{deliveryFee.toFixed(2)}</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr style={{ fontWeight: 'bold', background: '#e6ffe6' }}>
+                <td colSpan={3} style={{ textAlign: 'left' }}>סך הכל לתשלום:</td>
+                <td>₪{totalWithDelivery.toFixed(2)}</td>
                 <td></td>
                 <td></td>
               </tr>
