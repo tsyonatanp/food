@@ -44,8 +44,8 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  const freeDeliveryThreshold = Number(process.env.NEXT_PUBLIC_FREE_DELIVERY_THRESHOLD) || 500;
-  const actualDeliveryFee = total >= freeDeliveryThreshold ? 0 : deliveryFee;
+  const DELIVERY_FEE = 30;
+  const actualDeliveryFee = DELIVERY_FEE;
   const finalTotal = total + actualDeliveryFee;
 
   const validate = () => {
@@ -273,39 +273,8 @@ export default function CheckoutPage() {
               {apartment && <div className="mb-1">דירה: {apartment}</div>}
               {entryCode && <div className="mb-1">קוד כניסה: {entryCode}</div>}
               {notes && <div className="mb-1">הערות: {notes}</div>}
-              {items.length === 0 ? (
-                <div className="text-gray-500">העגלה ריקה</div>
-              ) : (
-                <ul className="mb-2" role="list">
-                  {items.map(item => (
-                    <li key={item.id} className="flex justify-between">
-                      <span>{item.name}</span>
-                      <span>
-                        {item.isByWeight
-                          ? `${item.weight} גרם`
-                          : item.averageWeightPerUnit && item.estimatedUnitPrice
-                            ? `${item.quantity ?? 0} יחידות (הערכה: ${(item.quantity ?? 0) * item.averageWeightPerUnit} גרם, מחיר משוער: ₪${((item.estimatedUnitPrice ?? 0) * (item.quantity ?? 0)).toFixed(2)})`
-                            : `${item.quantity} יחידות`}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              <div className="flex justify-between">
-                <span>סכום ביניים:</span>
-                <span>₪{total.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>דמי משלוח:</span>
-                <span>{actualDeliveryFee === 0 ? "חינם!" : `₪${actualDeliveryFee.toFixed(2)}`}</span>
-              </div>
-              <div className="flex justify-between font-bold mt-2">
-                <span>סה"כ לתשלום:</span>
-                <span>₪{finalTotal.toFixed(2)}</span>
-              </div>
-              <strong className="text-xs text-red-600 mt-2 block">
-                המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.
-              </strong>
+              <div className="mb-1 font-semibold text-red-700">דמי משלוח: 30 ש"ח</div>
+              <div className="mb-1 font-bold text-lg">סה"כ לתשלום: ₪{finalTotal.toFixed(2)}</div>
             </div>
             {error && <div className="text-red-600 text-center" role="alert" aria-live="polite">{error}</div>}
             <button
