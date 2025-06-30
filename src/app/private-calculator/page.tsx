@@ -55,6 +55,10 @@ export default function PrivateCalculator() {
     }
   };
 
+  const handleDeleteCalculation = (index: number) => {
+    setCalculations(prev => prev.filter((_, i) => i !== index));
+  };
+
   // Helper: blob to base64 (for logo)
   function blobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -82,12 +86,32 @@ export default function PrivateCalculator() {
   const totalSum = calculations.reduce((sum, c) => sum + c.total, 0);
 
   return (
-    <div style={{ maxWidth: 800, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
+    <div style={{ maxWidth: 800, margin: '20px auto', padding: '16px 12px', background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
       <style>{`
         @media print {
           body * { visibility: hidden; }
           #private-calc-output, #private-calc-output * { visibility: visible; }
           #private-calc-output { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
+          #private-calc-output th:last-child,
+          #private-calc-output td:last-child { display: none; }
+        }
+        @media screen and (max-width: 640px) {
+          #private-calc-output table {
+            font-size: 14px;
+          }
+          #private-calc-output th,
+          #private-calc-output td {
+            padding: 4px;
+          }
+          #private-calc-output .order-title {
+            font-size: 1.5rem !important;
+          }
+          #private-calc-output .order-date {
+            font-size: 1rem !important;
+          }
+          #private-calc-output .greeting {
+            font-size: 1rem !important;
+          }
         }
         #private-calc-output .order-title {
           font-size: 2rem;
@@ -140,27 +164,27 @@ export default function PrivateCalculator() {
       <h1 style={{ textAlign: 'center', marginBottom: 24 }}>מחשבון מחיר (פנימי)</h1>
       {/* טופס */}
       <div style={{ marginBottom: 32 }}>
-        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-          <label>בחר מוצר:</label>
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>בחר מוצר:</label>
           <select value={selected?.name || ''} onChange={e => {
             const prod = products.find(p => p.name === e.target.value);
             setSelected(prod || null);
-          }} style={{ width: '100%', padding: 8, marginTop: 8 }}>
+          }} style={{ width: '100%', padding: '6px 4px', marginTop: 4, border: '1px solid #d1d5db', borderRadius: 4 }}>
             <option value=''>-- בחר --</option>
             {products.map(p => (
               <option key={p.name} value={p.name}>{p.name}</option>
             ))}
           </select>
         </div>
-        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-          <label>הזן משקל בגרם:</label>
-          <input type='number' value={weight} onChange={e => setWeight(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, border: '1px solid #d1d5db', borderRadius: 4 }} />
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>הזן משקל בגרם:</label>
+          <input type='number' value={weight} onChange={e => setWeight(e.target.value)} style={{ width: '100%', padding: '6px 4px', marginTop: 4, border: '1px solid #d1d5db', borderRadius: 4 }} />
         </div>
-        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: 16 }}>
-          <label>הערות (לא חובה):</label>
-          <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: 8, marginTop: 8, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>הערות (לא חובה):</label>
+          <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: '6px 4px', marginTop: 4, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
         </div>
-        <button onClick={handleAddCalculation} style={{ width: '100%', padding: 12, background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18, marginBottom: 24 }}>הוסף חישוב</button>
+        <button onClick={handleAddCalculation} style={{ width: '100%', padding: '10px 8px', background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16, marginBottom: 20 }}>הוסף חישוב</button>
       </div>
       {/* פלט להדפסה ול-PDF */}
       <div id="private-calc-output" ref={printRef}>
@@ -179,6 +203,7 @@ export default function PrivateCalculator() {
                 <th>משקל (גרם)</th>
                 <th>מחיר סופי</th>
                 <th>הערות</th>
+                <th>פעולות</th>
               </tr>
             </thead>
             <tbody>
@@ -189,11 +214,28 @@ export default function PrivateCalculator() {
                   <td>{calc.weight}</td>
                   <td>₪{calc.total.toFixed(2)}</td>
                   <td>{calc.notes}</td>
+                  <td>
+                    <button 
+                      onClick={() => handleDeleteCalculation(idx)}
+                      style={{ 
+                        background: '#dc2626', 
+                        color: 'white', 
+                        padding: '4px 8px', 
+                        borderRadius: '4px',
+                        border: 'none',
+                        cursor: 'pointer'
+                      }}
+                      aria-label={`מחק את ${calc.product.name}`}
+                    >
+                      מחק
+                    </button>
+                  </td>
                 </tr>
               ))}
               <tr style={{ fontWeight: 'bold', background: '#e6e6f0' }}>
                 <td colSpan={3} style={{ textAlign: 'left' }}>סך הכל להזמנה:</td>
                 <td>₪{totalSum.toFixed(2)}</td>
+                <td></td>
                 <td></td>
               </tr>
             </tbody>
@@ -206,9 +248,9 @@ export default function PrivateCalculator() {
         <div className="greeting">בתיאבון ובריאות טובה 🌿 צוות שלג-רוז</div>
       </div>
       {calculations.length > 0 && (
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={handlePrint} style={{ flex: 1, padding: 12, background: '#f59e42', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הדפס הכל</button>
-          <button onClick={handleAllPDF} style={{ flex: 1, padding: 12, background: '#10b981', color: '#fff', border: 'none', borderRadius: 6, fontSize: 18 }}>הורד PDF לכל ההזמנה</button>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <button onClick={handlePrint} style={{ width: '100%', padding: '10px 8px', background: '#f59e42', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס הכל</button>
+          <button onClick={handleAllPDF} style={{ width: '100%', padding: '10px 8px', background: '#10b981', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הורד PDF לכל ההזמנה</button>
         </div>
       )}
     </div>
