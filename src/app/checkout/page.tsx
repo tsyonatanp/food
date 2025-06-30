@@ -26,6 +26,7 @@ export default function CheckoutPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [orderNumber] = useState(generateOrderNumber());
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function CheckoutPage() {
     if (!address.trim()) return "יש להזין כתובת";
     if (floor && isNaN(Number(floor))) return "קומה חייבת להיות מספר";
     if (apartment && isNaN(Number(apartment))) return "דירה חייבת להיות מספר";
+    if (!termsAccepted) return "יש לאשר שקראת את תקנון האתר";
     return "";
   };
 
@@ -247,6 +249,19 @@ export default function CheckoutPage() {
                 dir="rtl"
                 rows={2}
               />
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <input
+                id="terms"
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={e => setTermsAccepted(e.target.checked)}
+                required
+                className="accent-green-600 w-5 h-5"
+              />
+              <label htmlFor="terms" className="text-sm select-none">
+                בלחיצה על שליחה אני מאשר/ת שקראתי את <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-green-700 hover:text-green-900">תקנון האתר</a>
+              </label>
             </div>
             <div className="bg-gray-50 rounded p-3 text-sm" role="region" aria-label="סיכום הזמנה">
               <div className="font-semibold mb-2">סיכום הזמנה:</div>

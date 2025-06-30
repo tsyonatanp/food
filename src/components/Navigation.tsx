@@ -47,6 +47,7 @@ export default function Navigation() {
             <div className="flex items-center space-x-reverse space-x-8">
               <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base">שאלות ותשובות</Link>
               <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base">שרות לקוחות</Link>
+              <Link href="/terms" className="text-gray-900 hover:text-gray-600 font-medium text-base">תקנון</Link>
             </div>
           </div>
 
@@ -99,6 +100,7 @@ export default function Navigation() {
             <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">עלינו</Link>
             <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שאלות ותשובות</Link>
             <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שרות לקוחות</Link>
+            <Link href="/terms" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">תקנון</Link>
           </div>
         </div>
       )}
