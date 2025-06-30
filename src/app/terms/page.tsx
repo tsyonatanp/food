@@ -1,62 +1,75 @@
 export default function TermsPage() {
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-8 text-center">תקנון שימוש והזמנה באתר</h1>
+      <h1 className="text-3xl font-bold mb-4 text-center">🧾 תקנון אתר – שלג</h1>
+      <p className="text-center text-gray-600 mb-8">עודכן: יוני 2025</p>
       
       <div className="prose prose-lg max-w-none">
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">מידע כללי</h2>
+          <h2 className="text-2xl font-semibold mb-4">1. מידע כללי</h2>
           <p>
-            האתר מופעל על ידי שלג (להלן: &quot;המפעיל&quot;), שפועל כעוסק פטור ומבצע משלוחים של אוכל מוכן מאת &quot;רוז&quot;.
+            האתר מופעל על ידי שלג, עסק עצמאי הפועל בהתאם לחוקי מדינת ישראל. שלג אוסף, שוקל, אורז ומשלח מנות אוכל מוכנות, בשיתוף פעולה עם העסק "רוז" המספק את המזון עצמו.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">אופן הפעילות</h2>
+          <h2 className="text-2xl font-semibold mb-4">2. אזור שירות</h2>
           <p>
-            האתר מציג תפריט מנות מוכנות. ההזמנה מבוצעת ישירות דרך האתר, אך האוכל נשקל, נארז ונשלח ללקוח – ללא בישול או הכנה באתר של &quot;שלג&quot;.
+            המשלוחים זמינים בשלב זה באזור "בית בפארק" באור יהודה בלבד. תיתכן הרחבה בעתיד.
+            <br />
+            משלוח חינם – בכפוף לתנאים המשתנים ויעודכנו באתר.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">אזורי חלוקה</h2>
+          <h2 className="text-2xl font-semibold mb-4">3. תשלום</h2>
+          <p>ניתן לשלם באמצעות:</p>
+          <ul className="list-disc list-inside mb-4">
+            <li>Bit</li>
+            <li>פייבוקס</li>
+            <li>מזומן</li>
+          </ul>
           <p>
-            המשלוחים זמינים באזור &quot;בית בפארק&quot; אור יהודה בלבד. המשלוח הוא בתשלום, לפי תעריף עדכני שיופיע בעמוד ההזמנה.
+            בעתיד תתווסף אפשרות לתשלום בכרטיס אשראי דרך דף תשלום חיצוני.
+            <br />
+            האתר אינו שומר פרטי אשראי.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">תשלומים</h2>
+          <h2 className="text-2xl font-semibold mb-4">4. אחריות והחזרות</h2>
           <p>
-            ניתן לשלם באמצעות ביט, מזומן או פייבוקס. בעתיד תתווסף אפשרות לתשלום בכרטיס אשראי מאובטח.
+            המזון מופק ונמסר על ידי רוז, והאחריות לטיבו ולטריותו חלה עליהם.
+            <br />
+            כל פנייה בנוגע למוצר תטופל בהתאם לחוק הגנת הצרכן. החזרים או ביטולים יתבצעו לפי הדרישות הקבועות בחוק בלבד.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">כשרות</h2>
+          <h2 className="text-2xl font-semibold mb-4">5. כשרות</h2>
           <p>
-            כל האוכל תחת השגחת הרבנות רחובות.
+            כל המנות בכשרות בהשגחת הרבנות רחובות.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">אחריות והחזרות</h2>
+          <h2 className="text-2xl font-semibold mb-4">6. פרטיות</h2>
           <p>
-            האוכל מסופק על ידי רוז, והאחריות לטיבו חלה עליהם. במידה ויש בעיה בתכולה, ניתן לפנות לשירות הלקוחות לבירור. ביטולים יבוצעו בהתאם לחוק הגנת הצרכן.
+            האתר אינו אוסף או שומר מידע אישי מהמשתמשים. פרטי ההזמנה מועברים באופן פרטי באמצעות אפליקציית תשלום או טלגרם.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">שמירה על פרטיות</h2>
+          <h2 className="text-2xl font-semibold mb-4">7. זכויות יוצרים</h2>
           <p>
-            האתר אינו אוסף מידע אישי מהמשתמשים. כל הזמנה נמסרת באופן ידני באמצעות טלגרם או אמצעי תשלום חיצוניים.
+            כל התכנים באתר, כולל טקסטים, תמונות, ועיצוב גרפי, שייכים לשלג ואסור להשתמש בהם ללא רשות מראש ובכתב.
           </p>
         </section>
 
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">שינויים בתקנון</h2>
+          <h2 className="text-2xl font-semibold mb-4">8. שינוי תקנון</h2>
           <p>
-            הנהלת האתר רשאית לעדכן את תנאי השימוש מעת לעת. העדכון ייכנס לתוקף עם פרסומו באתר.
+            שלג שומר לעצמו את הזכות לעדכן את התקנון בכל עת. התקנון העדכני יהיה זמין לצפייה באתר, והמשך השימוש באתר מהווה הסכמה לו.
           </p>
         </section>
       </div>

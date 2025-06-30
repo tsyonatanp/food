@@ -7,7 +7,10 @@ export async function POST(req: NextRequest) {
     
     const { orderNumber, name, phone, address, floor, apartment, entryCode, notes, cart, total } = data;
     
-    const itemsText = cart.map((item: any) => {
+    // מיון הפריטים לפי סדר אלפביתי (א-ב) לפי שם המוצר
+    const sortedCart = [...cart].sort((a, b) => a.name.localeCompare(b.name, 'he'));
+    
+    const itemsText = sortedCart.map((item: any) => {
       if (item.isByWeight) {
         return `• ${item.name} - ${item.weight} גרם`;
       }

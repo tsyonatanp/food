@@ -187,6 +187,17 @@ export default function PrivateCalculator() {
           <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: '6px 4px', marginTop: 4, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
         </div>
         <button onClick={handleAddCalculation} style={{ width: '100%', padding: '10px 8px', background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16, marginBottom: 20 }}>הוסף חישוב</button>
+        
+        {/* שדה הערות כלליות */}
+        <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
+          <label style={{ display: 'block', marginBottom: 4 }}>הערות כלליות (לא חובה):</label>
+          <textarea 
+            value={finalNotes} 
+            onChange={e => setFinalNotes(e.target.value)} 
+            placeholder="הזן הערות כלליות להזמנה..."
+            style={{ width: '100%', padding: '6px 4px', marginTop: 4, minHeight: 80, border: '1px solid #d1d5db', borderRadius: 4 }} 
+          />
+        </div>
       </div>
       {/* פלט להדפסה ול-PDF */}
       <div id="private-calc-output" ref={printRef}>
