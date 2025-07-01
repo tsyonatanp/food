@@ -1,28 +1,28 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Redy Food - אוכל מוכן במשלוח',
-  description: 'הזמנת אוכל מוכן ליום שישי טרי לפי משקל עם משלוח עד הבית',
+  title: 'שלג-רוז - אוכל מוכן במשלוח',
+  description: 'הזמנת אוכל מוכן טרי לפי משקל עם משלוח עד הבית באזור בית בפארק אור יהודה',
   metadataBase: new URL('https://redy-food.vercel.app'),
   openGraph: {
-    title: 'Redy Food - אוכל מוכן במשלוח',
-    description: 'הזמנת אוכל מוכן ליום שישי טרי לפי משקל עם משלוח עד הבית',
+    title: 'שלג-רוז - אוכל מוכן במשלוח',
+    description: 'הזמנת אוכל מוכן טרי לפי משקל עם משלוח עד הבית באזור בית בפארק אור יהודה',
     type: 'website',
     url: 'https://redy-food.vercel.app',
-    siteName: 'Redy Food',
+    siteName: 'שלג-רוז',
     images: [
       {
-        url: '/1.jpeg',
+        url: '/hero-image.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Redy Food - אוכל מוכן במשלוח',
+        alt: 'שלג-רוז - אוכל מוכן במשלוח',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Redy Food - אוכל מוכן במשלוח',
-    description: 'הזמנת אוכל מוכן ליום שישי טרי לפי משקל עם משלוח עד הבית',
-    images: ['/1.jpeg'],
+    title: 'שלג-רוז - אוכל מוכן במשלוח',
+    description: 'הזמנת אוכל מוכן טרי לפי משקל עם משלוח עד הבית באזור בית בפארק אור יהודה',
+    images: ['/hero-image.jpeg'],
   },
 } 
