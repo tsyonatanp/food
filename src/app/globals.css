@@ -209,6 +209,63 @@
     .hover\\:bg-green-50:hover {
       background-color: #064e3b;
     }
+
+    /* Force black text on light backgrounds in dark mode */
+    .bg-white *,
+    .bg-gray-50 *,
+    .bg-gray-100 *,
+    .bg-gray-200 *,
+    .bg-yellow-50 *,
+    .bg-green-50 *,
+    .bg-blue-50 *,
+    .bg-red-50 *,
+    .bg-purple-50 *,
+    .bg-pink-50 *,
+    .bg-indigo-50 *,
+    .bg-orange-50 *,
+    .bg-teal-50 *,
+    .bg-cyan-50 *,
+    .bg-lime-50 *,
+    .bg-emerald-50 *,
+    .bg-amber-50 *,
+    .bg-sky-50 *,
+    .bg-violet-50 *,
+    .bg-fuchsia-50 *,
+    .bg-rose-50 *,
+    .bg-slate-50 *,
+    .bg-zinc-50 *,
+    .bg-neutral-50 *,
+    .bg-stone-50 * {
+      color: #000000 !important;
+    }
+
+    /* Ensure specific text classes are black on light backgrounds */
+    .bg-white .text-gray-900,
+    .bg-white .text-gray-800,
+    .bg-white .text-gray-700,
+    .bg-white .text-gray-600,
+    .bg-white .text-gray-500,
+    .bg-white .text-gray-400,
+    .bg-gray-50 .text-gray-900,
+    .bg-gray-50 .text-gray-800,
+    .bg-gray-50 .text-gray-700,
+    .bg-gray-50 .text-gray-600,
+    .bg-gray-50 .text-gray-500,
+    .bg-gray-50 .text-gray-400,
+    .bg-gray-100 .text-gray-900,
+    .bg-gray-100 .text-gray-800,
+    .bg-gray-100 .text-gray-700,
+    .bg-gray-100 .text-gray-600,
+    .bg-gray-100 .text-gray-500,
+    .bg-gray-100 .text-gray-400,
+    .bg-gray-200 .text-gray-900,
+    .bg-gray-200 .text-gray-800,
+    .bg-gray-200 .text-gray-700,
+    .bg-gray-200 .text-gray-600,
+    .bg-gray-200 .text-gray-500,
+    .bg-gray-200 .text-gray-400 {
+      color: #000000 !important;
+    }
   }
 
   /* Reduced motion support */
