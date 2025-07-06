@@ -104,16 +104,110 @@
       background-color: #1f2937;
     }
 
+    .bg-gray-50 {
+      background-color: #374151;
+    }
+
+    .bg-gray-100 {
+      background-color: #4b5563;
+    }
+
+    .bg-gray-200 {
+      background-color: #6b7280;
+    }
+
     .text-gray-900 {
       color: #f9fafb;
+    }
+
+    .text-gray-800 {
+      color: #f3f4f6;
+    }
+
+    .text-gray-700 {
+      color: #e5e7eb;
     }
 
     .text-gray-600 {
       color: #d1d5db;
     }
 
+    .text-gray-500 {
+      color: #9ca3af;
+    }
+
+    .text-gray-400 {
+      color: #9ca3af;
+    }
+
     .border-gray-300 {
       border-color: #4b5563;
+    }
+
+    .border-gray-200 {
+      border-color: #6b7280;
+    }
+
+    /* Hover states for dark mode */
+    .hover\\:bg-gray-100:hover {
+      background-color: #4b5563;
+    }
+
+    .hover\\:bg-gray-200:hover {
+      background-color: #6b7280;
+    }
+
+    .hover\\:bg-gray-300:hover {
+      background-color: #9ca3af;
+    }
+
+    .hover\\:bg-gray-400:hover {
+      background-color: #d1d5db;
+    }
+
+    .hover\\:text-gray-500:hover {
+      color: #9ca3af;
+    }
+
+    .hover\\:text-gray-600:hover {
+      color: #d1d5db;
+    }
+
+    .hover\\:text-gray-700:hover {
+      color: #e5e7eb;
+    }
+
+    .hover\\:text-gray-800:hover {
+      color: #f3f4f6;
+    }
+
+    /* Additional color support for dark mode */
+    .text-blue-900 {
+      color: #dbeafe;
+    }
+
+    .text-green-600 {
+      color: #4ade80;
+    }
+
+    .text-red-500 {
+      color: #f87171;
+    }
+
+    .hover\\:text-green-600:hover {
+      color: #4ade80;
+    }
+
+    .hover\\:text-green-700:hover {
+      color: #22c55e;
+    }
+
+    .hover\\:text-red-700:hover {
+      color: #ef4444;
+    }
+
+    .hover\\:bg-green-50:hover {
+      background-color: #064e3b;
     }
   }
 
