@@ -18,10 +18,10 @@ export default function CartSummary() {
   return (
     <>
       {/* Mobile cart button */}
-      <div className="lg:hidden fixed right-0 bottom-1/3 z-50">
+      <div className="lg:hidden fixed-button right-0 bottom-1/3 z-50">
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="bg-green-600 hover:bg-green-700 text-white rounded-l-full pr-4 pl-6 py-4 shadow-lg transition-all duration-200 hover:scale-110 bg-opacity-80 hover:bg-opacity-100"
+          className="bg-green-600 hover:bg-green-700 text-white rounded-l-full pr-4 pl-6 py-4 shadow-lg transition-colors duration-200 bg-opacity-80 hover:bg-opacity-100"
           aria-label="פתח עגלה"
         >
           <div className="relative">

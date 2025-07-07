@@ -133,7 +133,7 @@ export default function Accessibility() {
       {/* כפתור נגישות */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed left-0 top-1/2 transform -translate-y-1/2 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-r-full pl-4 pr-6 py-4 shadow-lg transition-all duration-200 hover:scale-110 bg-opacity-80 hover:bg-opacity-100"
+        className="fixed-button left-0 bottom-1/3 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-r-full pl-4 pr-6 py-4 shadow-lg transition-colors duration-200 bg-opacity-80 hover:bg-opacity-100"
         aria-label={isOpen ? "סגור תפריט נגישות" : "פתח תפריט נגישות"}
       >
         <FaUniversalAccess className="w-6 h-6" />

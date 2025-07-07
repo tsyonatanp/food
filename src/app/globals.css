@@ -456,4 +456,14 @@
 /* WhatsApp Button Styles - Now in Navigation */
 .whatsapp-button {
   display: none;
+}
+
+/* Fixed positioning improvements - prevent jumping during scroll */
+.fixed-button {
+  position: fixed !important;
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 } 
