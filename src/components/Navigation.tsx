@@ -10,11 +10,12 @@ import KosherStamp from './KosherStamp';
 const WhatsappIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
+    width="24"
+    height="24"
     viewBox="0 0 24 24"
     fill="currentColor"
     aria-hidden="true"
+    className="animate-pulse"
   >
     <path d="M12.04 2.003c-5.514 0-9.973 4.46-9.973 9.973 0 1.756.462 3.478 1.336 4.992l-1.428 5.207 5.352-1.403a10.06 10.06 0 004.713 1.196h.001c5.514 0 9.974-4.46 9.974-9.973s-4.46-9.992-9.975-9.992zm5.827 14.815c-.245.684-1.437 1.34-1.984 1.43-.507.082-1.145.116-1.847-.116-.425-.134-.974-.317-1.681-.622-2.961-1.278-4.885-4.418-5.038-4.633-.145-.214-1.204-1.601-1.204-3.053 0-1.451.763-2.166 1.035-2.45.272-.283.594-.354.792-.354.198 0 .396.002.57.01.184.009.429-.069.672.514.245.592.833 2.047.906 2.195.072.146.12.316.024.53-.095.214-.143.345-.278.532-.134.187-.283.417-.404.56-.134.156-.274.326-.117.64.157.313.698 1.153 1.496 1.868 1.028.914 1.894 1.194 2.21 1.33.314.135.498.113.684-.068.184-.183.79-.921 1.003-1.237.214-.314.428-.262.712-.157.284.105 1.797.85 2.105 1.003.31.156.517.23.594.36.077.128.077.743-.168 1.428z"/>
   </svg>
@@ -61,6 +62,7 @@ export default function Navigation() {
               <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base">שאלות ותשובות</Link>
               <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base">שרות לקוחות</Link>
               <Link href="/terms" className="text-gray-900 hover:text-gray-600 font-medium text-base">תקנון</Link>
+              <Link href="/accessibility-statement" className="text-gray-900 hover:text-gray-600 font-medium text-base">הצהרת נגישות</Link>
             </div>
           </div>
 
@@ -71,7 +73,7 @@ export default function Navigation() {
               href="https://wa.me/972509555755"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center p-2 rounded-md text-green-600 hover:text-green-700 hover:bg-green-50"
+              className="inline-flex items-center justify-center p-3 rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50 transition-all duration-200 hover:scale-110"
               aria-label="הזמן בוואטסאפ"
               title="הזמן בוואטסאפ"
             >
@@ -116,6 +118,7 @@ export default function Navigation() {
             <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שאלות ותשובות</Link>
             <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שרות לקוחות</Link>
             <Link href="/terms" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">תקנון</Link>
+            <Link href="/accessibility-statement" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">הצהרת נגישות</Link>
           </div>
         </div>
       )}

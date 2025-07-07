@@ -133,20 +133,11 @@ export default function Accessibility() {
       {/* כפתור נגישות */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed left-4 bottom-4 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110"
+        className="fixed right-4 bottom-4 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-110"
         aria-label="פתח תפריט נגישות"
       >
         <FaUniversalAccess className="w-6 h-6" />
       </button>
-
-      {/* הצהרת נגישות */}
-      <a
-        href="/accessibility-statement"
-        className="fixed left-4 bottom-20 z-[9999] text-sm text-gray-600 hover:text-gray-800"
-        aria-label="הצהרת נגישות"
-      >
-        הצהרת נגישות
-      </a>
 
       {/* תפריט נגישות */}
       {isOpen && (
