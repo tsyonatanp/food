@@ -73,7 +73,7 @@ export default function Navigation() {
               href="https://wa.me/972509555755"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center p-6 rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50 transition-all duration-200 hover:scale-110"
+              className="inline-flex items-center justify-center p-6 text-green-600 hover:text-green-700 transition-colors duration-200"
               aria-label="הזמן בוואטסאפ"
               title="הזמן בוואטסאפ"
             >
