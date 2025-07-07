@@ -451,4 +451,64 @@
 
 .keyboard-nav :focus:not(:focus-visible) {
   outline: none !important;
+}
+
+/* WhatsApp Button Styles */
+.whatsapp-button {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .whatsapp-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #25d366;
+    color: white;
+    border-radius: 25px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    z-index: 9999;
+    animation: bounce 2s infinite;
+    direction: rtl;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .whatsapp-button .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+  }
+
+  .whatsapp-button .text {
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  .whatsapp-button:hover {
+    background-color: #128c7e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .whatsapp-button:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
 } 
