@@ -6,7 +6,6 @@ import Banner from '@/components/Banner'
 import Navigation from '@/components/Navigation'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import Accessibility from '@/components/Accessibility'
-import WhatsappButton from '@/components/WhatsappButton'
 import dynamic from 'next/dynamic'
 import './globals.css'
 import Script from "next/script";
@@ -48,7 +47,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <Banner />
           <Navigation />
           <Accessibility />
-          <WhatsappButton />
           <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
             {children}
           </main>
