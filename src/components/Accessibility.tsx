@@ -132,9 +132,9 @@ export default function Accessibility() {
     <>
       {/* כפתור נגישות */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="fixed right-0 top-1/2 transform -translate-y-1/2 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-l-full pr-4 pl-6 py-4 shadow-lg transition-all duration-200 hover:scale-110"
-        aria-label="פתח תפריט נגישות"
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed left-0 top-1/2 transform -translate-y-1/2 z-[9999] bg-blue-600 hover:bg-blue-700 text-white rounded-r-full pl-4 pr-6 py-4 shadow-lg transition-all duration-200 hover:scale-110 bg-opacity-80 hover:bg-opacity-100"
+        aria-label={isOpen ? "סגור תפריט נגישות" : "פתח תפריט נגישות"}
       >
         <FaUniversalAccess className="w-6 h-6" />
       </button>
@@ -149,8 +149,8 @@ export default function Accessibility() {
           />
           
           {/* תפריט */}
-          <div className="relative bg-white rounded-lg shadow-xl p-6 max-w-sm w-full mx-4">
-            <div className="flex justify-between items-center mb-6">
+          <div className="relative bg-white rounded-lg shadow-xl p-6 max-w-sm w-full mx-4 max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center mb-6 flex-shrink-0">
               <h2 id="accessibility-title" className="text-xl font-semibold">הגדרות נגישות</h2>
               <button
                 onClick={() => setIsOpen(false)}
@@ -161,7 +161,7 @@ export default function Accessibility() {
               </button>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 overflow-y-auto flex-1">
               {/* גודל טקסט */}
               <div>
                 <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
@@ -280,6 +280,17 @@ export default function Accessibility() {
                   אפס הגדרות
                 </button>
               </div>
+            </div>
+            
+            {/* כפתור סגירה בתחתית */}
+            <div className="mt-4 pt-4 border-t flex-shrink-0">
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-full btn-primary py-3"
+                aria-label="סגור תפריט נגישות"
+              >
+                סגור
+              </button>
             </div>
           </div>
         </div>

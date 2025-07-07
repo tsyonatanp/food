@@ -21,7 +21,7 @@ export default function CartSummary() {
       <div className="lg:hidden fixed right-0 bottom-1/3 z-50">
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="bg-green-600 hover:bg-green-700 text-white rounded-l-full pr-4 pl-6 py-4 shadow-lg transition-all duration-200 hover:scale-110"
+          className="bg-green-600 hover:bg-green-700 text-white rounded-l-full pr-4 pl-6 py-4 shadow-lg transition-all duration-200 hover:scale-110 bg-opacity-80 hover:bg-opacity-100"
           aria-label="פתח עגלה"
         >
           <div className="relative">
