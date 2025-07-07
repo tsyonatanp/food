@@ -10,8 +10,8 @@ import KosherStamp from './KosherStamp';
 const WhatsappIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
+    width="48"
+    height="48"
     viewBox="0 0 24 24"
     fill="currentColor"
     aria-hidden="true"
@@ -73,7 +73,7 @@ export default function Navigation() {
               href="https://wa.me/972509555755"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center p-3 rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50 transition-all duration-200 hover:scale-110"
+              className="inline-flex items-center justify-center p-6 rounded-lg text-green-600 hover:text-green-700 hover:bg-green-50 transition-all duration-200 hover:scale-110"
               aria-label="הזמן בוואטסאפ"
               title="הזמן בוואטסאפ"
             >
