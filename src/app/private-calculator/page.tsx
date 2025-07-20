@@ -31,10 +31,10 @@ interface RoieCalculation {
 
 // סוגי קופסאות עם משקלים
 const BOX_TYPES = [
-  { name: 'קופסה גדולה מאוד', weight: 70 },
-  { name: 'קופסה גדולה', weight: 50 }, 
-  { name: 'קופסה בינונית', weight: 20 },
-  { name: 'קופסה קטנה', weight: 10 }
+  { name: 'קופסה גדולה', weight: 70 },
+  { name: 'קופסה קטנה', weight: 50 }, 
+  { name: 'קופסה סלט גדול', weight: 20 },
+  { name: 'קופסה סלט קטן', weight: 10 }
 ];
 
 const TEMP_LOGO = '/images/logo.png';
