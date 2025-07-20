@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 interface Product {
   name: string;
   price: number;
+  roiePrice: number;
 }
 
 interface Calculation {
@@ -58,6 +59,7 @@ export default function PrivateCalculator() {
         const items: Product[] = filtered.map((item: any) => ({
           name: item['מנה'],
           price: Number(item['מחיר (₪)']),
+          roiePrice: Number(item['רועי']),
         }));
         setProducts(items);
       });
@@ -120,8 +122,8 @@ export default function PrivateCalculator() {
       // חישוב משקל נטו (ללא חצי קופסאות)
       const netWeight = Math.max(0, calc.weight - totalBoxWeight);
       
-              // מחיר רועי: (מחיר ל-100 גרם / 1.2) * 0.9
-        const roiePrice = (calc.product.price / 1.2) * 0.9;
+      // מחיר רועי מהעמודה "רועי"
+      const roiePrice = calc.product.roiePrice;
       
       // מחיר סופי על המשקל הנטו
       const total = (netWeight / 100) * roiePrice;
