@@ -466,13 +466,11 @@ export default function PrivateCalculator() {
               <thead>
                 <tr>
                   <th>מוצר</th>
-                  <th>מחיר רגיל ל-100 גרם</th>
                   <th>מחיר רועי ל-100 גרם</th>
                   <th>משקל כולל</th>
                   <th>קופסאות (חצי משקל)</th>
                   <th>משקל נטו</th>
                   <th>מחיר סופי</th>
-                  <th>הערות</th>
                   <th>פעולות</th>
                 </tr>
               </thead>
@@ -480,7 +478,6 @@ export default function PrivateCalculator() {
                 {roieCalculations.map((calc, idx) => (
                   <tr key={idx}>
                     <td>{calc.product.name}</td>
-                    <td>₪{calc.product.price}</td>
                     <td>₪{calc.roiePrice.toFixed(2)}</td>
                     <td>{calc.weight} גרם</td>
                     <td>
@@ -491,7 +488,6 @@ export default function PrivateCalculator() {
                     </td>
                     <td>{calc.netWeight} גרם</td>
                     <td>₪{calc.total.toFixed(2)}</td>
-                    <td>{calc.notes}</td>
                     <td>
                       <button 
                         onClick={() => handleDeleteRoieCalculation(idx)}
@@ -511,9 +507,8 @@ export default function PrivateCalculator() {
                   </tr>
                 ))}
                 <tr style={{ fontWeight: 'bold', background: '#d1fae5' }}>
-                  <td colSpan={6} style={{ textAlign: 'left' }}>סך הכל לתשלום:</td>
+                  <td colSpan={5} style={{ textAlign: 'left' }}>סך הכל לתשלום:</td>
                   <td>₪{roieTotalSum.toFixed(2)}</td>
-                  <td></td>
                   <td></td>
                 </tr>
               </tbody>
