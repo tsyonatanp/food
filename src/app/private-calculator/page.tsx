@@ -120,8 +120,8 @@ export default function PrivateCalculator() {
       // חישוב משקל נטו (ללא חצי קופסאות)
       const netWeight = Math.max(0, calc.weight - totalBoxWeight);
       
-      // מחיר רועי: (מחיר ל-100 גרם / 1.3) * 0.9
-      const roiePrice = (calc.product.price / 1.3) * 0.9;
+              // מחיר רועי: (מחיר ל-100 גרם / 1.2) * 0.9
+        const roiePrice = (calc.product.price / 1.2) * 0.9;
       
       // מחיר סופי על המשקל הנטו
       const total = (netWeight / 100) * roiePrice;
