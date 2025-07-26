@@ -41,6 +41,14 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
             src={images[index]}
             alt={`שלג - אוכל מוכן, תמונה ${index + 1} מתוך ${images.length}`}
             className="rounded-xl shadow-lg w-full h-48 sm:h-64 object-cover"
+            onError={(e) => {
+              console.warn(`Failed to load image: ${images[index]}`);
+              // אם התמונה לא נטענת, ננסה את התמונה הבאה
+              const nextIndex = (index + 1) % images.length;
+              if (nextIndex !== index) {
+                setIndex(nextIndex);
+              }
+            }}
           />
           
           {/* Navigation buttons */}

@@ -18,23 +18,15 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // טוען כותרת
-        const titleData = await fetchTitle();
-        setTitle(titleData[0]?.['פרסום'] || '');
-        
-        // טוען תמונות
-        const imageData = await fetchSheleg();
-        setImages(imageData);
-      } catch (error) {
-        console.error('Error loading page data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // טעינת תמונות מקומיות מיד
+    const localImages = fetchSheleg();
+    setImages(localImages);
     
-    loadData();
+    fetchTitle().then(data => {
+      // ניקח את הערך הראשון בעמודה 'פרסום'
+      setTitle(data[0]?.['פרסום'] || '');
+      setLoading(false);
+    });
   }, []);
 
   // פונקציה לטיפול בלחיצות במקום ריק
@@ -64,29 +56,26 @@ export default function HomePage() {
       />
       <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
       {/* Hero Section - קרוסלה בראש הדף */}
-      {images.length > 0 ? (
-        <ShelegCarousel images={images} />
-      ) : (
-        <div className="flex flex-col items-center mb-8 min-h-[2.5rem]">
-          <h1 className="text-4xl font-bold text-center">
-            {loading ? (
-              <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
-            ) : (
-              title || 'ברוכים הבאים לשלג-רוז'
+      <div className="flex flex-col items-center mb-8">
+        {images.length > 0 ? (
+          <ShelegCarousel images={images} />
+        ) : (
+          <div className="min-h-[2.5rem]">
+            <h1 className="text-4xl font-bold text-center">
+              {loading ? (
+                <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
+              ) : (
+                title || 'ברוכים הבאים ל-Redy Food'
+              )}
+            </h1>
+            {loading && (
+              <p className="text-gray-500 mt-2 text-center text-sm" role="status" aria-live="polite">
+                טוען תוכן...
+              </p>
             )}
-          </h1>
-          {loading && (
-            <p className="text-gray-500 mt-2 text-center text-sm" role="status" aria-live="polite">
-              טוען...
-            </p>
-          )}
-          {!loading && images.length === 0 && (
-            <p className="text-gray-600 mt-4 text-center text-lg">
-              אוכל מוכן טרי במשלוח עד הבית
-            </p>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
       
       {/* Categories Section */}
       <div className="container mx-auto py-12">
