@@ -18,15 +18,23 @@ export default function HomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetchTitle().then(data => {
-      // ניקח את הערך הראשון בעמודה 'פרסום'
-      setTitle(data[0]?.['פרסום'] || '');
-      setLoading(false);
-    });
-    fetchSheleg().then(data => {
-      console.log('sheleg images:', data);
-      setImages(data);
-    });
+    const loadData = async () => {
+      try {
+        // טוען כותרת
+        const titleData = await fetchTitle();
+        setTitle(titleData[0]?.['פרסום'] || '');
+        
+        // טוען תמונות
+        const imageData = await fetchSheleg();
+        setImages(imageData);
+      } catch (error) {
+        console.error('Error loading page data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadData();
   }, []);
 
   // פונקציה לטיפול בלחיצות במקום ריק
@@ -64,12 +72,17 @@ export default function HomePage() {
             {loading ? (
               <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
             ) : (
-              title || 'ברוכים הבאים ל-Redy Food'
+              title || 'ברוכים הבאים לשלג-רוז'
             )}
           </h1>
           {loading && (
-            <p className="text-red-500 mt-2 text-center text-sm" role="status" aria-live="polite">
-              לא נמצאה תמונה בגליון sheleg או שיש בעיה בטעינה. בדוק את הקישור בגליון ואת ההרשאות.
+            <p className="text-gray-500 mt-2 text-center text-sm" role="status" aria-live="polite">
+              טוען...
+            </p>
+          )}
+          {!loading && images.length === 0 && (
+            <p className="text-gray-600 mt-4 text-center text-lg">
+              אוכל מוכן טרי במשלוח עד הבית
             </p>
           )}
         </div>
