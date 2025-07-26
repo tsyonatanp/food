@@ -1,18 +1,17 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { FaChevronLeft, FaChevronRight, FaPause, FaPlay } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 export default function ShelegCarousel({ images }: { images: string[] }) {
   const [index, setIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
-    if (images.length <= 1 || !isPlaying) return;
+    if (images.length <= 1) return;
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
     }, 3500);
     return () => clearInterval(interval);
-  }, [images.length, isPlaying]);
+  }, [images.length]);
 
   if (!images.length) return null;
 
@@ -24,9 +23,7 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
     setIndex((prev) => (prev + 1) % images.length);
   };
 
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
+
 
   const goToSlide = (slideIndex: number) => {
     setIndex(slideIndex);
@@ -74,18 +71,7 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
 
         {/* Controls */}
         {images.length > 1 && (
-          <div className="flex justify-center items-center mt-2 sm:mt-4 space-x-2 space-x-reverse">
-            <button
-              onClick={togglePlayPause}
-              className="bg-gray-200 hover:bg-gray-300 p-1.5 sm:p-2 rounded-full"
-              aria-label={isPlaying ? "עצור הקרנה" : "התחל הקרנה"}
-            >
-              {isPlaying ? 
-                <FaPause className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" /> : 
-                <FaPlay className="w-3 h-3 sm:w-4 sm:h-4" aria-hidden="true" />
-              }
-            </button>
-            
+          <div className="flex justify-center items-center mt-2 sm:mt-4">
             {/* Slide indicators */}
             <div className="flex space-x-1 space-x-reverse" role="tablist" aria-label="ניווט בין תמונות">
               {images.map((_, i) => (
