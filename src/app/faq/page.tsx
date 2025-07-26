@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { fetchFaq } from '@/lib/fetchFaq';
+import StructuredData from '@/components/StructuredData';
 
 type FaqRow = { type?: string; faq?: string };
 
@@ -9,8 +10,25 @@ export default async function FaqPage() {
   // סינון שורות ריקות
   const rows = data.filter(row => row.faq && row.type);
 
+  // הכנת נתונים ל-structured data
+  const faqData = rows
+    .filter(row => row.type === 'שאלה' && row.faq)
+    .map((row, index) => {
+      const answer = rows.find((r, i) => i > index && r.type !== 'שאלה' && r.faq);
+      return {
+        question: row.faq,
+        answer: answer?.faq || ''
+      };
+    })
+    .filter(faq => faq.answer);
+
   return (
-    <div className="max-w-2xl mx-auto mt-10 space-y-4">
+    <>
+      <StructuredData 
+        type="faq" 
+        data={{ faqs: faqData }} 
+      />
+      <div className="max-w-2xl mx-auto mt-10 space-y-4">
       {rows.map((row, i) => (
         <div
           key={i}
@@ -25,5 +43,6 @@ export default async function FaqPage() {
         </div>
       ))}
     </div>
+    </>
   );
 } 

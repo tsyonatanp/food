@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://food-one-cyan.vercel.app/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin and private areas
+Disallow: /private-calculator
+Disallow: /api/
+Disallow: /_next/
+Disallow: /backup_excel/
+
+# Allow important pages
+Allow: /
+Allow: /about
+Allow: /delivery
+Allow: /faq
+Allow: /support
+Allow: /terms
+Allow: /accessibility-statement
+Allow: /order
+Allow: /checkout 

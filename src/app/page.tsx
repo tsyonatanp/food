@@ -7,6 +7,7 @@ import CartSummary from '@/components/CartSummary';
 import { fetchTitle } from '@/lib/fetchTitle';
 import { fetchSheleg } from '@/lib/fetchSheleg';
 import ShelegCarousel from '@/components/ShelegCarousel';
+import StructuredData from '@/components/StructuredData';
 
 export default function HomePage() {
   const [title, setTitle] = useState('');
@@ -48,7 +49,12 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
+    <>
+      <StructuredData 
+        type="restaurant" 
+        data={{}} 
+      />
+      <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
       {/* Hero Section - קרוסלה בראש הדף */}
       {images.length > 0 ? (
         <ShelegCarousel images={images} />
@@ -84,5 +90,6 @@ export default function HomePage() {
         <CartSummary />
       </div>
     </main>
+    </>
   );
 } 

@@ -13,6 +13,11 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/images/logo.png" />
         <link rel="apple-touch-icon" href="/images/logo.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1d4ed8" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="שלג-רוז" />
         <title>שלג – אוכל מוכן באהבה</title>
         <meta name="title" content="שלג – אוכל מוכן באהבה" />
         <meta name="description" content="מנות, תבשילים וסלטים ליום שישי. הזמנה עד חמישי ב-20:00. תשלום בביט, פייבוקס או מזומן. כשר בהשגחת הרבנות." />
