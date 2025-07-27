@@ -78,6 +78,8 @@ const nextConfig = {
             name: 'vendors',
             chunks: 'all',
             priority: 10,
+            minSize: 20000,
+            maxSize: 100000,
           },
           common: {
             name: 'common',
@@ -92,6 +94,7 @@ const nextConfig = {
             name: 'react',
             chunks: 'all',
             priority: 20,
+            minSize: 10000,
           },
           // Separate icons
           icons: {
@@ -99,6 +102,7 @@ const nextConfig = {
             name: 'icons',
             chunks: 'all',
             priority: 15,
+            minSize: 5000,
           },
           // Separate form libraries
           forms: {
@@ -106,6 +110,7 @@ const nextConfig = {
             name: 'forms',
             chunks: 'all',
             priority: 12,
+            minSize: 5000,
           },
           // Separate UI libraries
           ui: {
@@ -113,6 +118,7 @@ const nextConfig = {
             name: 'ui',
             chunks: 'all',
             priority: 11,
+            minSize: 5000,
           },
           // Separate heavy libraries
           heavy: {
@@ -120,6 +126,15 @@ const nextConfig = {
             name: 'heavy',
             chunks: 'all',
             priority: 8,
+            minSize: 10000,
+          },
+          // Separate Next.js specific
+          nextjs: {
+            test: /[\\/]node_modules[\\/]next[\\/]/,
+            name: 'nextjs',
+            chunks: 'all',
+            priority: 25,
+            minSize: 5000,
           },
         },
       };
