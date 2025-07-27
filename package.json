@@ -21,6 +21,7 @@
     "@vercel/og": "^0.6.8",
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.7",
+    "critters": "^0.0.23",
     "googleapis": "^149.0.0",
     "jspdf": "^3.0.1",
     "next": "14.1.0",
