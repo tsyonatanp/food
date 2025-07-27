@@ -55,7 +55,17 @@ export default function Navigation() {
             <div className="flex-shrink-0 flex items-center justify-center gap-2">
               <KosherStamp />
               <Link href="/" aria-label="דף הבית">
-                <Image src={logoUrl} alt="לוגו" width={48} height={48} priority />
+                <Image 
+                  src={logoUrl} 
+                  alt="לוגו" 
+                  width={45} 
+                  height={48} 
+                  priority 
+                  style={{
+                    aspectRatio: '45/48',
+                    objectFit: 'contain'
+                  }}
+                />
               </Link>
             </div>
             <div className="flex items-center space-x-reverse space-x-8">
@@ -84,7 +94,17 @@ export default function Navigation() {
             <div className="flex items-center justify-center gap-1">
               <KosherStamp />
               <Link href="/" className="flex-shrink-0 flex items-center justify-center" aria-label="דף הבית">
-                <Image src={logoUrl} alt="לוגו" width={40} height={40} priority />
+                <Image 
+                  src={logoUrl} 
+                  alt="לוגו" 
+                  width={40} 
+                  height={43} 
+                  priority 
+                  style={{
+                    aspectRatio: '40/43',
+                    objectFit: 'contain'
+                  }}
+                />
               </Link>
             </div>
             

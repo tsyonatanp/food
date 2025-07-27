@@ -34,6 +34,52 @@ export default function RootLayout({
         <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" as="style" />
         <link rel="preload" href="https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         
+        {/* Font loading with fallback */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+        
+        {/* Fallback font styles */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @font-face {
+              font-family: 'Rubik';
+              font-style: normal;
+              font-weight: 300;
+              font-display: swap;
+              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Rubik';
+              font-style: normal;
+              font-weight: 400;
+              font-display: swap;
+              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Rubik';
+              font-style: normal;
+              font-weight: 500;
+              font-display: swap;
+              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Rubik';
+              font-style: normal;
+              font-weight: 600;
+              font-display: swap;
+              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            }
+            @font-face {
+              font-family: 'Rubik';
+              font-style: normal;
+              font-weight: 700;
+              font-display: swap;
+              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            }
+          `
+        }} />
+        
         {/* Service Worker Registration */}
         <script
           dangerouslySetInnerHTML={{
