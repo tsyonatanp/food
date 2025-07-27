@@ -45,7 +45,7 @@ const nextConfig = {
       },
     ]
   },
-  // Performance optimizations
+  // Modern JavaScript optimizations
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['react-icons', 'react-hook-form', '@headlessui/react'],
@@ -58,6 +58,11 @@ const nextConfig = {
         },
       },
     },
+  },
+  // Modern JavaScript compilation
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   // Bundle analyzer
   webpack: (config, { dev, isServer }) => {
@@ -124,7 +129,7 @@ const nextConfig = {
     }
     return config;
   },
-  // Reduce bundle size
+  // Modern JavaScript target
   swcMinify: true,
   // Optimize CSS
   optimizeFonts: true,
