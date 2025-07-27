@@ -2,10 +2,6 @@
 
 import { Rubik } from 'next/font/google'
 import { CartProvider } from '@/contexts/CartContext'
-import Banner from '@/components/Banner'
-import Navigation from '@/components/Navigation'
-
-import Accessibility from '@/components/Accessibility'
 import dynamic from 'next/dynamic'
 import './globals.css'
 import Script from "next/script";
@@ -26,6 +22,24 @@ const AccessibilityTest = dynamic(() => import('@/components/AccessibilityTest')
 
 // Dynamic import של GoogleAnalytics
 const GoogleAnalytics = dynamic(() => import('@/components/GoogleAnalytics'), {
+  ssr: false,
+  loading: () => null
+})
+
+// Dynamic import של Banner
+const Banner = dynamic(() => import('@/components/Banner'), {
+  ssr: true,
+  loading: () => <div className="h-12 bg-blue-600" />
+})
+
+// Dynamic import של Navigation
+const Navigation = dynamic(() => import('@/components/Navigation'), {
+  ssr: true,
+  loading: () => <div className="h-16 bg-white shadow" />
+})
+
+// Dynamic import של Accessibility
+const Accessibility = dynamic(() => import('@/components/Accessibility'), {
   ssr: false,
   loading: () => null
 })

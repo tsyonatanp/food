@@ -90,7 +90,7 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
 
         return (
           <article key={item.מנה} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col" role="article">
-            <div className="relative h-48">
+            <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
               {item.תמונה ? (
                 <Image
                   src={item.תמונה}
@@ -99,7 +99,9 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   className="object-cover"
                   loading="lazy"
                   quality={75}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                 />
               ) : (
                 <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400" role="img" aria-label={`אין תמונה זמינה עבור ${item.מנה}`}>אין תמונה</div>

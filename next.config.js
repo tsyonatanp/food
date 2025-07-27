@@ -46,11 +46,21 @@ const nextConfig = {
   // Performance optimizations
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['react-icons'],
+    optimizePackageImports: ['react-icons', 'react-hook-form', '@headlessui/react'],
+    // Add more aggressive optimizations
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
   // Bundle analyzer
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
+      // More aggressive code splitting
       config.optimization.splitChunks = {
         chunks: 'all',
         cacheGroups: {
@@ -58,12 +68,45 @@ const nextConfig = {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
+            priority: 10,
+          },
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 5,
+            reuseExistingChunk: true,
+          },
+          // Separate React and React DOM
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: 'react',
+            chunks: 'all',
+            priority: 20,
+          },
+          // Separate icons
+          icons: {
+            test: /[\\/]node_modules[\\/]react-icons[\\/]/,
+            name: 'icons',
+            chunks: 'all',
+            priority: 15,
           },
         },
       };
+      
+      // Enable tree shaking
+      config.optimization.usedExports = true;
+      config.optimization.sideEffects = false;
+      
+      // Minification
+      config.optimization.minimize = true;
     }
     return config;
   },
+  // Reduce bundle size
+  swcMinify: true,
+  // Optimize CSS
+  optimizeFonts: true,
 }
 
 module.exports = withBundleAnalyzer(nextConfig); 
