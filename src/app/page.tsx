@@ -50,10 +50,8 @@ export default function HomePage() {
 
   return (
     <>
-      <StructuredData 
-        type="restaurant" 
-        data={{}} 
-      />
+      <StructuredData type="restaurant" />
+      <StructuredData type="website" />
       <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
       {/* Hero Section - קרוסלה בראש הדף */}
       <div className="flex flex-col items-center mb-8">
