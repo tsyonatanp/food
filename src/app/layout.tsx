@@ -18,6 +18,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="שלג-רוז" />
+        
+        {/* Preload critical resources */}
+        <link rel="preload" href="/תמונת רקע.jpg" as="image" />
+        <link rel="preload" href="/hero-image.jpeg" as="image" />
+        <link rel="preload" href="/images/logo.png" as="image" />
+        
+        {/* Preconnect to external domains */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://drive.google.com" />
         <title>שלג – אוכל מוכן באהבה</title>
         <meta name="title" content="שלג – אוכל מוכן באהבה" />
         <meta name="description" content="מנות, תבשילים וסלטים ליום שישי. הזמנה עד חמישי ב-20:00. תשלום בביט, פייבוקס או מזומן. כשר בהשגחת הרבנות." />

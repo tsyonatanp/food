@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function ShelegCarousel({ images }: { images: string[] }) {
   const [index, setIndex] = useState(0);
@@ -18,10 +19,16 @@ export default function ShelegCarousel({ images }: { images: string[] }) {
     <div className="w-full max-w-[400px] px-4 mx-auto" role="region" aria-label="גלריית תמונות שלג">
       <div className="relative">
         {/* Main image */}
-        <img
+        <Image
           src={images[index]}
           alt={`שלג - אוכל מוכן, תמונה ${index + 1} מתוך ${images.length}`}
+          width={400}
+          height={256}
           className="rounded-xl shadow-lg w-full h-48 sm:h-64 object-cover"
+          priority={index === 0}
+          quality={85}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
           onError={(e) => {
             console.warn(`Failed to load image: ${images[index]}`);
             // אם התמונה לא נטענת, ננסה את התמונה הבאה

@@ -97,6 +97,9 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
                   alt={item.מנה}
                   fill
                   className="object-cover"
+                  loading="lazy"
+                  quality={75}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               ) : (
                 <div className="bg-gray-200 w-full h-48 flex items-center justify-center text-gray-400" role="img" aria-label={`אין תמונה זמינה עבור ${item.מנה}`}>אין תמונה</div>
