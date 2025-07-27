@@ -468,48 +468,15 @@
   -webkit-transform: translateZ(0);
 } 
 
-/* Font fallbacks */
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: local('Rubik Light'), local('Rubik-Light'), url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local('Rubik'), local('Rubik-Regular'), url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: local('Rubik Medium'), local('Rubik-Medium'), url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: local('Rubik SemiBold'), local('Rubik-SemiBold'), url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Rubik';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: local('Rubik Bold'), local('Rubik-Bold'), url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-}
+/* Simplified font loading */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
 
 /* Fallback font stack */
 body {
   font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Ensure text is always readable */
+* {
+  font-family: inherit;
 } 

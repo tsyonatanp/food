@@ -31,10 +31,8 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://drive.google.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" as="style" />
-        <link rel="preload" href="https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         
-        {/* Font loading with fallback */}
+        {/* Font loading with correct URL */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -42,40 +40,14 @@ export default function RootLayout({
         {/* Fallback font styles */}
         <style dangerouslySetInnerHTML={{
           __html: `
-            @font-face {
-              font-family: 'Rubik';
-              font-style: normal;
-              font-weight: 300;
-              font-display: swap;
-              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            /* Fallback font stack */
+            body {
+              font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
             }
-            @font-face {
-              font-family: 'Rubik';
-              font-style: normal;
-              font-weight: 400;
-              font-display: swap;
-              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-            }
-            @font-face {
-              font-family: 'Rubik';
-              font-style: normal;
-              font-weight: 500;
-              font-display: swap;
-              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-            }
-            @font-face {
-              font-family: 'Rubik';
-              font-style: normal;
-              font-weight: 600;
-              font-display: swap;
-              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
-            }
-            @font-face {
-              font-family: 'Rubik';
-              font-style: normal;
-              font-weight: 700;
-              font-display: swap;
-              src: url('https://fonts.gstatic.com/s/rubik/v28/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-NYi1UE80.woff2') format('woff2');
+            
+            /* Ensure text is always readable */
+            * {
+              font-family: inherit;
             }
           `
         }} />
