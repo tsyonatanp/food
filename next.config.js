@@ -93,6 +93,20 @@ const nextConfig = {
             chunks: 'all',
             priority: 15,
           },
+          // Separate form libraries
+          forms: {
+            test: /[\\/]node_modules[\\/](react-hook-form|@hookform)[\\/]/,
+            name: 'forms',
+            chunks: 'all',
+            priority: 12,
+          },
+          // Separate UI libraries
+          ui: {
+            test: /[\\/]node_modules[\\/](@headlessui)[\\/]/,
+            name: 'ui',
+            chunks: 'all',
+            priority: 11,
+          },
         },
       };
       
@@ -100,11 +114,13 @@ const nextConfig = {
       config.optimization.usedExports = true;
       config.optimization.sideEffects = false;
       
-      // Minification
-      config.optimization.minimize = true;
-      
       // Source maps configuration
       config.devtool = 'source-map';
+      
+      // Remove console logs in production using Next.js built-in
+      if (!dev) {
+        config.optimization.minimize = true;
+      }
     }
     return config;
   },
