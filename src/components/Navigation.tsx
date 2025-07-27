@@ -61,6 +61,7 @@ export default function Navigation() {
                   width={45} 
                   height={48} 
                   priority 
+                  quality={60}
                   style={{
                     aspectRatio: '45/48',
                     objectFit: 'contain'
@@ -100,6 +101,7 @@ export default function Navigation() {
                   width={40} 
                   height={43} 
                   priority 
+                  quality={60}
                   style={{
                     aspectRatio: '40/43',
                     objectFit: 'contain'
