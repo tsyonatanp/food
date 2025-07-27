@@ -8,6 +8,7 @@ import Script from "next/script";
 import { useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import { pageview } from '@/utils/gtag';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 const rubik = Rubik({ 
   subsets: ['hebrew', 'latin'],
@@ -48,8 +49,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname();
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
-      pageview(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, pathname);
+    try {
+      if (process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
+        pageview(process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID, pathname);
+      }
+    } catch (error) {
+      // Silent error handling for analytics
+      console.warn('Analytics error:', error);
     }
   }, [pathname]);
 
@@ -61,16 +67,18 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           דלג לתוכן הראשי
         </a>
         
-        <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
-        <AccessibilityTest />
-        <CartProvider>
-          <Banner />
-          <Navigation />
-          <Accessibility />
-          <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
-            {children}
-          </main>
-        </CartProvider>
+        <ErrorBoundary>
+          <GoogleAnalytics GA_MEASUREMENT_ID={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''} />
+          <AccessibilityTest />
+          <CartProvider>
+            <Banner />
+            <Navigation />
+            <Accessibility />
+            <main id="main-content" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
+              {children}
+            </main>
+          </CartProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

@@ -100,6 +100,9 @@ const nextConfig = {
       
       // Minification
       config.optimization.minimize = true;
+      
+      // Source maps configuration
+      config.devtool = 'source-map';
     }
     return config;
   },
@@ -107,6 +110,8 @@ const nextConfig = {
   swcMinify: true,
   // Optimize CSS
   optimizeFonts: true,
+  // Source maps for debugging
+  productionBrowserSourceMaps: true,
 }
 
 module.exports = withBundleAnalyzer(nextConfig); 
