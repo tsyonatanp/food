@@ -112,6 +112,13 @@ const nextConfig = {
             chunks: 'all',
             priority: 11,
           },
+          // Separate heavy libraries
+          heavy: {
+            test: /[\\/]node_modules[\\/](axios|googleapis|telegraf|stripe)[\\/]/,
+            name: 'heavy',
+            chunks: 'all',
+            priority: 8,
+          },
         },
       };
       
@@ -126,6 +133,15 @@ const nextConfig = {
       if (!dev) {
         config.optimization.minimize = true;
       }
+      
+      // Add module concatenation for better tree shaking
+      config.optimization.concatenateModules = true;
+      
+      // Set side effects to false for better tree shaking
+      config.module.rules.push({
+        test: /\.js$/,
+        sideEffects: false,
+      });
     }
     return config;
   },

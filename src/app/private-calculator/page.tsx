@@ -196,16 +196,8 @@ export default function PrivateCalculator() {
   };
 
   const handleAllPDF = async (type: 'customer' | 'roie' | 'all') => {
-    const { jsPDF } = await import('jspdf');
-    const doc = new jsPDF();
-    
-    let title = '';
-    if (type === 'customer') title = 'הזמנה ללקוח';
-    else if (type === 'roie') title = 'הזמנה לרועי';
-    else title = 'הזמנה מלאה';
-    
-    doc.text(title, 10, 10);
-    doc.save(`${title}.pdf`);
+    // הסרנו את הפונקציונליות של PDF כדי להקטין את גודל הבונדל
+    alert('פונקציונליות PDF זמינה בקרוב');
   };
 
   // חישוב סך הכל להזמנה
