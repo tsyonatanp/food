@@ -26,6 +26,9 @@ export default function HomePage() {
       // ניקח את הערך הראשון בעמודה 'פרסום'
       setTitle(data[0]?.['פרסום'] || '');
       setLoading(false);
+    }).catch(error => {
+      console.warn('Error fetching title:', error);
+      setLoading(false);
     });
   }, []);
 
@@ -53,43 +56,43 @@ export default function HomePage() {
       <StructuredData type="restaurant" />
       <StructuredData type="website" />
       <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
-      {/* Hero Section - קרוסלה בראש הדף */}
-      <div className="flex flex-col items-center mb-8">
-        {images.length > 0 ? (
-          <ShelegCarousel images={images} />
-        ) : (
-          <div className="min-h-[2.5rem]">
-            <h1 className="text-4xl font-bold text-center">
-              {loading ? (
-                <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
-              ) : (
-                title || 'ברוכים הבאים ל-Redy Food'
+        {/* Hero Section - קרוסלה בראש הדף */}
+        <div className="flex flex-col items-center mb-8">
+          {images.length > 0 ? (
+            <ShelegCarousel images={images} />
+          ) : (
+            <div className="min-h-[2.5rem]">
+              <h1 className="text-4xl font-bold text-center">
+                {loading ? (
+                  <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
+                ) : (
+                  title || 'ברוכים הבאים ל-Redy Food'
+                )}
+              </h1>
+              {loading && (
+                <p className="text-gray-500 mt-2 text-center text-sm" role="status" aria-live="polite">
+                  טוען תוכן...
+                </p>
               )}
-            </h1>
-            {loading && (
-              <p className="text-gray-500 mt-2 text-center text-sm" role="status" aria-live="polite">
-                טוען תוכן...
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-      
-      {/* Categories Section */}
-      <div className="container mx-auto py-12">
-        <section role="region" aria-labelledby="categories-heading">
-          <h2 id="categories-heading" className="text-center text-gray-600 mb-12 text-xl font-semibold">
-            בחר קטגוריה להזמנה
-          </h2>
-          <CategoriesGrid />
-        </section>
-      </div>
-      
-      {/* עגלה צפה במובייל - מוצגת רק ככפתור צף */}
-      <div className="lg:hidden">
-        <CartSummary />
-      </div>
-    </main>
+            </div>
+          )}
+        </div>
+        
+        {/* Categories Section */}
+        <div className="container mx-auto py-12">
+          <section role="region" aria-labelledby="categories-heading">
+            <h2 id="categories-heading" className="text-center text-gray-600 mb-12 text-xl font-semibold">
+              בחר קטגוריה להזמנה
+            </h2>
+            <CategoriesGrid />
+          </section>
+        </div>
+        
+        {/* עגלה צפה במובייל - מוצגת רק ככפתור צף */}
+        <div className="lg:hidden">
+          <CartSummary />
+        </div>
+      </main>
     </>
   );
 } 
