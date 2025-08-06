@@ -1,48 +1,110 @@
 export const dynamic = 'force-dynamic';
 
-import { fetchFaq } from '@/lib/fetchFaq';
 import StructuredData from '@/components/StructuredData';
 
-type FaqRow = { type?: string; faq?: string };
-
-export default async function FaqPage() {
-  const data: FaqRow[] = await fetchFaq();
-  // סינון שורות ריקות
-  const rows = data.filter(row => row.faq && row.type);
-
-  // הכנת נתונים ל-structured data
-  const faqData = rows
-    .filter(row => row.type === 'שאלה' && row.faq)
-    .map((row, index) => {
-      const answer = rows.find((r, i) => i > index && r.type !== 'שאלה' && r.faq);
-      return {
-        question: row.faq,
-        answer: answer?.faq || ''
-      };
-    })
-    .filter(faq => faq.answer);
+export default function FAQPage() {
+  const faqData = [
+    {
+      question: "איך מזמינים אוכל באתר שלכם?",
+      answer: "הזמנה באתר שלנו פשוטה מאוד! 1. בחרו קטגוריה מהתפריט 2. בחרו את המנות הרצויות 3. הוסיפו לעגלה 4. מלאו פרטי משלוח ותשלום 5. שלחו את ההזמנה. תקבלו אישור מיידי בווטסאפ או SMS."
+    },
+    {
+      question: "מה הזמנים להזמנה ומשלוח?",
+      answer: "ניתן להזמין עד יום חמישי בשעה 20:00. המשלוחים מתבצעים ביום שישי בבוקר בין השעות 8:00-12:00. הזמנות מיוחדות לאירועים ניתן להזמין מראש עד שבוע קודם."
+    },
+    {
+      question: "איפה אתם מוציאים משלוחים?",
+      answer: "אנחנו מוציאים משלוחים בכל רחבי אור יהודה. משלוח חינם על הזמנות מעל 300₪. על הזמנות מתחת ל-300₪ יש תוספת משלוח של 15₪."
+    },
+    {
+      question: "האם האוכל כשר?",
+      answer: "כן! כל האוכל שלנו כשר בהשגחת הרבנות המקומית באור יהודה. יש לנו תעודת כשרות מעודכנת ואנחנו מקפידים על כל כללי הכשרות."
+    },
+    {
+      question: "איך משלמים?",
+      answer: "אנחנו מקבלים תשלום בביט, פייבוקס או מזומן בעת המשלוח. תשלום מראש מתקבל רק בהזמנות מיוחדות לאירועים."
+    },
+    {
+      question: "האם יש אפשרויות לצמחונים וטבעונים?",
+      answer: "כן! יש לנו מגוון רחב של מנות צמחוניות וטבעוניות. כל המנות מסומנות בבירור בתפריט. יש גם אפשרויות ללא גלוטן וללא לקטוז."
+    },
+    {
+      question: "איך שומרים על הטריות של האוכל?",
+      answer: "אנחנו מבשלים ביום שישי בבוקר ומשתמשים באריזות מיוחדות לשמירה על הטריות. האוכל נארז בצורה מקצועית ונשמר בטמפרטורה מתאימה עד המשלוח."
+    },
+    {
+      question: "האם יש הנחות ללקוחות קבועים?",
+      answer: "כן! יש לנו תוכנית נאמנות עם 10% הנחה על הזמנות מעל 200₪, משלוח חינם על הזמנות מעל 300₪, ומנות מתנה ללקוחות קבועים."
+    },
+    {
+      question: "מה קורה אם האוכל לא הגיע בזמן?",
+      answer: "אנחנו מתחייבים למשלוח בזמן! אם יש עיכוב, תקבלו עדכון מיידי ותקבלו פיצוי או הזמנה חוזרת חינם. הצוות שלנו זמין 24/7 לכל שאלה."
+    },
+    {
+      question: "האם אפשר להזמין לאירועים מיוחדים?",
+      answer: "כן! אנחנו מתמחים באירועים מיוחדים כמו ימי הולדת, חתונות, בר מצוות, בת מצוות ואירועים משפחתיים. הזמינו מראש לפחות שבוע קודם."
+    },
+    {
+      question: "איך יודעים שהאוכל טרי ואיכותי?",
+      answer: "אנחנו קונים חומרי גלם טריים יומית מהשוק המקומי, משתמשים רק בחומרים איכותיים, ומבשלים כמו בבית עם אהבה ותשומת לב לכל פרט."
+    },
+    {
+      question: "האם יש אפשרות להזמנות קבועות?",
+      answer: "כן! יש לנו תוכנית הזמנות קבועות עם הנחות מיוחדות. תוכלו להזמין לארוחת שישי קבועה ולקבל הנחות משמעותיות."
+    },
+    {
+      question: "מה קורה אם לא מרוצים מהאוכל?",
+      answer: "אנחנו מתחייבים ל-100% שביעות רצון! אם לא מרוצים, נחזיר את הכסף או נשלח הזמנה חוזרת חינם. הלקוחות שלנו חשובים לנו."
+    },
+    {
+      question: "האם יש אפשרות להזמנות מיוחדות?",
+      answer: "כן! אנחנו מתמחים בהזמנות מיוחדות כמו מנות ללא גלוטן, ללא לקטוז, דיאטות מיוחדות, ומנות מותאמות אישית. פנו אלינו לפרטים."
+    },
+    {
+      question: "איך מתעדכנים על מנות חדשות?",
+      answer: "אנחנו מעדכנים את התפריט כל שבוע עם מנות חדשות ועונתיות. עקבו אחרינו בפייסבוק, אינסטגרם או הירשמו לעדכונים בווטסאפ."
+    }
+  ];
 
   return (
     <>
-      <StructuredData 
-        type="faq" 
-        data={{ faqs: faqData }} 
-      />
-      <div className="max-w-2xl mx-auto mt-10 space-y-4">
-      {rows.map((row, i) => (
-        <div
-          key={i}
-          className={`bg-white rounded-xl shadow p-4 text-lg flex items-start gap-3 ${
-            row.type === 'שאלה' ? 'font-bold text-blue-900' : 'text-gray-800'
-          }`}
-        >
-          <span className="text-2xl">
-            {row.type === 'שאלה' ? '❓' : '💡'}
-          </span>
-          <span className="whitespace-pre-line">{row.faq}</span>
+      <StructuredData type="faq" data={faqData} />
+      
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
+          שאלות נפוצות ❓
+        </h1>
+        
+        <div className="space-y-6">
+          {faqData.map((item, index) => (
+            <div key={index} className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-xl font-semibold mb-4 text-blue-600">
+                {item.question}
+              </h3>
+              <p className="text-lg leading-relaxed text-gray-700">
+                {item.answer}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+        
+        <div className="mt-12 text-center bg-blue-50 p-8 rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4 text-blue-600">
+            לא מצאתם את התשובה שחיפשתם?
+          </h2>
+          <p className="text-lg mb-6">
+            הצוות שלנו זמין 24/7 לעזור לכם בכל שאלה או בקשה
+          </p>
+          <div className="flex justify-center space-x-4">
+            <a href="/contact" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+              צרו קשר
+            </a>
+            <a href="/order" className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+              הזמינו עכשיו
+            </a>
+          </div>
+        </div>
+      </div>
     </>
   );
 } 
