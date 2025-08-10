@@ -1,63 +1,96 @@
-'use client';
+'use client'
 
-import React from 'react';
+import React, { Component, ErrorInfo, ReactNode } from 'react'
+import { AlertTriangle, RefreshCw } from 'lucide-react'
 
-interface ErrorBoundaryState {
-  hasError: boolean;
-  error?: Error;
+interface Props {
+  children: ReactNode
+  fallback?: ReactNode
 }
 
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-  fallback?: React.ComponentType<{ error?: Error }>;
+interface State {
+  hasError: boolean
+  error?: Error
+  errorInfo?: ErrorInfo
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false };
+export default class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = { hasError: false }
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
+  static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error }
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error caught by boundary:', error, errorInfo);
-    }
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ErrorBoundary caught an error:', error, errorInfo)
+    this.setState({ error, errorInfo })
     
-    // In production, you might want to send this to an error reporting service
-    // like Sentry, LogRocket, etc.
+    // אפשר לשלוח את השגיאה לשירות ניטור כמו Sentry
+    // logErrorToService(error, errorInfo)
+  }
+
+  handleRetry = () => {
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined })
   }
 
   render() {
     if (this.state.hasError) {
       if (this.props.fallback) {
-        const FallbackComponent = this.props.fallback;
-        return <FallbackComponent error={this.state.error} />;
+        return this.props.fallback
       }
 
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-            <div className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
-                <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+          <div className="max-w-md w-full text-center">
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="flex justify-center mb-4">
+                <AlertTriangle className="w-12 h-12 text-red-500" />
               </div>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
+              
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">
                 משהו השתבש
-              </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                אנא נסה לרענן את הדף או לחזור מאוחר יותר
+              </h2>
+              
+              <p className="text-gray-600 mb-6">
+                אירעה שגיאה בלתי צפויה. אנא נסה שוב או פנה לתמיכה אם הבעיה נמשכת.
               </p>
-              <div className="mt-6">
+
+              {process.env.NODE_ENV === 'development' && this.state.error && (
+                <details className="mb-6 text-left">
+                  <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700 mb-2">
+                    פרטי שגיאה (פיתוח)
+                  </summary>
+                  <div className="bg-gray-100 p-3 rounded text-xs font-mono text-gray-800 overflow-auto">
+                    <div className="mb-2">
+                      <strong>Error:</strong> {this.state.error.message}
+                    </div>
+                    {this.state.errorInfo && (
+                      <div>
+                        <strong>Stack:</strong>
+                        <pre className="whitespace-pre-wrap mt-1">
+                          {this.state.errorInfo.componentStack}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </details>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  onClick={this.handleRetry}
+                  className="flex-1 flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  נסה שוב
+                </button>
+                
                 <button
                   onClick={() => window.location.reload()}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
                 >
                   רענן דף
                 </button>
@@ -65,11 +98,25 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
             </div>
           </div>
         </div>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
-export default ErrorBoundary; 
+// Hook version for functional components
+export function useErrorHandler() {
+  const [error, setError] = React.useState<Error | null>(null)
+
+  const handleError = React.useCallback((error: Error) => {
+    console.error('Error caught by useErrorHandler:', error)
+    setError(error)
+  }, [])
+
+  const clearError = React.useCallback(() => {
+    setError(null)
+  }, [])
+
+  return { error, handleError, clearError }
+} 

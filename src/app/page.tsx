@@ -1,98 +1,113 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import CategoriesGrid from '@/components/CategoriesGrid';
-import CartSummary from '@/components/CartSummary';
-import { fetchTitle } from '@/lib/fetchTitle';
-import { fetchSheleg } from '@/lib/fetchSheleg';
-import ShelegCarousel from '@/components/ShelegCarousel';
-import StructuredData from '@/components/StructuredData';
+import Link from 'next/link'
+import { Building2, Monitor, Users } from 'lucide-react'
+import { useAuthStore } from '../store/auth'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function HomePage() {
-  const [title, setTitle] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [images, setImages] = useState<string[]>([]);
-  const [clickCount, setClickCount] = useState(0);
-  const [lastClickTime, setLastClickTime] = useState(0);
-  const router = useRouter();
+  const user = useAuthStore((state) => state.user)
+  const loading = useAuthStore((state) => state.loading)
+  const router = useRouter()
 
   useEffect(() => {
-    // טעינת תמונות מקומיות מיד
-    const localImages = fetchSheleg();
-    setImages(localImages);
-    
-    fetchTitle().then(data => {
-      // ניקח את הערך הראשון בעמודה 'פרסום'
-      setTitle(data[0]?.['פרסום'] || '');
-      setLoading(false);
-    }).catch(error => {
-      console.warn('Error fetching title:', error);
-      setLoading(false);
-    });
-  }, []);
+    // אם יש משתמש מחובר ולא בטעינה, העבר לדף התצוגה עם מזהה אישי
+    if (user && !loading) {
+      const displayId = user.id;
+      if (displayId) {
+        router.push(`/tv/${displayId}`);
+      }
+    }
+  }, [user, loading, router])
 
-  // פונקציה לטיפול בלחיצות במקום ריק
-  const handleEmptySpaceClick = () => {
-    const now = Date.now();
-    
-    // אם עבר יותר מ-3 שניות מהלחיצה האחרונה, מאפסים את המונה
-    if (now - lastClickTime > 3000) {
-      setClickCount(1);
-    } else {
-      setClickCount(prev => prev + 1);
-    }
-    
-    setLastClickTime(now);
-    
-    // אם הגענו ל-10 לחיצות, עוברים למחשבון הפרטי
-    if (clickCount + 1 >= 10) {
-      router.push('/private-calculator');
-    }
-  };
+  // אם עדיין בטעינה, הצג loading
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">טוען...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // אם יש משתמש מחובר, אל תציג כלום (כי הוא יועבר לדף התצוגה)
+  if (user) {
+    return null
+  }
 
   return (
-    <>
-      <StructuredData type="restaurant" />
-      <StructuredData type="website" />
-      <main className="min-h-screen bg-gray-50" onClick={handleEmptySpaceClick}>
-        {/* Hero Section - קרוסלה בראש הדף */}
-        <div className="flex flex-col items-center mb-8">
-          {images.length > 0 ? (
-            <ShelegCarousel images={images} />
-          ) : (
-            <div className="min-h-[2.5rem]">
-              <h1 className="text-4xl font-bold text-center">
-                {loading ? (
-                  <span className="inline-block bg-gray-200 rounded w-40 h-8 animate-pulse" aria-hidden="true"></span>
-                ) : (
-                  title || 'ברוכים הבאים ל-Redy Food'
-                )}
-              </h1>
-              {loading && (
-                <p className="text-gray-500 mt-2 text-center text-sm" role="status" aria-live="polite">
-                  טוען תוכן...
-                </p>
-              )}
-            </div>
-          )}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+      <div className="max-w-4xl w-full text-center">
+        {/* Main Title */}
+        <div className="mb-12">
+          <div className="flex items-center justify-center mb-6">
+            <Building2 className="w-16 h-16 text-blue-600 ml-4" />
+            <Monitor className="w-16 h-16 text-indigo-600" />
+          </div>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            לוח מודעות דיגיטלי
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            מערכת תצוגה חכמה לבניינים - הציגו הודעות, תמונות ומידע חשוב על מסך הטלוויזיה בכניסה לבניין
+          </p>
         </div>
-        
-        {/* Categories Section */}
-        <div className="container mx-auto py-12">
-          <section role="region" aria-labelledby="categories-heading">
-            <h2 id="categories-heading" className="text-center text-gray-600 mb-12 text-xl font-semibold">
-              בחר קטגוריה להזמנה
-            </h2>
-            <CategoriesGrid />
-          </section>
+
+        {/* Features */}
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="bg-white rounded-lg p-6 shadow-lg">
+            <Monitor className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">תצוגה חכמה</h3>
+            <p className="text-gray-600">
+              הציגו תוכן על מסך הטלוויזיה בכניסה לבניין בקרוסלה אוטומטית
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-lg p-6 shadow-lg">
+            <Users className="w-12 h-12 text-indigo-600 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">ניהול קל</h3>
+            <p className="text-gray-600">
+              ממשק ניהול פשוט לוועד הבית לעדכון הודעות והעלאת תמונות
+            </p>
+          </div>
+          
+          <div className="bg-white rounded-lg p-6 shadow-lg">
+            <Building2 className="w-12 h-12 text-green-600 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">לכל בניין</h3>
+            <p className="text-gray-600">
+              תוכן ייעודי לכל בניין עם פרטי התקשרות ומידע מתוזמן
+            </p>
+          </div>
         </div>
-        
-        {/* עגלה צפה במובייל - מוצגת רק ככפתור צף */}
-        <div className="lg:hidden">
-          <CartSummary />
+
+        {/* Call to Action */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/login"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+            >
+              התחבר לחשבון קיים
+            </Link>
+            <Link
+              href="/register"
+              className="bg-white hover:bg-gray-50 text-blue-600 font-semibold py-3 px-8 rounded-lg border-2 border-blue-600 transition-colors"
+            >
+              הרשם חינם
+            </Link>
+          </div>
+          
+                                <p className="text-sm text-gray-500 mt-6">
+                        כבר יש לכם מסך? 
+                        <Link href="/tv" className="text-blue-600 hover:underline mr-1">
+                          צפו בתצוגה
+                        </Link>
+
+                      </p>
         </div>
-      </main>
-    </>
-  );
+      </div>
+    </div>
+  )
 } 
