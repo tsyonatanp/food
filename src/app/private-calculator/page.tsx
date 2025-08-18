@@ -202,16 +202,11 @@ export default function PrivateCalculator() {
       const printWindow = window.open('', '_blank', 'width=800,height=600');
       if (!printWindow) return;
 
-      // קבלת התוכן הרלוונטי
-      const logoImg = document.querySelector('img[alt="לוגו"]') as HTMLImageElement;
-      const logoSrc = logoImg ? logoImg.src : '/images/logo.png';
-      
       let contentToPrint = '';
       
-      // הוספת הלוגו והכותרת
+      // הוספת הכותרת (ללא לוגו כדי למנוע בעיות טעינה)
       contentToPrint += `
         <div style="text-align: center; margin-bottom: 20px;">
-          <img src="${logoSrc}" alt="לוגו" style="width: 80px; height: 80px; margin-bottom: 10px;">
           <h1 style="margin: 0; font-size: 24px; color: #333;">שלג-רוז - אוכל מוכן</h1>
           <p style="margin: 5px 0; color: #666;">${new Date().toLocaleDateString('he-IL')}</p>
         </div>
@@ -317,10 +312,35 @@ export default function PrivateCalculator() {
       printWindow.document.close();
       
       // המתנה להטענת התמונה ואז הדפסה
+      printWindow.onload = () => {
+        setTimeout(() => {
+          printWindow.print();
+          
+          // סגירת החלון רק אחרי שההדפסה הסתיימה
+          printWindow.onafterprint = () => {
+            printWindow.close();
+          };
+          
+          // גיבוי - סגירה אוטומטית אחרי 3 שניות
+          setTimeout(() => {
+            if (!printWindow.closed) {
+              printWindow.close();
+            }
+          }, 3000);
+        }, 1000);
+      };
+      
+      // גיבוי נוסף במקרה שonload לא עובד
       setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 500);
+        if (printWindow && !printWindow.closed) {
+          printWindow.print();
+          setTimeout(() => {
+            if (!printWindow.closed) {
+              printWindow.close();
+            }
+          }, 2000);
+        }
+      }, 2000);
     }
   };
 
