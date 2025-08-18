@@ -195,7 +195,7 @@ export default function PrivateCalculator() {
     });
   }
 
-  const handlePrint = (type: 'customer' | 'roie' | 'all') => {
+  const handlePrint = (type: 'customer' | 'roie' | 'all' | 'customer-simple' | 'roie-simple') => {
     if (printRef.current && typeof window !== 'undefined') {
       // הוספת CSS להסתרת/הצגת אלמנטים לפי סוג הדפסה
       const style = document.createElement('style');
@@ -209,7 +209,7 @@ export default function PrivateCalculator() {
         }
       `;
       
-      if (type === 'customer') {
+      if (type === 'customer' || type === 'customer-simple') {
         style.textContent += `
           @media print {
             .roie-section { 
@@ -226,7 +226,7 @@ export default function PrivateCalculator() {
             }
           }
         `;
-      } else if (type === 'roie') {
+      } else if (type === 'roie' || type === 'roie-simple') {
         style.textContent += `
           @media print {
             .customer-section { 
@@ -245,6 +245,20 @@ export default function PrivateCalculator() {
         `;
       }
       
+      // הסתרת עמודות משקל כולל וקופסאות עבור הדפסה פשוטה
+      if (type === 'customer-simple' || type === 'roie-simple') {
+        style.textContent += `
+          @media print {
+            #private-calc-output th:nth-child(3),
+            #private-calc-output td:nth-child(3),
+            #private-calc-output th:nth-child(4),
+            #private-calc-output td:nth-child(4) { 
+              display: none !important; 
+            }
+          }
+        `;
+      }
+
       document.head.appendChild(style);
       
       // המתנה קצרה לפני ההדפסה כדי שה-CSS ייכנס לתוקף
@@ -664,6 +678,11 @@ export default function PrivateCalculator() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             <button onClick={() => handlePrint('customer')} style={{ padding: '10px 8px', background: '#f59e42', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס ללקוח</button>
             <button onClick={() => handlePrint('roie')} style={{ padding: '10px 8px', background: '#059669', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס לרועי</button>
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+            <button onClick={() => handlePrint('customer-simple')} style={{ padding: '10px 8px', background: '#f97316', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס ללקוח (פשוט)</button>
+            <button onClick={() => handlePrint('roie-simple')} style={{ padding: '10px 8px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס לרועי (פשוט)</button>
           </div>
           
           <button onClick={() => handlePrint('all')} style={{ width: '100%', padding: '10px 8px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס הכל</button>
