@@ -198,13 +198,19 @@ export default function PrivateCalculator() {
   const handlePrint = (type: 'customer' | 'roie' | 'all' | 'customer-simple') => {
     if (printRef.current && typeof window !== 'undefined') {
       
-      // פתרון חדש - יצירת חלון הדפסה נפרד עם התוכן הרלוונטי בלבד
-      const printWindow = window.open('', '_blank', 'width=800,height=600');
-      if (!printWindow) return;
-
+      // פתרון חדש למובייל - הסתרת אלמנטים במקום חלון נפרד
+      const body = document.body;
+      const originalDisplay = body.style.display;
+      const originalVisibility = body.style.visibility;
+      
+      // יצירת אלמנט הדפסה זמני
+      const printElement = document.createElement('div');
+      printElement.id = 'temp-print-content';
+      printElement.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; padding: 20px; box-sizing: border-box; direction: rtl; font-family: Arial, sans-serif;';
+      
       let contentToPrint = '';
       
-      // הוספת הכותרת (ללא לוגו כדי למנוע בעיות טעינה)
+      // הוספת הכותרת
       contentToPrint += `
         <div style="text-align: center; margin-bottom: 20px;">
           <h1 style="margin: 0; font-size: 24px; color: #333;">שלג-רוז - אוכל מוכן</h1>
@@ -268,79 +274,40 @@ export default function PrivateCalculator() {
         contentToPrint += '</tbody></table>';
       }
 
-      if (type === 'all') {
-        // שני החלקים יחד
-        // [הקוד של שני החלקים יחד...]
-      }
-
       // הוספת הערות כלליות
       if (finalNotes.trim()) {
         contentToPrint += `<div style="margin-top: 20px;"><strong>הערות כלליות:</strong><div style="border: 1.5px solid #789; background: #f5f5ff; border-radius: 6px; padding: 12px; margin-top: 8px;">${finalNotes}</div></div>`;
       }
 
       contentToPrint += '<div style="text-align: center; margin-top: 30px; color: #666;">בתיאבון ובריאות טובה 🌿 צוות שלג-רוז</div>';
-
-      // כתיבת התוכן לחלון ההדפסה
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html dir="rtl" lang="he">
-        <head>
-          <meta charset="UTF-8">
-          <title>הזמנה - שלג-רוז</title>
-          <style>
-            body { 
-              font-family: Arial, sans-serif; 
-              margin: 20px; 
-              direction: rtl; 
-              text-align: right;
-            }
-            table { 
-              width: 100%; 
-              border-collapse: collapse; 
-            }
-            @media print {
-              body { margin: 0; }
-            }
-          </style>
-        </head>
-        <body>
-          ${contentToPrint}
-        </body>
-        </html>
-      `);
       
-      printWindow.document.close();
+      // הוספת התוכן לאלמנט
+      printElement.innerHTML = contentToPrint;
       
-      // המתנה להטענת התמונה ואז הדפסה
-      printWindow.onload = () => {
-        setTimeout(() => {
-          printWindow.print();
-          
-          // סגירת החלון רק אחרי שההדפסה הסתיימה
-          printWindow.onafterprint = () => {
-            printWindow.close();
-          };
-          
-          // גיבוי - סגירה אוטומטית אחרי 3 שניות
-          setTimeout(() => {
-            if (!printWindow.closed) {
-              printWindow.close();
-            }
-          }, 3000);
-        }, 1000);
-      };
-      
-      // גיבוי נוסף במקרה שonload לא עובד
-      setTimeout(() => {
-        if (printWindow && !printWindow.closed) {
-          printWindow.print();
-          setTimeout(() => {
-            if (!printWindow.closed) {
-              printWindow.close();
-            }
-          }, 2000);
+      // הוספת CSS להדפסה
+      const style = document.createElement('style');
+      style.textContent = `
+        @media print {
+          body * { visibility: hidden !important; }
+          #temp-print-content, #temp-print-content * { visibility: visible !important; }
+          #temp-print-content { position: static !important; }
         }
-      }, 2000);
+      `;
+      document.head.appendChild(style);
+      
+      // הוספת האלמנט לדף
+      document.body.appendChild(printElement);
+      
+      // הדפסה
+      setTimeout(() => {
+        window.print();
+        
+        // ניקוי אחרי ההדפסה
+        setTimeout(() => {
+          document.body.removeChild(printElement);
+          document.head.removeChild(style);
+        }, 100);
+      }, 100);
     }
   };
 
