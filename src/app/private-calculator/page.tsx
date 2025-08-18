@@ -196,18 +196,9 @@ export default function PrivateCalculator() {
   }
 
   const handlePrint = (type: 'customer' | 'roie' | 'all' | 'customer-simple') => {
-    if (printRef.current && typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       
-      // פתרון חדש למובייל - הסתרת אלמנטים במקום חלון נפרד
-      const body = document.body;
-      const originalDisplay = body.style.display;
-      const originalVisibility = body.style.visibility;
-      
-      // יצירת אלמנט הדפסה זמני
-      const printElement = document.createElement('div');
-      printElement.id = 'temp-print-content';
-      printElement.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 99999; padding: 20px; box-sizing: border-box; direction: rtl; font-family: Arial, sans-serif;';
-      
+      // פתרון Iframe - הכי יציב למובייל
       let contentToPrint = '';
       
       // הוספת הכותרת
@@ -218,96 +209,101 @@ export default function PrivateCalculator() {
         </div>
       `;
 
+      // --- בניית תוכן ההדפסה ---
       if (type === 'customer' || type === 'customer-simple') {
-        // חישוב לקוח
         contentToPrint += '<h3 style="color: #4f46e5; border-bottom: 2px solid #e0e7ff; padding-bottom: 8px; margin: 20px 0 12px 0;">חישוב רגיל</h3>';
         contentToPrint += '<table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">';
-        
-        // כותרות טבלה
         if (type === 'customer-simple') {
           contentToPrint += '<thead><tr style="background: #f3f4f6;"><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מוצר</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מחיר ל-100 גרם</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">משקל לאחר קיזוז</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מחיר סופי</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">הערות</th></tr></thead>';
         } else {
           contentToPrint += '<thead><tr style="background: #f3f4f6;"><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מוצר</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מחיר ל-100 גרם</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">משקל כולל</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">קופסאות</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">משקל לאחר קיזוז</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מחיר סופי</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">הערות</th></tr></thead>';
         }
-        
         contentToPrint += '<tbody>';
         calculations.forEach(calc => {
           if (type === 'customer-simple') {
             contentToPrint += `<tr><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.product.name}</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${calc.product.price.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.netWeight} גרם</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${calc.total.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.notes}</td></tr>`;
           } else {
-            const boxesText = calc.selectedBoxes.length > 0 
-              ? calc.selectedBoxes.map(box => `${box.name} (${box.weight} גרם)`).join(', ')
-              : 'ללא קופסאות';
+            const boxesText = calc.selectedBoxes.length > 0 ? calc.selectedBoxes.map(box => `${box.name} (${box.weight} גרם)`).join(', ') : 'ללא קופסאות';
             contentToPrint += `<tr><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.product.name}</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${calc.product.price.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.weight} גרם</td><td style="border: 1px solid #d1d5db; padding: 8px;">${boxesText}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.netWeight} גרם</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${calc.total.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.notes}</td></tr>`;
           }
         });
-        
         const totalSum = calculations.reduce((sum, c) => sum + c.total, 0);
         const deliveryFee = 30;
         const totalWithDelivery = totalSum + deliveryFee;
-        
         if (type === 'customer-simple') {
           contentToPrint += `<tr style="font-weight: bold; background: #e0e7ff;"><td colspan="3" style="border: 1px solid #d1d5db; padding: 8px; text-align: left;">סך הכל לתשלום:</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${totalWithDelivery.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;"></td></tr>`;
         } else {
           contentToPrint += `<tr style="font-weight: bold; background: #e0e7ff;"><td colspan="5" style="border: 1px solid #d1d5db; padding: 8px; text-align: left;">סך הכל לתשלום:</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${totalWithDelivery.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;"></td></tr>`;
         }
-        
         contentToPrint += '</tbody></table>';
       }
 
       if (type === 'roie') {
-        // חישוב לרועי
         contentToPrint += '<h3 style="color: #059669; border-bottom: 2px solid #d1fae5; padding-bottom: 8px; margin: 20px 0 12px 0;">חישוב לרועי</h3>';
         contentToPrint += '<table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">';
         contentToPrint += '<thead><tr style="background: #f3f4f6;"><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מוצר</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מחיר רועי ל-100 גרם</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">משקל כולל</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">קופסאות (חצי משקל)</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">משקל לאחר קיזוז</th><th style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">מחיר סופי</th></tr></thead>';
         contentToPrint += '<tbody>';
-        
         roieCalculations.forEach(calc => {
-          const boxesText = calc.selectedBoxes.length > 0 
-            ? calc.selectedBoxes.map(box => `${box.name} (${box.weight/2} גרם)`).join(', ')
-            : 'ללא קופסאות';
+          const boxesText = calc.selectedBoxes.length > 0 ? calc.selectedBoxes.map(box => `${box.name} (${box.weight/2} גרם)`).join(', ') : 'ללא קופסאות';
           contentToPrint += `<tr><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.product.name}</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${calc.roiePrice.toFixed(2)}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.weight} גרם</td><td style="border: 1px solid #d1d5db; padding: 8px;">${boxesText}</td><td style="border: 1px solid #d1d5db; padding: 8px;">${calc.netWeight} גרם</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${calc.total.toFixed(2)}</td></tr>`;
         });
-        
         const roieTotalSum = roieCalculations.reduce((sum, c) => sum + c.total, 0);
         contentToPrint += `<tr style="font-weight: bold; background: #d1fae5;"><td colspan="5" style="border: 1px solid #d1d5db; padding: 8px; text-align: left;">סך הכל לתשלום:</td><td style="border: 1px solid #d1d5db; padding: 8px;">₪${roieTotalSum.toFixed(2)}</td></tr>`;
         contentToPrint += '</tbody></table>';
       }
 
-      // הוספת הערות כלליות
       if (finalNotes.trim()) {
         contentToPrint += `<div style="margin-top: 20px;"><strong>הערות כלליות:</strong><div style="border: 1.5px solid #789; background: #f5f5ff; border-radius: 6px; padding: 12px; margin-top: 8px;">${finalNotes}</div></div>`;
       }
-
-      contentToPrint += '<div style="text-align: center; margin-top: 30px; color: #666;">בתיאבון ובריאות טובה 🌿 צוות שלג-רוז</div>';
       
-      // הוספת התוכן לאלמנט
-      printElement.innerHTML = contentToPrint;
-      
-      // הוספת CSS להדפסה
-      const style = document.createElement('style');
-      style.textContent = `
-        @media print {
-          body * { visibility: hidden !important; }
-          #temp-print-content, #temp-print-content * { visibility: visible !important; }
-          #temp-print-content { position: static !important; }
-        }
+      const fullHtml = `
+        <!DOCTYPE html>
+        <html dir="rtl" lang="he">
+        <head>
+          <meta charset="UTF-8">
+          <title>הדפסה</title>
+          <style>
+            body { font-family: Arial, sans-serif; direction: rtl; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #d1d5db; padding: 8px; text-align: right; }
+            @media print {
+              body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            }
+          </style>
+        </head>
+        <body>
+          <div style="text-align: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 24px; color: #333;">שלג-רוז - אוכל מוכן</h1>
+            <p style="margin: 5px 0; color: #666;">${new Date().toLocaleDateString('he-IL')}</p>
+          </div>
+          ${contentToPrint}
+          <div style="text-align: center; margin-top: 30px; color: #666;">בתיאבון ובריאות טובה 🌿 צוות שלג-רוז</div>
+        </body>
+        </html>
       `;
-      document.head.appendChild(style);
-      
-      // הוספת האלמנט לדף
-      document.body.appendChild(printElement);
-      
-      // הדפסה
-      setTimeout(() => {
-        window.print();
-        
-        // ניקוי אחרי ההדפסה
+
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'absolute';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      iframe.style.visibility = 'hidden';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentWindow?.document;
+      if (doc) {
+        doc.open();
+        doc.write(fullHtml);
+        doc.close();
+
         setTimeout(() => {
-          document.body.removeChild(printElement);
-          document.head.removeChild(style);
-        }, 100);
-      }, 100);
+          iframe.contentWindow?.focus();
+          iframe.contentWindow?.print();
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+          }, 1000);
+        }, 500);
+      }
     }
   };
 
