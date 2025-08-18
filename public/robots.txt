@@ -1,0 +1,56 @@
+# Robots.txt for שלג-רוז - אוכל מוכן
+User-agent: *
+Allow: /
+
+# Allow all important pages
+Allow: /about
+Allow: /delivery
+Allow: /faq
+Allow: /support
+Allow: /terms
+Allow: /accessibility-statement
+Allow: /order
+Allow: /checkout
+Allow: /order-confirmation
+
+# Allow static resources
+Allow: /images/
+Allow: /Menu/
+Allow: /MenuCategories/
+Allow: /*.jpeg
+Allow: /*.jpg
+Allow: /*.png
+Allow: /*.webp
+Allow: /*.avif
+
+# Disallow private/admin areas
+Disallow: /private-calculator
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /temp/
+Disallow: /backup/
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://food-one-cyan.vercel.app/sitemap.xml
+
+# Additional sitemaps for better indexing
+Sitemap: https://food-one-cyan.vercel.app/sitemap.xml
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Bing specific
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Yandex specific
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1 
