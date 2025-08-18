@@ -195,58 +195,93 @@ export default function PrivateCalculator() {
     });
   }
 
-  const handlePrint = (type: 'customer' | 'roie' | 'all' | 'customer-simple' | 'roie-simple') => {
+  const handlePrint = (type: 'customer' | 'roie' | 'all' | 'customer-simple') => {
     if (printRef.current && typeof window !== 'undefined') {
-      // הוספת CSS להסתרת/הצגת אלמנטים לפי סוג הדפסה
+      // הסתרה מוחלטת של אלמנטים לפני הדפסה
+      const customerSections = document.querySelectorAll('.customer-section');
+      const roieSections = document.querySelectorAll('.roie-section');
+      
+      // הוספת CSS חזק במיוחד
       const style = document.createElement('style');
+      style.id = 'print-style-temp';
       style.textContent = `
         @media print {
-          body * { visibility: hidden; }
-          #private-calc-output, #private-calc-output * { visibility: visible; }
-          #private-calc-output { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
+          * { color-adjust: exact !important; print-color-adjust: exact !important; }
+          body * { visibility: hidden !important; }
+          #private-calc-output, #private-calc-output * { visibility: visible !important; }
+          #private-calc-output { 
+            position: absolute !important; 
+            left: 0 !important; 
+            top: 0 !important; 
+            width: 100vw !important; 
+            background: white !important; 
+            z-index: 9999 !important;
+          }
           #private-calc-output th:last-child,
-          #private-calc-output td:last-child { display: none; }
+          #private-calc-output td:last-child { display: none !important; }
         }
       `;
       
       if (type === 'customer' || type === 'customer-simple') {
+        // הסתרה פיזית של חלק רועי
+        roieSections.forEach(section => {
+          (section as HTMLElement).style.display = 'none';
+        });
+        
         style.textContent += `
           @media print {
-            .roie-section { 
+            .roie-section, 
+            .roie-section *, 
+            div[class*="roie"], 
+            h3[style*="059669"] { 
               display: none !important; 
               visibility: hidden !important;
               opacity: 0 !important;
               height: 0 !important;
               overflow: hidden !important;
               position: absolute !important;
-              left: -9999px !important;
+              left: -99999px !important;
               width: 0 !important;
               margin: 0 !important;
               padding: 0 !important;
+              border: none !important;
+              font-size: 0 !important;
+              line-height: 0 !important;
             }
           }
         `;
-      } else if (type === 'roie' || type === 'roie-simple') {
+      } else if (type === 'roie') {
+        // הסתרה פיזית של חלק לקוח  
+        customerSections.forEach(section => {
+          (section as HTMLElement).style.display = 'none';
+        });
+        
         style.textContent += `
           @media print {
-            .customer-section { 
+            .customer-section, 
+            .customer-section *, 
+            div[class*="customer"], 
+            h3[style*="4f46e5"] { 
               display: none !important; 
               visibility: hidden !important;
               opacity: 0 !important;
               height: 0 !important;
               overflow: hidden !important;
               position: absolute !important;
-              left: -9999px !important;
+              left: -99999px !important;
               width: 0 !important;
               margin: 0 !important;
               padding: 0 !important;
+              border: none !important;
+              font-size: 0 !important;
+              line-height: 0 !important;
             }
           }
         `;
       }
       
       // הסתרת עמודות משקל כולל וקופסאות עבור הדפסה פשוטה
-      if (type === 'customer-simple' || type === 'roie-simple') {
+      if (type === 'customer-simple') {
         style.textContent += `
           @media print {
             #private-calc-output th:nth-child(3),
@@ -261,10 +296,24 @@ export default function PrivateCalculator() {
 
       document.head.appendChild(style);
       
-      // המתנה קצרה לפני ההדפסה כדי שה-CSS ייכנס לתוקף
+      // המתנה קצרה יותר להדפסה ושחזור אלמנטים
       setTimeout(() => {
         window.print();
-        document.head.removeChild(style);
+        
+        // שחזור הצגת אלמנטים אחרי ההדפסה
+        setTimeout(() => {
+          customerSections.forEach(section => {
+            (section as HTMLElement).style.display = '';
+          });
+          roieSections.forEach(section => {
+            (section as HTMLElement).style.display = '';
+          });
+          
+          const existingStyle = document.getElementById('print-style-temp');
+          if (existingStyle) {
+            document.head.removeChild(existingStyle);
+          }
+        }, 100);
       }, 100);
     }
   };
@@ -680,10 +729,7 @@ export default function PrivateCalculator() {
             <button onClick={() => handlePrint('roie')} style={{ padding: '10px 8px', background: '#059669', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס לרועי</button>
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-            <button onClick={() => handlePrint('customer-simple')} style={{ padding: '10px 8px', background: '#f97316', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס ללקוח (פשוט)</button>
-            <button onClick={() => handlePrint('roie-simple')} style={{ padding: '10px 8px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס לרועי (פשוט)</button>
-          </div>
+          <button onClick={() => handlePrint('customer-simple')} style={{ width: '100%', padding: '10px 8px', background: '#f97316', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס ללקוח (פשוט)</button>
           
           <button onClick={() => handlePrint('all')} style={{ width: '100%', padding: '10px 8px', background: '#8b5cf6', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הדפס הכל</button>
           
