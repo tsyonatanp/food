@@ -212,20 +212,46 @@ export default function PrivateCalculator() {
       if (type === 'customer') {
         style.textContent += `
           @media print {
-            .roie-section { display: none !important; }
+            .roie-section { 
+              display: none !important; 
+              visibility: hidden !important;
+              opacity: 0 !important;
+              height: 0 !important;
+              overflow: hidden !important;
+              position: absolute !important;
+              left: -9999px !important;
+              width: 0 !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
           }
         `;
       } else if (type === 'roie') {
         style.textContent += `
           @media print {
-            .customer-section { display: none !important; }
+            .customer-section { 
+              display: none !important; 
+              visibility: hidden !important;
+              opacity: 0 !important;
+              height: 0 !important;
+              overflow: hidden !important;
+              position: absolute !important;
+              left: -9999px !important;
+              width: 0 !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
           }
         `;
       }
       
       document.head.appendChild(style);
-      window.print();
-      document.head.removeChild(style);
+      
+      // המתנה קצרה לפני ההדפסה כדי שה-CSS ייכנס לתוקף
+      setTimeout(() => {
+        window.print();
+        document.head.removeChild(style);
+      }, 100);
     }
   };
 
@@ -264,6 +290,27 @@ export default function PrivateCalculator() {
           #private-calc-output { position: absolute; left: 0; top: 0; width: 100vw; background: white; }
           #private-calc-output th:last-child,
           #private-calc-output td:last-child { display: none; }
+          
+          /* CSS חזק יותר להסתרת חלקים במובייל */
+          .roie-section.hide-for-print { 
+            display: none !important; 
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
+          
+          .customer-section.hide-for-print { 
+            display: none !important; 
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            left: -9999px !important;
+          }
         }
         @media screen and (max-width: 640px) {
           #private-calc-output table {
