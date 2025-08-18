@@ -50,6 +50,26 @@ export default function PrivateCalculator() {
   const [finalNotes, setFinalNotes] = useState('');
   const printRef = useRef<HTMLDivElement>(null);
 
+  // הודעת אישור ביציאה מהמחשבון
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      // רק אם יש חישובים או הערות, נציג הודעת אישור
+      if (calculations.length > 0 || roieCalculations.length > 0 || finalNotes.trim() || notes.trim()) {
+        e.preventDefault();
+        e.returnValue = 'האם אתה בטוח שברצונך לצאת? השינויים לא יישמרו.';
+        return 'האם אתה בטוח שברצונך לצאת? השינויים לא יישמרו.';
+      }
+    };
+
+    // הוספת event listener
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // ניקוי event listener
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [calculations, roieCalculations, finalNotes, notes]);
+
   // Fetch products from Google Sheets (opensheet API)
   useEffect(() => {
     fetch('https://opensheet.elk.sh/1xTlTECzbxdDVu6SSnoQnN_GtL39b7-ZzhgcIvaLyljU/Menu')
@@ -114,6 +134,14 @@ export default function PrivateCalculator() {
       return;
     }
 
+    // אם יש כבר חישובי רועי, נשאל אם למחוק אותם
+    if (roieCalculations.length > 0) {
+      const confirmed = window.confirm('יש כבר חישובי רועי קיימים. האם אתה רוצה להחליף אותם?');
+      if (!confirmed) {
+        return;
+      }
+    }
+
     // המרת כל החישובים הרגילים לחישובי רועי
     const newRoieCalculations: RoieCalculation[] = calculations.map(calc => {
       // חישוב משקל כולל של כל הקופסאות (חצי משקל)
@@ -144,11 +172,17 @@ export default function PrivateCalculator() {
   };
 
   const handleDeleteCalculation = (index: number) => {
-    setCalculations(prev => prev.filter((_, i) => i !== index));
+    const confirmed = window.confirm('האם אתה בטוח שברצונך למחוק את הפריט הזה?');
+    if (confirmed) {
+      setCalculations(prev => prev.filter((_, i) => i !== index));
+    }
   };
 
   const handleDeleteRoieCalculation = (index: number) => {
-    setRoieCalculations(prev => prev.filter((_, i) => i !== index));
+    const confirmed = window.confirm('האם אתה בטוח שברצונך למחוק את הפריט הזה?');
+    if (confirmed) {
+      setRoieCalculations(prev => prev.filter((_, i) => i !== index));
+    }
   };
 
   // Helper: blob to base64 (for logo)
@@ -208,6 +242,18 @@ export default function PrivateCalculator() {
 
   // חישוב משקל כולל של קופסאות נבחרות
   const totalSelectedBoxWeight = selectedBoxes.reduce((sum, box) => sum + box.weight, 0);
+
+  const handleGoBack = () => {
+    // בדיקה אם יש חישובים או הערות
+    if (calculations.length > 0 || roieCalculations.length > 0 || finalNotes.trim() || notes.trim()) {
+      const confirmed = window.confirm('האם אתה בטוח שברצונך לצאת? השינויים לא יישמרו.');
+      if (confirmed) {
+        window.location.href = '/';
+      }
+    } else {
+      window.location.href = '/';
+    }
+  };
 
   return (
     <div style={{ maxWidth: 800, margin: '20px auto', padding: '16px 12px', background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #ccc' }}>
@@ -285,7 +331,25 @@ export default function PrivateCalculator() {
           margin-top: 2em;
         }
       `}</style>
-      <h1 style={{ textAlign: 'center', marginBottom: 24 }}>מחשבון מחיר (פנימי)</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <button 
+          onClick={handleGoBack}
+          style={{ 
+            padding: '8px 16px', 
+            background: '#6b7280', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: 6, 
+            cursor: 'pointer',
+            fontSize: 14
+          }}
+          aria-label="חזור לדף הבית"
+        >
+          ← חזור לדף הבית
+        </button>
+        <h1 style={{ textAlign: 'center', margin: 0, flex: 1 }}>מחשבון מחיר (פנימי)</h1>
+        <div style={{ width: 100 }}></div> {/* Spacer for balance */}
+      </div>
       {/* טופס */}
       <div style={{ marginBottom: 32 }}>
         <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
@@ -350,7 +414,37 @@ export default function PrivateCalculator() {
           <textarea value={notes} onChange={e => setNotes(e.target.value)} style={{ width: '100%', padding: '6px 4px', marginTop: 4, minHeight: 50, border: '1px solid #d1d5db', borderRadius: 4 }} />
         </div>
         
-        <button onClick={handleAddCalculation} style={{ width: '100%', padding: '10px 8px', background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16, marginBottom: 20 }}>הוסף חישוב</button>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: 20 }}>
+          <button onClick={handleAddCalculation} style={{ flex: 1, padding: '10px 8px', background: '#4f46e5', color: '#fff', border: 'none', borderRadius: 6, fontSize: 16 }}>הוסף חישוב</button>
+          <button 
+            onClick={() => {
+              if (calculations.length > 0 || roieCalculations.length > 0 || finalNotes.trim() || notes.trim()) {
+                const confirmed = window.confirm('האם אתה בטוח שברצונך לנקות הכל? פעולה זו לא ניתנת לביטול.');
+                if (confirmed) {
+                  setCalculations([]);
+                  setRoieCalculations([]);
+                  setFinalNotes('');
+                  setNotes('');
+                  setSelectedBoxes([]);
+                  setWeight('');
+                  setSelected(null);
+                }
+              }
+            }}
+            style={{ 
+              padding: '10px 16px', 
+              background: '#dc2626', 
+              color: '#fff', 
+              border: 'none', 
+              borderRadius: 6, 
+              fontSize: 16,
+              cursor: 'pointer'
+            }}
+            aria-label="נקה את כל החישובים וההערות"
+          >
+            נקה הכל
+          </button>
+        </div>
         
         {/* שדה הערות כלליות */}
         <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
