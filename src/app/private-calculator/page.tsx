@@ -399,12 +399,12 @@ export default function PrivateCalculator() {
           />
           {weight && selectedBoxes.length > 0 && (
             <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-              משקל נטו: {Math.max(0, parseFloat(weight) - totalSelectedBoxWeight)} גרם
+              משקל לאחר קיזוז: {Math.max(0, parseFloat(weight) - totalSelectedBoxWeight)} גרם
             </div>
           )}
           {weight && selectedBoxes.length === 0 && (
             <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
-              משקל נטו: {parseFloat(weight)} גרם (ללא קופסאות)
+              משקל לאחר קיזוז: {parseFloat(weight)} גרם (ללא קופסאות)
             </div>
           )}
         </div>
@@ -480,7 +480,7 @@ export default function PrivateCalculator() {
                   <th>מחיר ל-100 גרם</th>
                   <th>משקל כולל</th>
                   <th>קופסאות</th>
-                  <th>משקל נטו</th>
+                  <th>משקל לאחר קיזוז</th>
                   <th>מחיר סופי</th>
                   <th>הערות</th>
                   <th>פעולות</th>
@@ -555,7 +555,7 @@ export default function PrivateCalculator() {
                   <th>מחיר רועי ל-100 גרם</th>
                   <th>משקל כולל</th>
                   <th>קופסאות (חצי משקל)</th>
-                  <th>משקל נטו</th>
+                  <th>משקל לאחר קיזוז</th>
                   <th>מחיר סופי</th>
                   <th>פעולות</th>
                 </tr>
