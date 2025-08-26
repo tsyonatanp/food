@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sendTelegramMessage } from '@/lib/telegram';
+import { sendTelegramMessage, sendTelegramExcelFile } from '@/lib/telegram';
+import { createOrderExcelFile, generateExcelFilename } from '@/lib/excel';
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +26,34 @@ export async function POST(req: NextRequest) {
       `\n\n<b>פרטי הזמנה:</b>\n${itemsText}\n\n<b>סה\"כ לתשלום:</b> ₪${total.toFixed(2)}` +
       `\n\n<b>המחיר הסופי מתעדכן לאחר השקילה – כדי שתקבלו בדיוק מה שאתם רוצים.</b>`;
 
+    // שליחת הודעה לטלגרם
     await sendTelegramMessage(message);
+
+    // יצירת קובץ Excel
+    const deliveryFee = 30;
+    const finalTotal = total + deliveryFee;
+    
+    const orderData = {
+      orderNumber,
+      customerName: name,
+      phone,
+      address,
+      floor,
+      apartment,
+      entryCode,
+      notes,
+      cart: sortedCart,
+      total,
+      deliveryFee,
+      finalTotal
+    };
+
+    const excelBuffer = createOrderExcelFile(orderData);
+    const filename = generateExcelFilename(orderNumber);
+    
+    // שליחת קובץ Excel לטלגרם
+    const excelCaption = `📊 <b>קובץ Excel להזמנה ${orderNumber}</b>\n\nהקובץ מכיל את כל פרטי ההזמנה והמשקלים לצורך הכנה מדויקת.`;
+    await sendTelegramExcelFile(excelBuffer, filename, excelCaption);
 
     return NextResponse.json({ ok: true });
   } catch (e) {
