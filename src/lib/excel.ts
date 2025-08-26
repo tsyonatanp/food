@@ -29,45 +29,23 @@ export function createOrderExcelFile(orderData: OrderData): Buffer {
   // יצירת workbook חדש
   const workbook = XLSX.utils.book_new();
   
-  // יצירת נתונים לטבלת הזמנה - רק שם מוצר ומשקל
-  const orderItems = orderData.cart.map((item, index) => ({
-    'מספר שורה': index + 1,
-    'שם מוצר': item.name,
-    'משקל (גרם)': item.isByWeight ? item.weight : (item.quantity ? `${item.quantity} יחידות` : '')
+  // יצירת נתונים לטבלת הזמנה - רק משקל ושם מוצר
+  const orderItems = orderData.cart.map((item) => ({
+    'משקל (גרם)': item.isByWeight ? item.weight : (item.quantity ? `${item.quantity} יחידות` : ''),
+    'שם מוצר': item.name
   }));
 
   // יצירת worksheet לפרטי הזמנה
   const orderWorksheet = XLSX.utils.json_to_sheet(orderItems);
   
-  // הגדרת רוחב עמודות - רק 3 עמודות
+  // הגדרת רוחב עמודות - רק 2 עמודות
   const columnWidths = [
-    { wch: 8 },   // מספר שורה
-    { wch: 30 },  // שם מוצר
-    { wch: 15 }   // משקל
+    { wch: 15 },  // משקל
+    { wch: 30 }   // שם מוצר
   ];
   orderWorksheet['!cols'] = columnWidths;
-  
-  // יצירת worksheet לפרטי לקוח
-  const customerData = [
-    { 'שדה': 'מספר הזמנה', 'ערך': orderData.orderNumber },
-    { 'שדה': 'שם לקוח', 'ערך': orderData.customerName },
-    { 'שדה': 'טלפון', 'ערך': orderData.phone },
-    { 'שדה': 'כתובת', 'ערך': orderData.address },
-    { 'שדה': 'קומה', 'ערך': orderData.floor || '' },
-    { 'שדה': 'דירה', 'ערך': orderData.apartment || '' },
-    { 'שדה': 'קוד כניסה', 'ערך': orderData.entryCode || '' },
-    { 'שדה': 'הערות', 'ערך': orderData.notes || '' },
-    { 'שדה': '', 'ערך': '' },
-    { 'שדה': 'סה"כ לתשלום', 'ערך': `₪${orderData.finalTotal.toFixed(2)}` },
-    { 'שדה': 'תאריך הזמנה', 'ערך': new Date().toLocaleDateString('he-IL') },
-    { 'שדה': 'שעת הזמנה', 'ערך': new Date().toLocaleTimeString('he-IL') }
-  ];
-  
-  const customerWorksheet = XLSX.utils.json_to_sheet(customerData);
-  customerWorksheet['!cols'] = [{ wch: 15 }, { wch: 30 }];
 
-  // הוספת הworksheets לworkbook
-  XLSX.utils.book_append_sheet(workbook, customerWorksheet, 'פרטי לקוח');
+  // הוספת הworksheet לworkbook - רק גיליון אחד
   XLSX.utils.book_append_sheet(workbook, orderWorksheet, 'רשימת מוצרים');
 
   // יצירת קובץ Excel כbuffer
