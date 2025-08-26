@@ -8,6 +8,7 @@ interface OrderItem {
   price?: number;
   pricePerGram?: number;
   total: number;
+  area?: string; // הוספת אזור
 }
 
 interface OrderData {
@@ -29,19 +30,21 @@ export function createOrderExcelFile(orderData: OrderData): Buffer {
   // יצירת workbook חדש
   const workbook = XLSX.utils.book_new();
   
-  // יצירת נתונים לטבלת הזמנה - רק משקל ושם מוצר
+  // יצירת נתונים לטבלת הזמנה - משקל, שם מוצר ואזור
   const orderItems = orderData.cart.map((item) => ({
     'משקל (גרם)': item.isByWeight ? item.weight : (item.quantity ? `${item.quantity} יחידות` : ''),
-    'שם מוצר': item.name
+    'שם מוצר': item.name,
+    'אזור': item.area || ''
   }));
 
   // יצירת worksheet לפרטי הזמנה
   const orderWorksheet = XLSX.utils.json_to_sheet(orderItems);
   
-  // הגדרת רוחב עמודות - רק 2 עמודות
+  // הגדרת רוחב עמודות - 3 עמודות
   const columnWidths = [
     { wch: 15 },  // משקל
-    { wch: 30 }   // שם מוצר
+    { wch: 30 },  // שם מוצר
+    { wch: 12 }   // אזור
   ];
   orderWorksheet['!cols'] = columnWidths;
 
