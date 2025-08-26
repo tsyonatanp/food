@@ -14,6 +14,7 @@ type CartItem = {
   price?: number
   averageWeightPerUnit?: number // משקל ממוצע ליחידה
   estimatedUnitPrice?: number // מחיר ליחידה משוער
+  area?: string // הוספת עמודת אזור
 }
 
 type CartState = {

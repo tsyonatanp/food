@@ -15,6 +15,7 @@ interface MenuItem {
   'סוג מכירה'?: string // 'משקל' או 'יחידה'
   checkboxes?: string | boolean
   averageWeightPerUnit?: number // משקל ממוצע ליחידה
+  אזור?: string // הוספת עמודת אזור
 }
 
 export default function MenuItems({ items }: { items: MenuItem[] }) {
@@ -47,7 +48,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
         name: item.מנה,
         weight,
         pricePerGram: Number(item['מחיר (₪)']) / 100, // מחיר ל-100 גרם
-        isByWeight: true
+        isByWeight: true,
+        area: item.אזור || '' // הוספת אזור
       })
     } else {
       const quantity = selectedQuantities[item.מנה] || 1
@@ -60,7 +62,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
           quantity,
           estimatedUnitPrice, // מחיר ליחידה משוער
           averageWeightPerUnit: item.averageWeightPerUnit, // משקל ממוצע ליחידה
-          isByWeight: false
+          isByWeight: false,
+          area: item.אזור || '' // הוספת אזור
         })
       } else {
         addItem({
@@ -68,7 +71,8 @@ export default function MenuItems({ items }: { items: MenuItem[] }) {
           name: item.מנה,
           quantity,
           price: Number(item['מחיר (₪)']), // מחיר ליחידה
-          isByWeight: false
+          isByWeight: false,
+          area: item.אזור || '' // הוספת אזור
         })
       }
     }
