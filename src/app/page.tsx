@@ -87,6 +87,29 @@ export default function HomePage() {
             <CategoriesGrid />
           </section>
         </div>
+
+        {/* Catering Section */}
+        <div className="container mx-auto py-12 bg-white">
+          <section role="region" aria-labelledby="catering-heading">
+            <div className="text-center mb-8">
+              <h2 id="catering-heading" className="text-3xl font-bold text-gray-800 mb-4">
+                🎉 קייטרינג לאירועים
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                תפריטים מיוחדים לאירועים, מסיבות ומפגשים משפחתיים. 
+                אוכל טרי, טעים ומגוון - מוכן במיוחד עבורכם!
+              </p>
+            </div>
+            <div className="text-center">
+              <button
+                onClick={() => router.push('/catering')}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-200 transform hover:scale-105 shadow-lg"
+              >
+                🍽️ צפה בתפריטי הקייטרינג
+              </button>
+            </div>
+          </section>
+        </div>
         
         {/* עגלה צפה במובייל - מוצגת רק ככפתור צף */}
         <div className="lg:hidden">

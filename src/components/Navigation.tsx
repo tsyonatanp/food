@@ -50,6 +50,7 @@ export default function Navigation() {
           <div className="hidden w-full sm:flex items-center justify-between">
             <div className="flex items-center space-x-reverse space-x-8">
               <Link href="/delivery" className="text-gray-900 hover:text-gray-600 font-medium text-base">משלוחים ואיזורי חלוקה</Link>
+              <Link href="/catering" className="text-gray-900 hover:text-gray-600 font-medium text-base">🎉 קייטרינג</Link>
               <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base">עלינו</Link>
             </div>
             <div className="flex-shrink-0 flex items-center justify-center gap-2">
@@ -136,6 +137,7 @@ export default function Navigation() {
         <div id="mobile-menu" className="sm:hidden bg-white border-t" role="menu" aria-label="תפריט ניווט">
           <div className="flex flex-col items-center py-2 space-y-2">
             <Link href="/delivery" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">משלוחים ואיזורי חלוקה</Link>
+            <Link href="/catering" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">🎉 קייטרינג</Link>
             <Link href="/about" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">עלינו</Link>
             <Link href="/faq" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שאלות ותשובות</Link>
             <Link href="/support" className="text-gray-900 hover:text-gray-600 font-medium text-base" role="menuitem">שרות לקוחות</Link>

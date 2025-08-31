@@ -263,8 +263,50 @@ export default function CheckoutPage() {
                 בלחיצה על שליחה אני מאשר/ת שקראתי את <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline text-green-700 hover:text-green-900">תקנון האתר</a>
               </label>
             </div>
-            <div className="bg-gray-50 rounded p-3 text-sm" role="region" aria-label="סיכום הזמנה">
-              <div className="font-semibold mb-2">סיכום הזמנה:</div>
+            {/* Cart Items */}
+            <div className="bg-gray-50 rounded p-3 text-sm" role="region" aria-label="פריטי הזמנה">
+              <div className="font-semibold mb-3">פריטי הזמנה:</div>
+              {items.map((item) => (
+                <div key={item.id} className="flex justify-between items-center mb-2 pb-2 border-b border-gray-200">
+                  <div className="flex-1">
+                    <div className="font-medium">{item.name}</div>
+                    {item.isByWeight ? (
+                      <div className="text-gray-600">
+                        {item.weight} גרם × ₪{(item.pricePerGram || 0).toFixed(2)}
+                      </div>
+                    ) : (
+                      <div className="text-gray-600">
+                        {item.quantity} יחידות × ₪{(item.price || 0).toFixed(2)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-semibold">
+                    ₪{item.isByWeight 
+                      ? ((item.weight || 0) * (item.pricePerGram || 0)).toFixed(2)
+                      : ((item.quantity || 0) * (item.price || 0)).toFixed(2)
+                    }
+                  </div>
+                </div>
+              ))}
+              <div className="border-t pt-2 mt-2">
+                <div className="flex justify-between">
+                  <span>סה"כ פריטים:</span>
+                  <span className="font-semibold">₪{total.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-red-700">
+                  <span>דמי משלוח:</span>
+                  <span className="font-semibold">₪{actualDeliveryFee.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-lg font-bold mt-1">
+                  <span>סה"כ לתשלום:</span>
+                  <span>₪{finalTotal.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Order Details */}
+            <div className="bg-gray-50 rounded p-3 text-sm" role="region" aria-label="פרטי הזמנה">
+              <div className="font-semibold mb-2">פרטי הזמנה:</div>
               <div className="mb-1">מספר הזמנה: <b>{orderNumber}</b></div>
               <div className="mb-1">שם: {name}</div>
               <div className="mb-1">טלפון: {phone}</div>
@@ -273,8 +315,6 @@ export default function CheckoutPage() {
               {apartment && <div className="mb-1">דירה: {apartment}</div>}
               {entryCode && <div className="mb-1">קוד כניסה: {entryCode}</div>}
               {notes && <div className="mb-1">הערות: {notes}</div>}
-              <div className="mb-1 font-semibold text-red-700">דמי משלוח: 30 ש"ח</div>
-              <div className="mb-1 font-bold text-lg">סה"כ לתשלום: ₪{finalTotal.toFixed(2)}</div>
             </div>
             {error && <div className="text-red-600 text-center" role="alert" aria-live="polite">{error}</div>}
             <button
