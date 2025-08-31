@@ -428,7 +428,7 @@ export default function CateringPage() {
                 <ul className="space-y-2 text-gray-700">
                   <li>• הזמנה מינימלית: {MIN_QUANTITY} אנשים</li>
                   <li>• מחיר לא כולל משלוח</li>
-                  <li>• משלוח: ₪30</li>
+                  <li>• משלוח קייטרינג: ₪250</li>
                   <li>• הנחות על הזמנות גדולות</li>
                 </ul>
               </div>

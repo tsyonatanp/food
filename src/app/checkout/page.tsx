@@ -44,7 +44,9 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  const DELIVERY_FEE = 30;
+  // Calculate delivery fee based on cart contents
+  const hasCatering = items.some(item => item.area === 'קייטרינג');
+  const DELIVERY_FEE = hasCatering ? 250 : 30;
   const actualDeliveryFee = DELIVERY_FEE;
   const finalTotal = total + actualDeliveryFee;
 
