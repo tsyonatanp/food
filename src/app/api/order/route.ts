@@ -12,10 +12,19 @@ export async function POST(req: NextRequest) {
     const sortedCart = [...cart].sort((a, b) => a.name.localeCompare(b.name, 'he'));
     
     const itemsText = sortedCart.map((item: any) => {
+      let itemText = '';
       if (item.isByWeight) {
-        return `• ${item.name} - ${item.weight} גרם`;
+        itemText = `• ${item.name} - ${item.weight} גרם`;
+      } else {
+        itemText = `• ${item.name} - ${item.quantity} יחידות`;
       }
-      return `• ${item.name} - ${item.quantity} יחידות`;
+      
+      // Add catering selections if available
+      if (item.notes && item.name.includes('קייטרינג')) {
+        itemText += `\n  ${item.notes}`;
+      }
+      
+      return itemText;
     }).join('\n');
     
     const message = `🛒 <b>הזמנה חדשה!</b>\n\n<b>מספר הזמנה:</b> ${orderNumber}\n<b>שם:</b> ${name}\n<b>טלפון:</b> ${phone}\n<b>כתובת:</b> ${address}` +

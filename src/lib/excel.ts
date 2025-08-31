@@ -9,6 +9,7 @@ interface OrderItem {
   pricePerGram?: number;
   total: number;
   area?: string; // הוספת אזור
+  notes?: string; // הערות לבחירות
 }
 
 interface OrderData {
@@ -31,11 +32,20 @@ export function createOrderExcelFile(orderData: OrderData): Buffer {
   const workbook = XLSX.utils.book_new();
   
   // יצירת נתונים לטבלת הזמנה - משקל, שם מוצר ואזור
-  const orderItems = orderData.cart.map((item) => ({
-    'משקל (גרם)': item.isByWeight ? item.weight : (item.quantity ? `${item.quantity} יחידות` : ''),
-    'שם מוצר': item.name,
-    'אזור': item.area || ''
-  }));
+  const orderItems = orderData.cart.map((item) => {
+    let productName = item.name;
+    
+    // Add catering selections to product name if available
+    if (item.notes && item.name.includes('קייטרינג')) {
+      productName += ` (${item.notes})`;
+    }
+    
+    return {
+      'משקל (גרם)': item.isByWeight ? item.weight : (item.quantity ? `${item.quantity} יחידות` : ''),
+      'שם מוצר': productName,
+      'אזור': item.area || ''
+    };
+  });
 
   // יצירת worksheet לפרטי הזמנה
   const orderWorksheet = XLSX.utils.json_to_sheet(orderItems);

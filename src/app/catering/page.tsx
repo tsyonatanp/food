@@ -9,9 +9,12 @@ interface CateringMenu {
   id: string;
   name: string;
   description: string;
-  items: string[];
-  price: number;
-  image?: string;
+  basePrice: number;
+  items: {
+    category: string;
+    options: string[];
+    required: number;
+  }[];
 }
 
 const cateringMenus: CateringMenu[] = [
@@ -19,39 +22,80 @@ const cateringMenus: CateringMenu[] = [
     id: 'catering-1',
     name: 'תפריט 1 - דגים',
     description: 'תפריט דגים מלא עם סלטים ותוספות',
+    basePrice: 45,
     items: [
-      '6 סוגי סלטים',
-      'דגים: אמנון מטוגן/מבושל, לברק, נסיכה, טונה',
-      '3 תוספות',
-      'לחמניות'
-    ],
-    price: 45
+      {
+        category: 'סלטים',
+        options: ['סלט יווני', 'סלט וולדורף', 'סלט אנטיפסטי', 'סלט ירקות', 'סלט כרוב וגזר', 'סלט מיונז'],
+        required: 6
+      },
+      {
+        category: 'דגים',
+        options: ['אמנון מטוגן', 'אמנון מבושל', 'לברק', 'נסיכה', 'טונה', 'סלמון'],
+        required: 4
+      },
+      {
+        category: 'תוספות',
+        options: ['אורז לבן', 'אורז צהוב', 'פתיתים', 'קוסקוס', 'תפוחי אדמה', 'בורגול'],
+        required: 3
+      }
+    ]
   },
   {
     id: 'catering-2', 
     name: 'תפריט 2 - דגים ועופות',
     description: 'תפריט משולב דגים ועופות עם סלטים',
+    basePrice: 55,
     items: [
-      '6 סוגי סלטים',
-      'דגים: אמנון, לברק, נסיכה, טונה',
-      '2 סוגי עופות',
-      '3 תוספות',
-      'לחמניות'
-    ],
-    price: 55
+      {
+        category: 'סלטים',
+        options: ['סלט יווני', 'סלט וולדורף', 'סלט אנטיפסטי', 'סלט ירקות', 'סלט כרוב וגזר', 'סלט מיונז'],
+        required: 6
+      },
+      {
+        category: 'דגים',
+        options: ['אמנון', 'לברק', 'נסיכה', 'טונה', 'סלמון'],
+        required: 4
+      },
+      {
+        category: 'עופות',
+        options: ['חזה עוף בגריל', 'כנפיים', 'פרגיות', 'שניצל עוף', 'עוף ברוטב'],
+        required: 2
+      },
+      {
+        category: 'תוספות',
+        options: ['אורז לבן', 'אורז צהוב', 'פתיתים', 'קוסקוס', 'תפוחי אדמה', 'בורגול'],
+        required: 3
+      }
+    ]
   },
   {
     id: 'catering-3',
     name: 'תפריט 3 - דגים ובשרים',
     description: 'תפריט מלא עם דגים, בשרים וסלטים',
+    basePrice: 65,
     items: [
-      '6 סוגי סלטים',
-      'דגים',
-      '3 תוספות',
-      '3 סוגי בשרים',
-      'לחמניות'
-    ],
-    price: 65
+      {
+        category: 'סלטים',
+        options: ['סלט יווני', 'סלט וולדורף', 'סלט אנטיפסטי', 'סלט ירקות', 'סלט כרוב וגזר', 'סלט מיונז'],
+        required: 6
+      },
+      {
+        category: 'דגים',
+        options: ['אמנון', 'לברק', 'נסיכה', 'טונה', 'סלמון'],
+        required: 3
+      },
+      {
+        category: 'תוספות',
+        options: ['אורז לבן', 'אורז צהוב', 'פתיתים', 'קוסקוס', 'תפוחי אדמה', 'בורגול'],
+        required: 3
+      },
+      {
+        category: 'בשרים',
+        options: ['קציצות בשר', 'קבב', 'צלי בקר', 'בשר ברוטב', 'בשר בגריל'],
+        required: 3
+      }
+    ]
   }
 ];
 
@@ -61,31 +105,92 @@ export default function CateringPage() {
   const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [showOrderForm, setShowOrderForm] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<{[key: string]: string[]}>({});
 
   const handleMenuSelect = (menuId: string) => {
     setSelectedMenu(menuId);
     setShowOrderForm(true);
+    // Initialize selected items for this menu
+    const menu = cateringMenus.find(m => m.id === menuId);
+    if (menu) {
+      const initialSelections: {[key: string]: string[]} = {};
+      menu.items.forEach(item => {
+        initialSelections[item.category] = [];
+      });
+      setSelectedItems(initialSelections);
+    }
+  };
+
+  const handleItemToggle = (category: string, item: string) => {
+    const menu = cateringMenus.find(m => m.id === selectedMenu);
+    if (!menu) return;
+
+    const categoryConfig = menu.items.find(i => i.category === category);
+    if (!categoryConfig) return;
+
+    setSelectedItems(prev => {
+      const current = prev[category] || [];
+      let newSelection: string[];
+
+      if (current.includes(item)) {
+        // Remove item
+        newSelection = current.filter(i => i !== item);
+      } else {
+        // Add item if we haven't reached the limit
+        if (current.length < categoryConfig.required) {
+          newSelection = [...current, item];
+        } else {
+          // Replace the last item
+          newSelection = [...current.slice(1), item];
+        }
+      }
+
+      return {
+        ...prev,
+        [category]: newSelection
+      };
+    });
+  };
+
+  const isSelectionValid = () => {
+    if (!selectedMenu) return false;
+    
+    const menu = cateringMenus.find(m => m.id === selectedMenu);
+    if (!menu) return false;
+
+    return menu.items.every(item => {
+      const selected = selectedItems[item.category] || [];
+      return selected.length === item.required;
+    });
   };
 
   const handleAddToCart = () => {
-    if (!selectedMenu) return;
+    if (!selectedMenu || !isSelectionValid()) return;
     
     const menu = cateringMenus.find(m => m.id === selectedMenu);
     if (!menu) return;
+
+    // Create description of selected items
+    const selections = menu.items.map(item => {
+      const selected = selectedItems[item.category] || [];
+      return `${item.category}: ${selected.join(', ')}`;
+    }).join(' | ');
 
     addItem({
       id: Date.now(), // Unique ID
       name: `${menu.name} - קייטרינג`,
       quantity: quantity,
-      price: menu.price,
+      price: menu.basePrice,
       isByWeight: false,
-      area: 'קייטרינג'
+      area: 'קייטרינג',
+      notes: selections // Store selections as notes
     });
 
     // Reset form
     setSelectedMenu(null);
     setQuantity(1);
     setShowOrderForm(false);
+    setSelectedItems({});
     
     // Show success message
     alert(`תפריט ${menu.name} נוסף לעגלה!`);
@@ -124,7 +229,7 @@ export default function CateringPage() {
                   <h3 className="text-2xl font-bold mb-2">{menu.name}</h3>
                   <p className="text-blue-100">{menu.description}</p>
                   <div className="text-3xl font-bold mt-4">
-                    ₪{menu.price}
+                    ₪{menu.basePrice}
                   </div>
                 </div>
 
@@ -137,9 +242,15 @@ export default function CateringPage() {
                     {menu.items.map((item, index) => (
                       <li key={index} className="flex items-start">
                         <span className="text-green-500 mr-2">✓</span>
-                        <span className="text-gray-700">{item}</span>
+                        <span className="text-gray-700">
+                          {item.required} סוגי {item.category}
+                        </span>
                       </li>
                     ))}
+                    <li className="flex items-start">
+                      <span className="text-green-500 mr-2">✓</span>
+                      <span className="text-gray-700">לחמניות</span>
+                    </li>
                   </ul>
 
                   {/* Order Button */}
@@ -157,11 +268,12 @@ export default function CateringPage() {
           {/* Order Form Modal */}
           {showOrderForm && selectedMenu && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-xl p-8 max-w-md w-full">
+              <div className="bg-white rounded-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                  הזמנת קייטרינג
+                  הזמנת קייטרינג - בחירת פריטים
                 </h3>
                 
+                {/* Menu Selection */}
                 <div className="mb-6">
                   <label className="block text-gray-700 font-medium mb-2">
                     כמות תפריטים:
@@ -185,9 +297,47 @@ export default function CateringPage() {
                   </div>
                 </div>
 
+                {/* Item Selection */}
+                <div className="mb-6">
+                  {cateringMenus.find(m => m.id === selectedMenu)?.items.map((item, index) => (
+                    <div key={index} className="mb-6">
+                      <h4 className="text-lg font-semibold text-gray-800 mb-3">
+                        {item.category} - בחר {item.required} סוגים:
+                      </h4>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {item.options.map((option) => {
+                          const isSelected = (selectedItems[item.category] || []).includes(option);
+                          const selectedCount = (selectedItems[item.category] || []).length;
+                          const isDisabled = !isSelected && selectedCount >= item.required;
+                          
+                          return (
+                            <button
+                              key={option}
+                              onClick={() => handleItemToggle(item.category, option)}
+                              disabled={isDisabled}
+                              className={`p-3 rounded-lg border-2 text-sm font-medium transition-all duration-200 ${
+                                isSelected
+                                  ? 'border-green-500 bg-green-50 text-green-700'
+                                  : isDisabled
+                                  ? 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
+                                  : 'border-gray-300 bg-white text-gray-700 hover:border-green-300 hover:bg-green-50'
+                              }`}
+                            >
+                              {option}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-2">
+                        נבחרו: {(selectedItems[item.category] || []).length} / {item.required}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
                 <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                   <p className="text-gray-700">
-                    <strong>סה"כ לתשלום:</strong> ₪{cateringMenus.find(m => m.id === selectedMenu)?.price! * quantity}
+                    <strong>סה"כ לתשלום:</strong> ₪{cateringMenus.find(m => m.id === selectedMenu)?.basePrice! * quantity}
                   </p>
                 </div>
 
@@ -197,6 +347,7 @@ export default function CateringPage() {
                       setShowOrderForm(false);
                       setSelectedMenu(null);
                       setQuantity(1);
+                      setSelectedItems({});
                     }}
                     className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
                   >
@@ -204,7 +355,12 @@ export default function CateringPage() {
                   </button>
                   <button
                     onClick={handleAddToCart}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                    disabled={!isSelectionValid()}
+                    className={`flex-1 font-semibold py-3 px-6 rounded-lg transition-colors duration-200 ${
+                      isSelectionValid()
+                        ? 'bg-green-600 hover:bg-green-700 text-white'
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
                   >
                     הוסף לעגלה
                   </button>
