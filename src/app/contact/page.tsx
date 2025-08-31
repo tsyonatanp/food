@@ -37,8 +37,8 @@ export default function ContactPage() {
             
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-4 text-green-600">📍 כתובת</h3>
-              <p className="text-lg">אור יהודה, ישראל</p>
-              <p className="text-sm text-gray-600">משלוחים בכל רחבי העיר</p>
+              <p className="text-lg">בקעת אונו ורחובות, ישראל</p>
+              <p className="text-sm text-gray-600">משלוחים בכל רחבי האזור</p>
             </div>
           </div>
           

@@ -16,18 +16,18 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "@type": "Restaurant",
           "name": "שלג-רוז",
           "alternateName": "שלג רוז",
-          "description": "אוכל מוכן טרי במשלוח עד הבית באור יהודה. מנות חמות, תבשילים וסלטים ליום שישי. כשר בהשגחת הרבנות.",
+          "description": "אוכל מוכן טרי במשלוח עד הבית בבקעת אונו ורחובות. מנות חמות, תבשילים וסלטים ליום שישי. כשר בהשגחת הרבנות.",
           "url": baseUrl,
           "telephone": "+972-XX-XXXXXXX",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "אור יהודה",
+            "addressLocality": "בקעת אונו ורחובות",
             "addressCountry": "IL"
           },
           "geo": {
             "@type": "GeoCoordinates",
-            "latitude": "32.0238",
-            "longitude": "34.8563"
+            "latitude": "32.0333",
+            "longitude": "34.8500"
           },
           "openingHours": "Mo-Th 09:00-20:00, Fr 09:00-20:00",
           "priceRange": "₪₪",
@@ -60,13 +60,13 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "@type": "Organization",
           "name": "שלג-רוז",
           "alternateName": "שלג רוז",
-          "description": "מסעדה ומשלוחי אוכל כשרים באור יהודה",
+          "description": "מסעדה ומשלוחי אוכל כשרים בבקעת אונו ורחובות",
           "url": baseUrl,
           "logo": `${baseUrl}/images/logo.png`,
           "image": `${baseUrl}/hero-image.jpeg`,
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "אור יהודה",
+            "addressLocality": "בקעת אונו ורחובות",
             "addressCountry": "IL"
           },
           "contactPoint": {
@@ -87,7 +87,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "@type": "WebSite",
           "name": "שלג-רוז - אוכל מוכן",
           "url": baseUrl,
-          "description": "הזמנת אוכל מוכן כשר במשלוח עד הבית באור יהודה",
+          "description": "הזמנת אוכל מוכן כשר במשלוח עד הבית בבקעת אונו ורחובות",
           "potentialAction": {
             "@type": "SearchAction",
             "target": {
