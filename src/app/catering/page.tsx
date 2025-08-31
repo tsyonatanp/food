@@ -103,7 +103,10 @@ export default function CateringPage() {
 
   // Group menu items by category
   const getItemsByCategory = (categoryName: string) => {
-    return menuItems.filter(item => item.קטגוריה === categoryName);
+    return menuItems.filter(item => {
+      // Check if the category matches exactly or contains the category name
+      return item.קטגוריה === categoryName || item.קטגוריה.includes(categoryName);
+    });
   };
 
   const handleMenuSelect = (menuId: string) => {
