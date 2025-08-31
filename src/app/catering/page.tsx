@@ -69,11 +69,13 @@ const cateringMenus: CateringMenu[] = [
   }
 ];
 
+const MIN_QUANTITY = 50; // כמות מינימום לקייטרינג
+
 export default function CateringPage() {
   const router = useRouter();
   const { addItem } = useCart();
   const [selectedMenu, setSelectedMenu] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(MIN_QUANTITY);
   const [showOrderForm, setShowOrderForm] = useState(false);
   const [selectedItems, setSelectedItems] = useState<{[key: string]: string[]}>({});
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -155,10 +157,16 @@ export default function CateringPage() {
     const menu = cateringMenus.find(m => m.id === selectedMenu);
     if (!menu) return false;
 
-    return menu.items.every(item => {
+    // Check if all categories have the required number of selections
+    const allCategoriesValid = menu.items.every(item => {
       const selected = selectedItems[item.category] || [];
       return selected.length === item.required;
     });
+
+    // Check if quantity meets minimum requirement
+    const quantityValid = quantity >= MIN_QUANTITY;
+
+    return allCategoriesValid && quantityValid;
   };
 
   const handleAddToCart = () => {
@@ -185,7 +193,7 @@ export default function CateringPage() {
 
     // Reset form
     setSelectedMenu(null);
-    setQuantity(1);
+    setQuantity(MIN_QUANTITY);
     setShowOrderForm(false);
     setSelectedItems({});
     
@@ -223,6 +231,11 @@ export default function CateringPage() {
               תפריטים מיוחדים לאירועים, מסיבות ומפגשים משפחתיים. 
               אוכל טרי, טעים ומגוון - מוכן במיוחד עבורכם!
             </p>
+            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-yellow-800 font-semibold">
+                ⚠️ הזמנה מינימלית: {MIN_QUANTITY} אנשים לקייטרינג
+              </p>
+            </div>
           </div>
 
           {/* Catering Menus Grid */}
@@ -284,25 +297,30 @@ export default function CateringPage() {
                 {/* Menu Selection */}
                 <div className="mb-6">
                   <label className="block text-gray-700 font-medium mb-2">
-                    כמות תפריטים:
+                    כמות אנשים (מינימום {MIN_QUANTITY}):
                   </label>
                   <div className="flex items-center space-x-4">
                     <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      onClick={() => setQuantity(Math.max(MIN_QUANTITY, quantity - 10))}
                       className="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-xl font-bold"
                     >
                       -
                     </button>
-                    <span className="text-2xl font-bold text-gray-800 min-w-[3rem] text-center">
+                    <span className="text-2xl font-bold text-gray-800 min-w-[4rem] text-center">
                       {quantity}
                     </span>
                     <button
-                      onClick={() => setQuantity(quantity + 1)}
+                      onClick={() => setQuantity(quantity + 10)}
                       className="w-10 h-10 bg-green-600 hover:bg-green-700 text-white rounded-full flex items-center justify-center text-xl font-bold"
                     >
                       +
                     </button>
                   </div>
+                  {quantity < MIN_QUANTITY && (
+                    <p className="text-red-600 text-sm mt-2">
+                      כמות מינימלית: {MIN_QUANTITY} אנשים
+                    </p>
+                  )}
                 </div>
 
                 {/* Item Selection */}
@@ -362,7 +380,7 @@ export default function CateringPage() {
                     onClick={() => {
                       setShowOrderForm(false);
                       setSelectedMenu(null);
-                      setQuantity(1);
+                      setQuantity(MIN_QUANTITY);
                       setSelectedItems({});
                     }}
                     className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
@@ -408,7 +426,7 @@ export default function CateringPage() {
                   💰 מחירים ותוספות:
                 </h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• תוספת סלמון במנה: ₪5</li>
+                  <li>• הזמנה מינימלית: {MIN_QUANTITY} אנשים</li>
                   <li>• מחיר לא כולל משלוח</li>
                   <li>• משלוח: ₪30</li>
                   <li>• הנחות על הזמנות גדולות</li>
