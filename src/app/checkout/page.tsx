@@ -278,14 +278,19 @@ export default function CheckoutPage() {
                       </div>
                     ) : (
                       <div className="text-gray-600">
-                        {item.quantity} יחידות × ₪{(item.price || 0).toFixed(2)}
+                        {item.quantity} יחידות × ₪{(item.estimatedUnitPrice || item.price || 0).toFixed(2)}
+                        {item.estimatedUnitPrice && item.averageWeightPerUnit && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            (הערכה: {item.quantity! * item.averageWeightPerUnit} גרם)
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
                   <div className="font-semibold">
                     ₪{item.isByWeight 
                       ? ((item.weight || 0) * (item.pricePerGram || 0)).toFixed(2)
-                      : ((item.quantity || 0) * (item.price || 0)).toFixed(2)
+                      : ((item.quantity || 0) * (item.estimatedUnitPrice || item.price || 0)).toFixed(2)
                     }
                   </div>
                 </div>

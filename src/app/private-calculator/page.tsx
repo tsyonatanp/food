@@ -75,13 +75,24 @@ export default function PrivateCalculator() {
     fetch('https://opensheet.elk.sh/1xTlTECzbxdDVu6SSnoQnN_GtL39b7-ZzhgcIvaLyljU/Menu')
       .then(res => res.json())
       .then((data) => {
+        console.log('Raw data from Google Sheets:', data);
         const filtered = data.filter((item: any) => String(item.checkboxes).toLowerCase() === 'true');
-        const items: Product[] = filtered.map((item: any) => ({
-          name: item['מנה'],
-          price: Number(item['מחיר (₪)']),
-          roiePrice: Number(item['רועי']),
-        }));
+        console.log('Filtered data:', filtered);
+        const items: Product[] = filtered.map((item: any) => {
+          const priceValue = item['מחיר (₪)'];
+          const roieValue = item['רועי'];
+          console.log(`Item: ${item['מנה']}, Price field: "${priceValue}", Roie field: "${roieValue}"`);
+          return {
+            name: item['מנה'],
+            price: Number(priceValue) || 0,
+            roiePrice: Number(roieValue) || 0,
+          };
+        });
+        console.log('Final products:', items);
         setProducts(items);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
       });
   }, []);
 
@@ -455,13 +466,19 @@ export default function PrivateCalculator() {
           <label style={{ display: 'block', marginBottom: 4 }}>בחר מוצר:</label>
           <select value={selected?.name || ''} onChange={e => {
             const prod = products.find(p => p.name === e.target.value);
+            console.log('Selected product:', prod);
             setSelected(prod || null);
           }} style={{ width: '100%', padding: '6px 4px', marginTop: 4, border: '1px solid #d1d5db', borderRadius: 4 }}>
             <option value=''>-- בחר --</option>
             {products.map(p => (
-              <option key={p.name} value={p.name}>{p.name}</option>
+              <option key={p.name} value={p.name}>{p.name} - ₪{p.price}</option>
             ))}
           </select>
+          {selected && (
+            <div style={{ fontSize: '12px', color: '#666', marginTop: '4px', padding: '4px', background: '#f0f0f0', borderRadius: '4px' }}>
+              מחיר ל-100 גרם: ₪{selected.price}
+            </div>
+          )}
         </div>
         
         <div style={{ marginBottom: 16, border: '2px solid #e5e7eb', borderRadius: 8, padding: '12px 8px' }}>
