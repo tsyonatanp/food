@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import StructuredData from '@/components/StructuredData';
 import { fetchMenu } from '@/lib/fetchMenu';
 import { fetchCategories } from '@/lib/fetchCategories';
+import Head from 'next/head';
 
 interface MenuItem {
   מנה: string;
@@ -221,7 +222,68 @@ export default function CateringPage() {
 
   return (
     <>
+      <Head>
+        <title>קייטרינג לאירועים - שלג-רוז | תפריטים מיוחדים למסיבות ואירועים בבקעת אונו ורחובות</title>
+        <meta name="description" content="קייטרינג לאירועים, מסיבות ואירועים משפחתיים. תפריטים מיוחדים עם דגים, עופות ובשרים. הזמנה מינימלית 50 אנשים. משלוח עד הבית בבקעת אונו ורחובות. כשר בהשגחת הרבנות." />
+        <meta name="keywords" content="קייטרינג, אירועים, מסיבות, תפריטים לאירועים, קייטרינג כשר, אוכל לאירועים, הזמנת קייטרינג, בקעת אונו, רחובות, דגים, עופות, בשרים, סלטים, תבשילים" />
+        <meta property="og:title" content="קייטרינג לאירועים - שלג-רוז | תפריטים מיוחדים למסיבות ואירועים" />
+        <meta property="og:description" content="קייטרינג לאירועים, מסיבות ואירועים משפחתיים. תפריטים מיוחדים עם דגים, עופות ובשרים. הזמנה מינימלית 50 אנשים. משלוח עד הבית בבקעת אונו ורחובות." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://food-one-cyan.vercel.app/catering" />
+        <link rel="canonical" href="https://food-one-cyan.vercel.app/catering" />
+      </Head>
+      
       <StructuredData type="website" />
+      
+      {/* Catering-specific structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "name": "קייטרינג לאירועים - שלג-רוז",
+            "description": "שירות קייטרינג לאירועים, מסיבות ואירועים משפחתיים. תפריטים מיוחדים עם דגים, עופות ובשרים. הזמנה מינימלית 50 אנשים.",
+            "provider": {
+              "@type": "Organization",
+              "name": "שלג-רוז",
+              "url": "https://food-one-cyan.vercel.app"
+            },
+            "areaServed": {
+              "@type": "Place",
+              "name": "בקעת אונו ורחובות"
+            },
+            "serviceType": "קייטרינג",
+            "offers": [
+              {
+                "@type": "Offer",
+                "name": "תפריט 1 - דגים",
+                "description": "תפריט דגים מלא עם סלטים ותוספות",
+                "price": "45",
+                "priceCurrency": "ILS",
+                "availability": "https://schema.org/InStock"
+              },
+              {
+                "@type": "Offer", 
+                "name": "תפריט 2 - דגים ועופות",
+                "description": "תפריט משולב דגים ועופות עם סלטים",
+                "price": "55",
+                "priceCurrency": "ILS",
+                "availability": "https://schema.org/InStock"
+              },
+              {
+                "@type": "Offer",
+                "name": "תפריט 3 - דגים ובשרים", 
+                "description": "תפריט מלא עם דגים, בשרים וסלטים",
+                "price": "65",
+                "priceCurrency": "ILS",
+                "availability": "https://schema.org/InStock"
+              }
+            ],
+            "keywords": "קייטרינג, אירועים, מסיבות, תפריטים לאירועים, קייטרינג כשר, אוכל לאירועים"
+          })
+        }}
+      />
       
       <div className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-6xl mx-auto px-4">
