@@ -16,12 +16,12 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "@type": "Restaurant",
           "name": "שלג-רוז",
           "alternateName": "שלג רוז",
-          "description": "אוכל מוכן טרי במשלוח עד הבית בבקעת אונו ורחובות. מנות חמות, תבשילים וסלטים ליום שישי. כשר בהשגחת הרבנות.",
+          "description": "אוכל מוכן טרי במשלוח עד הבית בבקעת אונו, רחובות, כפר הנוער, בן שמן ומצליח. מנות חמות, תבשילים וסלטים ליום שישי. כשר בהשגחת הרבנות.",
           "url": baseUrl,
           "telephone": "+972-XX-XXXXXXX",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "בקעת אונו ורחובות",
+            "addressLocality": "בקעת אונו, רחובות, כפר הנוער, בן שמן ומצליח",
             "addressCountry": "IL"
           },
           "geo": {
@@ -60,13 +60,13 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "@type": "Organization",
           "name": "שלג-רוז",
           "alternateName": "שלג רוז",
-          "description": "מסעדה ומשלוחי אוכל כשרים בבקעת אונו ורחובות",
+          "description": "מסעדה ומשלוחי אוכל כשרים בבקעת אונו, רחובות, כפר הנוער, בן שמן ומצליח",
           "url": baseUrl,
           "logo": `${baseUrl}/images/logo.png`,
           "image": `${baseUrl}/hero-image.jpeg`,
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "בקעת אונו ורחובות",
+            "addressLocality": "בקעת אונו, רחובות, כפר הנוער, בן שמן ומצליח",
             "addressCountry": "IL"
           },
           "contactPoint": {
@@ -87,7 +87,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
           "@type": "WebSite",
           "name": "שלג-רוז - אוכל מוכן",
           "url": baseUrl,
-          "description": "הזמנת אוכל מוכן כשר במשלוח עד הבית בבקעת אונו ורחובות",
+          "description": "הזמנת אוכל מוכן כשר במשלוח עד הבית בבקעת אונו, רחובות, כפר הנוער, בן שמן ומצליח",
           "potentialAction": {
             "@type": "SearchAction",
             "target": {
